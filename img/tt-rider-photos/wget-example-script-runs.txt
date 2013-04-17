@@ -1,0 +1,34 @@
+wget --tries=75 [DOWNLOAD_URL]  --limit-rate=200k -c -i [DOWNLOAD_FILE_URLS_ONE_PER_LINE]
+
+
+-- download ALL the images from this website
+
+wget --tries=75 --limit-rate=200k -c -r -A.jpg http://www.iomtt.com/images/cache/
+
+
+http://www.iomtt.com/images/cache/7f9c85806140b2ac2930873e8242b052.jpg
+http://www.iomtt.com/images/cache/4624fca13895b459a02555750578ca54.jpg
+http://www.iomtt.com/images/cache/783e43b1f0f407bc885db3e4473a4892.jpg
+http://www.iomtt.com/images/cache/f81651371e20e5097ffab1e864101acb.jpg
+http://www.iomtt.com/images/cache/c91e981be5689ca9b09b1cc7b1c03aea.jpg
+http://www.iomtt.com/images/cache/ff365cfa6fe341971c9d70b4229c9af8.jpg
+http://www.iomtt.com/images/cache/3e9549555bed3949dde0cf70268f8fa5.jpg
+http://www.iomtt.com/images/cache/fb7e964e4ca16b28ee1b3c9f64973611.jpg
+http://www.iomtt.com/images/cache/b7d20df8510e2b442c2e71b91511843b.jpg
+http://www.iomtt.com/images/cache/d7862a02b689f4a210798281ae4faade.jpg
+
+
+-- works!
+wget --tries=75 --limit-rate=200k -c http://www.iomtt.com/images/cache/7f9c85806140b2ac2930873e8242b052.jpg
+
+
+-- works!
+wget --tries=75 --limit-rate=200k -c -i tt-rider-photos-small-set.txt
+
+
+-- try downloading ALL of the images in the IOMTT DB images cache
+wget --tries=75 --limit-rate=200k -c -i tt-rider-photos.txt
+
+
+-- try downloading ALL of the images in the IOMTT DB images cache
+wget --tries=75 --limit-rate=200k -c -r -A.jpg http://www.iomtt.com/images/cache/

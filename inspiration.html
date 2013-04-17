@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<meta charset="utf-8">
+<head>
+    <title>The Isle of Man TT - Our Inspiration & Motivation</title>
+
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/visualization.css"/>
+
+    <!-- local copy of minified D3 library -->
+    <script src="js/d3.v3.min.js"></script>
+
+    <!-- local copy of minified jQuery library -->
+    <script src="js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<header>
+    <img class="tt-img tt-img-floatleft" src="img/iomtt-logo-smaller.png" />
+    <h1>The Isle of Man TT</h1>
+    <!-- This is for the menus -->
+    <ul id="main-nav">
+        <li><a href="index.html">Main</a></li>
+        <!-- will include information on the race classes in project 3 -->
+        <!--<li><a href="races.html">Races</a></li>-->
+        <li><a href="maps.html">Maps</a></li>
+        <li><a href="inspiration.html">Inspiration</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+    <img class="tt-img tt-img-floatright" src="img/iomtt-logo-smaller.png" />
+</header>
+
+<article>
+
+    <div id="viz-info">
+
+        <h2>Inspiration & Motivation</h2>
+
+        <p>Our project comes about from a fascination with the incredibly brave and talented men (and women!) racers
+            that continue to show up every year at the Isle of Man TT and challenge world records, personal bests, and
+            each other.  After watching several documentaries about the annual TT races (including those already
+            mentioned on the <a href="index.html">main page</a>,
+            <a href="http://www.imdb.com/title/tt1698010/?ref_=fn_al_tt_1">TT3D: Closer To The Edge</a> and the BBC
+            ITV4 documentary
+            <a href="http://www.touchline.tv/tv/motorsport/manx-grand-prix-documentary-on-itv4">Grand Prix Racer</a>)
+            David was inspired to see if he could do some interesting visualizations on rider performance, learn more
+            about how long it takes riders to become proficient on the <a href="maps.html">Snaefell Mountain Course</a>,
+            and also create some really fun and interactive visualizations of the rich dataset that the official
+            <a href="http://www.iomtt.com/TT-Database.aspx">Isle of Man TT Database website</a> provides (particularly
+            because the official database website is primarily a relatively flat, boring dump of "numbers in tables"
+            kind of datadump, it was ripe for being the datasource for visualizing).</p><br />
+        <p>In addition to the fantastic <a href="http://www.imdb.com/title/tt1698010/?ref_=fn_al_tt_1">TT3D: Closer
+            To The Edge</a>, we were also inspired by a few recent videos of recent Isle of Man TT events, as well as the
+            Irish Northwest 200 (considered a "warm-up" race for the official Isle of Man TT) here - these are best
+            viewed in full-screen and with your speakers turned all the way up:
+        <ul class="left-margin-bump improvements">
+            <li><a href="http://vimeo.com/46856767" target="_blank">"The Greatest Show On Earth - 200 mph Street Race - Isle of Man TT"</a></li>
+            <li><a href="http://vimeo.com/55067330" target="_blank">Most Extreme Sport - Irish Road Racing - Ulster Grand Prix - Northwest 200</a></li>
+            <li><a href="http://vimeo.com/59191280" target="_blank">The Road Warriors - Irish Road Racing and Southern 100 - Isle of Man</a></li>
+            <li><a href="http://vimeo.com/59816919" target="_blank">Road Warriors 2 - North West 200, Southern 100, Isle of Man TT</a></li>
+            <li><a href="http://www.youtube.com/watch?feature=player_embedded&v=VOTvQuuQ7B4" target="_blank">News Clip on Deadly Side of Isle of Man TT</a></li>
+        </ul>
+
+        <p>After David and Leo teamed up to work on the project, we were both also inspired by the example provided in
+            the <a href="https://docs.google.com/document/d/1K7RjtnDB9_4_YTF-cg8vxSoLi8oDEuE9fSNO1nMiQWo/edit">Project
+            II</a> project document of "A good multi-view example" of the
+            <a href="http://cscheid.net/static/mlb­hall­of­fame­voting/">MLB Hall of Fame Voting</a>, where it showed
+            lines for each player and showed how many votes they received each year until they reached (or in several
+            cases, did not reach) enough votes to gain entry into the MLB Hall of Fame.  We felt that a graph like this
+            for our Isle of Man TT rider and race data would be a neat way to visualize how a rider has performed in
+            the TT races over the years, and give us insight into our primary research question, which is <b><i>"How
+            long does it take most riders to become proficient at the Isle of Man TT?"</i></b></p><br />
+        <p>We felt that we should focus our analysis of the rich 100+ year history of the Isle of Man TT by focusing in
+            on the <a href="http://www.iomtt.com/TT-Database/Events.aspx?era=5">modern era</a> of the
+            TT because the motorcycles used today are so vastly superior to those of earlier eras that the comparison
+            of older data to present-day data would not be fair (it is common for the best riders of today to reach
+            speeds in excess of 200 MPH on some of the straights at the <a href="maps.html">Snaefell Mountain
+            Course</a>.</p><br />
+
+        <h2>The Isle of Man TT</h2>
+
+        <p>The Isle of Man TT is the world's most famous, prestigious, and infamous motorcycle road race (for more
+            details about what the TT is, please see the <a href="about.html">About</a> page).  Our
+            visualization is focused on visualizing rider race performance across all of the variety of race
+            classes (there are several).</p>
+        <p>The TT race is run on the <a href="http://en.wikipedia.org/wiki/Snaefell_mountain_course">Snaefell
+            Mountain Course</a> is a notoriously difficult and challenging course, and conventional wisdom is that
+            it takes anywhere from 3 - 10 years of racing on the course to become proficient (this range was taken
+            as a direct quote from both the <a href="http://www.imdb.com/title/tt1698010/?ref_=fn_al_tt_1">TT3D:
+                Closer To The Edge</a> documentary, as well as a BBC ITV4 documentary
+            <a href="http://www.touchline.tv/tv/motorsport/manx-grand-prix-documentary-on-itv4">Grand Prix
+                Racer</a>).</p>
+        <p>The official <a href="http://iomtt.com/">Isle of Man TT website</a> has a wonderful resource in the
+            <a href="http://www.iomtt.com/TT-Database.aspx">TT Database</a>, which we used as our primary data
+            source, and we wrote Python scripts to mine the data.  We concerned ourselves with showing line graphs
+            per rider, per race class so that we could visualize how the rider has performed in a given race
+            class.  When you mouse over a racing line in the primary visualization above, the line will turn black
+            to call it out so that you can see how the rider has performed in the selected race class over time.</p><br />
+
+        <!--
+        <p>The Isle of Man TT is the world's most famous, prestigious, and infamous motorcycle road race (for more
+            details about what the TT is, please see the <a href="about.html">About</a> page).  Our
+            visualization is focused on visualizing rider race performance across all of the variety of race
+            classes (there are several).</p><br />
+        <p>The TT race is run on the <a href="http://en.wikipedia.org/wiki/Snaefell_mountain_course">Snaefell
+            Mountain Course</a> is a notoriously difficult and challenging course, and conventional wisdom is that
+            it takes anywhere from 3 - 10 years of racing on the course to become proficient (this range was taken
+            as a direct quote from both the <a href="http://www.imdb.com/title/tt1698010/?ref_=fn_al_tt_1">TT3D:
+                Closer To The Edge</a> documentary, as well as a BBC ITV4 documentary
+            <a href="http://www.touchline.tv/tv/motorsport/manx-grand-prix-documentary-on-itv4">Grand Prix
+                Racer</a>).</p><br />
+        <p>The official <a href="http://iomtt.com/">Isle of Man TT website</a> has a wonderful resource in the
+            <a href="http://www.iomtt.com/TT-Database.aspx">TT Database</a>, which we used as our primary data
+            source, and we wrote Python scripts to mine the data.  We concerned ourselves with showing line graphs
+            per rider, per race class so that we could visualize how the rider has performed in a given race
+            class.  When you mouse over a racing line in the primary visualization above, the line will turn black
+            to call it out so that you can see how the rider has performed in the selected race class over time.</p><br />
+        <p>We also show other visualizations below when you select a racing line, as well as showing detailed
+            information on the rider in the panel on the right.</p>
+        -->
+
+    </div>
+</article>
+
+<footer>
+    <p>&copy; David Killeffer & Leo Mejia for CS 171 / CSCI-E 64 at Harvard Extension School, Spring 2013.</p>
+    <br />
+    <p>Want to see our code? Check out our <a href="https://github.com/rayden7/cs171-project02" target="_blank">Github</a> repo for everything!</p>
+</footer>
+
+<!-- our custom code for creating the visualization -->
+<script src="js/visualization.js"></script>
+</body>
+</html>

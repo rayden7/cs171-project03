@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<meta charset="utf-8">
+<head>
+    <title>The Isle of Man TT - How Long Does It Take To Become Proficient?</title>
+
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/visualization.css"/>
+
+    <!-- local copy of minified D3 library -->
+    <script src="js/d3.v3.min.js"></script>
+
+    <!-- local copy of minified jQuery library -->
+    <script src="js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+    <header>
+        <img class="tt-img tt-img-floatleft" src="img/iomtt-logo-smaller.png" />
+        <h1>The Isle of Man TT</h1>
+        <!-- This is for the menus -->
+        <ul id="main-nav">
+            <li><a href="index.html">Main</a></li>
+            <!-- will include information on the race classes in project 3 -->
+            <!--<li><a href="races.html">Races</a></li>-->
+            <li><a href="maps.html">Maps</a></li>
+            <li><a href="inspiration.html">Inspiration</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+        <img class="tt-img tt-img-floatright" src="img/iomtt-logo-smaller.png" />
+    </header>
+
+    <article>
+
+        <!-- this is where the primary visualization will be rendered -->
+        <div id="viz"></div>
+
+        <aside id="viz-filters">
+            <h3>Race Classes</h3>
+            <div id="raceClassFilter">
+                <ul>
+                    <li><span class="raceFilter" id="formulaone"><div class="raceFilterBox formulaone"></div> TT Formula One</span></li>
+                    <li><span class="raceFilter" id="junior"><div class="raceFilterBox junior"></div> TT Junior</span></li>
+                    <li><span class="raceFilter" id="lightweight"><div class="raceFilterBox lightweight"></div> TT Lightweight</span></li>
+                    <li><span class="raceFilter" id="production"><div class="raceFilterBox production"></div> TT Intnl. Production 1000</span></li>
+                    <li><span class="raceFilter" id="senior"><div class="raceFilterBox senior"></div> Senior TT</span></li>
+                    <!-- commenting out the Sidecar class races for now; they're not working properly in the visualization  -->
+                    <!--
+                    <li><span class="raceFilter" id="sidecara"><div class="raceFilterBox sidecara"></div> TT Sidecar Race A</span></li>
+                    <li><span class="raceFilter" id="sidecarb"><div class="raceFilterBox sidecarb"></div> TT Sidecar Race B</span></li>
+                    -->
+                    <li><span class="raceFilter" id="singles"><div class="raceFilterBox singles"></div> TT Singles</span></li>
+                    <li><span class="raceFilter" id="superbike"><div class="raceFilterBox superbike"></div> TT Superbike</span></li>
+                    <!-- commenting out the Supersport class races for now; they're not working properly in the visualization  -->
+                    <!--
+                    <li><span class="raceFilter" id="supersporta"><div class="raceFilterBox supersporta"></div> TT Supersport Race A</span></li>
+                    <li><span class="raceFilter" id="supersportb"><div class="raceFilterBox supersportb"></div> TT Supersport Race B</span></li>
+                    -->
+                    <li><span class="raceFilter" id="superstock"><div class="raceFilterBox superstock"></div> TT Superstock</span></li>
+
+                    <!-- commenting out the Ultralightweight class races for now; they're not working properly in the visualization  -->
+                    <!--
+                    <li><span class="raceFilter" id="ultralightweight"><div class="raceFilterBox ultralightweight"></div> TT Ultra Lightweight 125</span></li>
+                    -->
+
+                    <li><span class="raceFilter" id="zero"><div class="raceFilterBox zero"></div> TTXGP</span></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- this is where detailed rider info will display when the user mouses over a race line -->
+        <aside id="riderInfo"></aside>
+
+        <div id="viz-info">
+            <h2>Isle of Man TT</h2>
+            <p>The Isle of Man TT is the world's most famous, prestigious, and infamous motorcycle road race (for more
+                details about what the TT is, please see the <a href="about.html">About</a> page).  Our
+                visualization is focused on visualizing rider race performance across all of the variety of race
+                classes (there are several).</p><br />
+            <p>The TT race is run on the <a href="http://en.wikipedia.org/wiki/Snaefell_mountain_course">Snaefell
+                Mountain Course</a> is a notoriously difficult and challenging course, and conventional wisdom is that
+                it takes anywhere from 3 - 10 years of racing on the course to become proficient (this range was taken
+                as a direct quote from both the <a href="http://www.imdb.com/title/tt1698010/?ref_=fn_al_tt_1">TT3D:
+                Closer To The Edge</a> documentary, as well as a BBC ITV4 documentary
+                <a href="http://www.touchline.tv/tv/motorsport/manx-grand-prix-documentary-on-itv4">Grand Prix
+                Racer</a>).</p><br />
+            <p>The official <a href="http://iomtt.com/">Isle of Man TT website</a> has a wonderful resource in the
+                <a href="http://www.iomtt.com/TT-Database.aspx">TT Database</a>, which we used as our primary data
+                source, and we wrote Python scripts to mine the data.  We concerned ourselves with showing line graphs
+                per rider, per race class so that we could visualize how the rider has performed in a given race
+                class.  For more information, see the <a href="inspiration.html.html">Inspiration</a> and
+                <a href="about.html">About</a> pages.</p>
+            <hr />
+            <h2>Notes on the Visualization</h2>
+            <p>When you mouse over a racing line in the primary visualization above, the line will turn black
+                to call it out so that you can see how the rider has performed in the selected race class over
+                time.  Race positions go from 1 to 71.  Position 72 (the bottom of the graph) is equivalent to a
+                <b>DNF</b> (Did Not Finish) race placement (riders that do not finish may have crashed, experienced a
+                mechanical failure, retired, or worse).  We also show a tooltip when you mouseover a racing line and it
+                shows who the rider is, and the race class the line is for.</p>
+            <p>We also show other visualizations below when you select a racing line, as well as showing detailed
+                information on the rider in the panel on the right (drill-down & linking functionality).  Also,
+                when you mouse over a rider's racing line, we show two (or three, depending on if the rider has at least
+                one or more rce finishes in the top 5) below the main visualization) sub-visualizations below:</p>
+            <ol class="explanation">
+                <li><b>Left-most sub-visualization - Number of Times Rider Has Come In a Given Position
+                    Per Race Class</b><br />The left-most sub-visualization shows the race
+                    position ("Race Position", X-axis) that the rider has come in a given spot and the number of times
+                    they earned that place ("Number of Race Class Wins", Y-axis).
+                </li>
+                <li><b>Middle sub-visualization - Rider's Average Race Speed Per Year In Selected Race Class</b><br />
+                    The middle sub-visualization shows the rider's average lap speed per year for the currently
+                    moused-over race class.</li>
+                <li><b>Right-most sub-visualization (if applicable) - Rider's Average Race Speed Per Year When
+                    Finishing In Top 5 Spots For Selected Race Class</b><br />
+                    If a rider has finished in the top 5 spots for a given race class, then this chart will show, and
+                    it will display the rider's average lap speed for the currently selected race class per year.
+                    The size of the circles also corresponds to the average lap speed (e.g., greater lap speed circles
+                    will have larger radii).  Since this visualization is data-dependent, to see it you should try
+                    mousing-over some of the upper lines that correspond to top 5 slots.</li>
+            </ol>
+            <p>The visualization also lets you filter the primary visualization area based on a given race class; you
+                may select one race class at a time to display, or select all race classes.  We have plans to improve
+                and extend this filtering more in Project 3 (for our other ideas and things we would like to change/fix,
+                see our <a href="about.html">About</a> page.</p>
+
+            <h2>Code & Process Book</h2>
+            <p>To see the code we used to scrape the data from the TT Database and also the JavaScript / HTML / CSS
+                / jQuery / D3 code we used to create the primary visualization, see our
+                <a href="https://github.com/rayden7/cs171-project02">Project II Github repository</a>.</p>
+
+            <p>To read more about how we built out this visualization, see our Google Drive
+                <a href="https://docs.google.com/document/d/1PG95QfW0-YFx-HRjBAYC87QeIbOJeit_5cBa2nenG40/edit?usp=sharing">Project II Process Book</a>.</p>
+            <br />
+
+            <h2>Screencast</h2>
+            <p>This is our video submission introducing our visualization.</p>
+            <iframe width="560" height="315" src="http://www.youtube.com/embed/q8pQeaAc5k4" frameborder="0" allowfullscreen></iframe>
+            <br />
+            <br />
+
+        </div>
+    </article>
+
+    <footer>
+        <p>&copy; David Killeffer & Leo Mejia for CS 171 / CSCI-E 64 at Harvard Extension School, Spring 2013.</p>
+        <br />
+        <p>Want to see our code? Check out our <a href="https://github.com/rayden7/cs171-project02" target="_blank">Github</a> repo for everything!</p>
+    </footer>
+
+    <!-- our custom code for creating the visualization -->
+    <script src="js/visualization.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<meta charset="utf-8">
+<head>
+    <title>The Isle of Man TT - Maps</title>
+
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/visualization.css"/>
+
+    <!-- local copy of minified D3 library -->
+    <script src="js/d3.v3.min.js"></script>
+
+    <!-- local copy of minified jQuery library -->
+    <script src="js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<header>
+    <img class="tt-img tt-img-floatleft" src="img/iomtt-logo-smaller.png" />
+    <h1>The Isle of Man TT</h1>
+    <!-- This is for the menus -->
+    <ul id="main-nav">
+        <li><a href="index.html">Main</a></li>
+        <!-- will include information on the race classes in project 3 -->
+        <!--<li><a href="races.html">Races</a></li>-->
+        <li><a href="maps.html">Maps</a></li>
+        <li><a href="inspiration.html">Inspiration</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+    <img class="tt-img tt-img-floatright" src="img/iomtt-logo-smaller.png" />
+</header>
+
+<article>
+
+    <div id="viz-info">
+
+        <h2>Snaefell Mountain Course</h2>
+
+        <object class="svg-img-floatleft" data="svg/Isle_of_Man_TT_Course_OpenStreetMap.svg" type="image/svg+xml"></object>
+
+        <p><b><i><a href="http://en.wikipedia.org/wiki/Snaefell_mountain_course">From Wikipedia:</a></b></p><br />
+
+        <div class="quotation">
+            <p><i>The Snaefell Mountain Course or Mountain Course is a road-racing street circuit used for the Isle of Man TT
+                and Manx Grand Prix Races held in the Isle of Man from 1911 and 1923 respectively. The racing is held on
+                public roads closed for racing by an Act of Tynwald (the parliament of the Isle of Man). It is the oldest
+                motor-cycle racing circuit still in use.</i></p>
+            <p><i>The course is 37.733 miles (60.73 km) in length and the start-line is situated on the A2 Glencrutchery Road
+                in the town of Douglas. The racing circuit is based on a number of public roads on the Isle of Man
+                including the primary A2 Douglas to Ramsey road, A1 Douglas to Peel road, A3 Castletown to Ramsey Road
+                and the primary A18 Snaefell Mountain Road. The highest point of the course is situated on the primary A18
+                Mountain Road between the Bungalow and Hailwood's Height at spot height 422 metres (1,385 ft) above sea
+                level ( 54°14′47.47″N 4°27′57.18″W).</i></p>
+        </div>
+
+        <p>The Mountain Course is a notoriously difficult and challenging course, and conventional wisdom is that
+            it takes anywhere from 3 - 10 years of racing on the course to become proficient (this range was taken
+            as a direct quote from both the <a href="http://www.imdb.com/title/tt1698010/?ref_=fn_al_tt_1">TT3D:
+                Closer To The Edge</a> documentary, as well as a BBC ITV4 documentary
+            <a href="http://www.touchline.tv/tv/motorsport/manx-grand-prix-documentary-on-itv4">Grand Prix
+                Racer</a>).</p>
+        <p>This difficulty, combined with the fact that over 230 riders have lost their lives on the course, made us
+            interested in visualizing how long it actually takes for riders to become proficient on the course.</p>
+        <br />
+
+    </div>
+</article>
+
+<footer>
+    <p>&copy; David Killeffer & Leo Mejia for CS 171 / CSCI-E 64 at Harvard Extension School, Spring 2013.</p>
+    <br />
+    <p>Want to see our code? Check out our <a href="https://github.com/rayden7/cs171-project02" target="_blank">Github</a> repo for everything!</p>
+</footer>
+
+<!-- our custom code for creating the visualization -->
+<script src="js/visualization.js"></script>
+</body>
+</html>

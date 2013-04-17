@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<meta charset="utf-8">
+<head>
+    <title>The Isle of Man TT - Race Classes</title>
+
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/visualization.css"/>
+
+    <!-- local copy of minified D3 library -->
+    <script src="js/d3.v3.min.js"></script>
+
+    <!-- local copy of minified jQuery library -->
+    <script src="js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<header>
+    <img class="tt-img tt-img-floatleft" src="img/iomtt-logo-smaller.png" />
+    <h1>The Isle of Man TT</h1>
+    <!-- This is for the menus -->
+    <ul id="main-nav">
+        <li><a href="index.html">Main</a></li>
+        <li><a href="races.html">Races</a></li>
+        <li><a href="maps.html">Maps</a></li>
+        <li><a href="inspiration.html">Inspiration</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+    <img class="tt-img tt-img-floatright" src="img/iomtt-logo-smaller.png" />
+</header>
+
+<article>
+
+    <div id="viz-info">
+
+        <h2>TT Race Classes</h2>
+
+        <p>There are several different classes of races that are run each year at the TT, with different
+            characteristics.  Here's a listing of the race classes our visualization shows currently (note that we
+            are not including certain classes currently, including the Sidecar A / B races, etc.)</p>
+
+        <!-- RAN OUT OF TIME!  we will include the list of race classes for project 3 -->
+        <!--
+        var raceClasses = {
+        // http://www.iomguide.com/ttformulaone.php
+        // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT04&race_seq=1
+        formulaone       : {
+        Class:"TT Formula One",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"John McGuinness",
+        AverageSpeed:125.38,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Formula One Motorcycle Races was started in 1977. It use to covers 226.38 miles/364.2 km over 6 laps on the Mountain Circuit, but as of 2004 it changed to 4 laps."
+        },
+        // http://www.iomtt.com/TT-Database/TT-Records/Race-Records.aspx
+        // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2009&race_seq=4
+        // http://www.iomguide.com/ttjunior.php
+        junior           : {
+        Class:"TT Junior / Supersport TT",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"Ian Hutchinson",
+        AverageSpeed:124.141,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Junior 600 and TT 250 Motorcycle Races covers 150.92 miles/ 242.8 km over 4 laps on the Mountain Circuit. The Junior Races are on Wednesday morning."
+        },
+        // http://cdn.iomtt.com/~/media/Files/2012/Results/Fast%20times%20-%20Lightweight%2026.5.ashx
+        // http://www.iomguide.com/ttlightweight.php
+        lightweight      : {
+        Class:"TT Lightweight",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"Ryan Farquhar",
+        AverageSpeed:113.587,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Lightweight 400 and Ultra Lightweight 125 Motorcycle Races cover 150.92 miles/242.8 km over 4 laps on the Mountain Circuit. The Lightweight and Ultra Lightweight races are on Monday."
+        },
+        // http://www.iomguide.com/ttproduction.php
+        // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT04&race_seq=5
+        production       : {
+        Class:"TT International Production 1000",
+        Laps:3,
+        DistanceMiles:113.19,
+        FastestLapRider:"Bruce Anstey",
+        AverageSpeed:123.72,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Production 600 and 1000 Motorcycle Races cover 113.19 miles/182.1 km over 3 laps on the Mountain Circuit. The Production 1000 race is on Monday and the Production 600 race on Friday."
+        },
+        // http://www.iomtt.com/TT-Database/TT-Records/Race-Records.aspx
+        // http://www.iomguide.com/races/tt/senior-tt.php
+        senior           : {
+        Class:"Senior TT",
+        Laps:6,
+        DistanceMiles:226.38,
+        FastestLapRider:"John McGuiness",
+        AverageSpeed:128.078,
+        Notes: "A new race from 2005 with any machine eligible from TT Superbike, TT Superstock or Supersport Junior TT."
+        },
+        // http://cdn.iomtt.com/~/media/Files/2012/Results/Sidecar%20Fast%20times%20-%2026.5.ashx
+        // http://www.iomguide.com/sidecarraces.php
+        sidecara         : {
+        Class:"TT Sidecar Race A",
+        Laps:3,
+        DistanceMiles:113.19,
+        FastestLapRider:"Dave Molyneux & Patrick Farrance",
+        AverageSpeed:110.831,
+        Notes: "The TT Sidecar Motorcycle Races cover 113.19 miles/182.1 km over 3 laps on the Mountain Circuit. The Sidecar A race is on Saturday followed by the Sidecar B on Wednesday and are made up of ACU Formula 2 Sidecars."
+        },
+        // http://cdn.iomtt.com/~/media/Files/2012/Results/Sidecar%20Fast%20times%20-%2026.5.ashx
+        // http://www.iomguide.com/sidecarraces.php
+        sidecarb          : {
+        Class:"TT Sidecar Race B",
+        Laps:3,
+        DistanceMiles:113.19,
+        FastestLapRider:"Dave Molyneux & Patrick Farrance",
+        AverageSpeed:110.831,
+        Notes: "The TT Sidecar Motorcycle Races cover 113.19 miles/182.1 km over 3 laps on the Mountain Circuit. The Sidecar A race is on Saturday followed by the Sidecar B on Wednesday and are made up of ACU Formula 2 Sidecars."
+        },
+        // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT00&race_seq=7
+        // http://en.wikipedia.org/wiki/2000_Isle_of_Man_TT
+        singles          : {
+        Class:"TT Singles",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"John McGuinness",
+        AverageSpeed:109.63,
+        Notes: ""
+        },
+        // http://cdn.iomtt.com/~/media/Files/2012/Results/020612/Superbike/Superbike%20-%20Lap%20by%20lap%20-%202.6.ashx
+        // http://www.iomguide.com/races/tt/tt-superbike.php
+        superbike        : {
+        Class:"TT Superbike",
+        Laps:6,
+        DistanceMiles:226.38,
+        FastestLapRider:"Cameron Donald",
+        AverageSpeed:130.258,
+        Notes: "A new race from 2005 with machines complying with World Superbike and/or British Superbike specifications:\n\nOver 750cc up to 1000cc 4 cylinders\nOver 750cc up to 1000cc 3 cylinders\nOver 800cc up to 1000cc 2 cylinders"
+        },
+        // http://cdn.iomtt.com/~/media/Files/2012/Results/060612/Lap%20by%20lap-Supersport%202.ashx
+        // http://www.iomguide.com/races/tt/supersport-junior-tt.php
+        supersporta       : {
+        Class:"TT Supersport Race A",
+        Laps:6,
+        DistanceMiles:226.38,
+        FastestLapRider:"Michael Dunlop",
+        AverageSpeed:124.391,
+        Notes: "A new race from 2005 with machines complying with FIM Supersport or MCRCB Supersport specifications:\n\nOver 400cc up to 600cc 4 cylinders\nOver 600cc up to 750cc 2 cylinders"
+        },
+        // http://cdn.iomtt.com/~/media/Files/2012/Results/060612/Lap%20by%20lap-Supersport%202.ashx
+        // http://www.iomguide.com/races/tt/supersport-junior-tt.php
+        supersportb       : {
+        Class:"TT Supersport Race B",
+        Laps:6,
+        DistanceMiles:226.38,
+        FastestLapRider:"Michael Dunlop",
+        AverageSpeed:124.391,
+        Notes: "A new race from 2005 with machines complying with FIM Supersport or MCRCB Supersport specifications:\n\nOver 400cc up to 600cc 4 cylinders\nOver 600cc up to 750cc 2 cylinders"
+        },
+        // http://www.iomguide.com/races/tt/tt-superstock.php
+        // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2012&race_seq=4
+        superstock       : {
+        Class:"TT Superstock",
+        Laps:4,
+        DistanceMiles:150.8,
+        FastestLapRider:"John McGuinness",
+        AverageSpeed:126.657,
+        Notes: "A new race from 2005 with machines complying with FIM Superstock and/or UEM Stocksport and/or MCRCB Stocksport specifications:\n\nOver 600cc up to 1000cc 4 cylinders\nOver 750cc up to 1000cc 3 cylinders\nOver 850cc up to 1200cc 2 cylinders"
+        },
+        // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2009&race_seq=10
+        // http://www.iomtt.com/News/2009/04/20/Increased-interest-in-Lightweight-and-Ultra-Lightweight-TT-Races.aspx
+        // http://www.iomguide.com/ttlightweight.php
+        ultralightweight : {
+        Class:"TT Ultra Lightweight 125",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"Ian Lougher",
+        AverageSpeed:94.911,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Lightweight 400 and Ultra Lightweight 125 Motorcycle Races cover 150.92 miles/242.8 km over 4 laps on the Mountain Circuit. The Lightweight and Ultra Lightweight races are on Monday."
+        },
+        // http://www.iomtt.com/TT-2013/TT-Zero.aspx
+        // http://www.iomguide.com/races/tt/ttxgp.php
+        // www.iomtt.com/TT-Database/TT-Records/Race-Records.aspx
+        zero             : {
+        Class:"TTXGP",
+        Laps:1,
+        DistanceMiles:37.7,
+        FastestLapRider:"Michael Rutter",
+        AverageSpeed:104.056,
+        Notes: "The world's first clean emmissions race for motorcycles. The first one lap race is due to take place on June 12, 2009."
+        }
+        };
+        -->
+
+    </div>
+</article>
+
+<footer>
+    <p>&copy; David Killeffer & Leo Mejia for CS 171 / CSCI-E 64 at Harvard Extension School, Spring 2013.</p>
+    <br />
+    <p>Want to see our code? Check out our <a href="https://github.com/rayden7/cs171-project02" target="_blank">Github</a> repo for everything!</p>
+</footer>
+
+<!-- our custom code for creating the visualization -->
+<script src="js/visualization.js"></script>
+</body>
+</html>

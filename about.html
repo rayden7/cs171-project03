@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<meta charset="utf-8">
+<head>
+    <title>The Isle of Man TT - About Our Visualization</title>
+
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/visualization.css"/>
+
+    <!-- local copy of minified D3 library -->
+    <script src="js/d3.v3.min.js"></script>
+
+    <!-- local copy of minified jQuery library -->
+    <script src="js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<header>
+    <img class="tt-img tt-img-floatleft" src="img/iomtt-logo-smaller.png" />
+    <h1>The Isle of Man TT</h1>
+    <!-- This is for the menus -->
+    <ul id="main-nav">
+        <li><a href="index.html">Main</a></li>
+        <!-- will include information on the race classes in project 3 -->
+        <!--<li><a href="races.html">Races</a></li>-->
+        <li><a href="maps.html">Maps</a></li>
+        <li><a href="inspiration.html">Inspiration</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+    <img class="tt-img tt-img-floatright" src="img/iomtt-logo-smaller.png" />
+</header>
+
+<article>
+
+    <div id="viz-info">
+
+        <h2>About</h2>
+
+        <p>Our primary interest for this project was visualizing the rich dataset of rider race performance on the
+            Isle of Man TT, and trying to answer the primary research question of, <b><i>"How long does it take most
+            riders to become proficient at the Isle of Man TT?"</i></b>.  Also, we wanted to find interesting ways to
+            visualize rider performance across 9 different race classes, over a period of 21 years (the modern era of
+            the TT).</p>
+        <p>We attempt Our visualization is a multi-view exmaple showing rider race performance data across several race
+            classes at the Isle of Man TT.  Each line on the primary visualization represents how the rider "placed"
+            in a given race class for a particular year.  When you move your mouse over a race line, the line will be
+            colored black and highlighted, showing you how the rider has fared in a given race over the years.  Also,
+            when you select a rider we show detailed information on them in a panel on the right, as well as 2 or 3
+            alternative visualizations below, which correspond to the rider's performance in the currently moused-over
+            race class.</p>
+        <br />
+
+        <h2>Code & Process Book</h2>
+        <p>To see the code we used to scrape the data from the TT Database and also the JavaScript / HTML / CSS
+            / jQuery / D3 code we used to create the primary visualization, see our
+            <a href="https://github.com/rayden7/cs171-project02">Project II Github repository</a>.</p>
+
+        <p>To read more about how we built out this visualization, see our Google Drive
+            <a href="https://docs.google.com/document/d/1PG95QfW0-YFx-HRjBAYC87QeIbOJeit_5cBa2nenG40/edit?usp=sharing">Project II Process Book</a>.</p>
+        <br />
+
+        <h2>Screencast</h2>
+        <p>This is our video submission introducing our visualization.</p>
+        <iframe width="560" height="315" src="http://www.youtube.com/embed/q8pQeaAc5k4" frameborder="0" allowfullscreen></iframe>
+        <br />
+        <br />
+
+
+        <h2>Software & Tools Used</h2>
+        <p>David is a "Mac guy", Leo is a "PC guy", but we were able to share several tools and applications on both
+            platforms.  Software, programming languages, toolkits, and services used to create this visualization:</p>
+
+        <ul class="left-margin-bump five-column">
+            <li><a href="http://www.jetbrains.com/pycharm/">JetBrains PyCharm</a></li>
+            <li><a href="http://www.jetbrains.com/webstorm/">JetBrains WebStorm</a></li>
+            <li><a href="http://www.eclipse.org/">Eclipse</a></li>
+            <li><a href="http://d3js.org/">D3</a></li>
+            <li><a href="http://jquery.com/">jQuery</a></li>
+            <li><a href="http://www.w3.org/html/wg/drafts/html/master/">HTML5</a></li>
+            <li><a href="http://www.w3.org/Style/CSS/Overview.en.html">CSS</a></li>
+            <li><a href="http://www.w3.org/Graphics/SVG/">SVG</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/JavaScript">JavaScript</a></li>
+            <li><a href="http://python.org/">Python</a></li>
+            <li><a href="http://code.google.com/p/google-refine/">Google Refine</a></li>
+            <li><a href="http://office.microsoft.com/en-us/excel/">Microsoft Excel</a></li>
+            <li><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></li>
+            <li><a href="http://www.techsmith.com/camtasia.html">Camtasia</a></li>
+            <li><a href="http://git-scm.com/">Git</a></li>
+            <li><a href="https://github.com/">Github</a></li>
+            <li><a href="http://www.skype.com/en/">Skype</a></li>
+        </ul>
+        <br /><br />
+
+        <h2>Opportunities For Improvements on Project III</h2>
+        <p>While we are very proud of what we were able to accomplish in the short amount of time we had for
+            Project 2, and despite many very long hours of work, there are several areas that we would like to improve
+            upon for our upcoming Project 3 submission that would make this visualization even better:</p>
+
+        <ul class="left-margin-bump improvements">
+            <li><span class="category-header">Individual Rider Filtering:</span> similar to how the MLB Hall of Fame
+                Voting visualization allows you to search for individuals by name, we would also like to be able to
+                search for individual racers by name and then show appropriate visualizations for the riders that
+                were found (or selected from a list)</li>
+            <li><span class="category-header">Animations & Transitions:</span> it would be nice to have smoothly
+                animating transitions when selecting different riders so that not all the interactivity is purely
+                ON / OFF when mousing over something</li>
+            <li><span class="category-header">Better Contexual Selections / Mouseovers:</span> when you mouseover a
+                racing line, it would be nice to have all the other lines have their opacity change so that the
+                primary visualization appears "less busy"</li>
+            <li><span class="category-header">"Sticky Rider Selections":</span> currently when you mouse over a rider's
+                racing line in the primary visualization, you are shown a very nice information panel on the rider on
+                the right, and you also get 2 or 3 nice smaller custom visualizations of the rider's race class
+                performance underneath the primary visualization; however, when you mouse out from that racing line
+                those areas go away, and so we don't really allow the viewer to play with or explore the rider detail
+                panel or the graphs below.  We would like to modify the primary visualization so that if you mouse over
+                and then click on a rider's racing line, that the rider detail panel and the smaller lower
+                visualizations "stick" so that the viewer can explore and play with those areas (in particular the
+                rider detail panel, because that one contains links for the rider to other websites, etc.).</li>
+            <li><span class="category-header">Rider Performance Comparisons:</span> one thing we would like to do to
+                make the visualization truly powerful would be to let you select 2 riders (perhaps more, but we would
+                need to explore this further) from a list (or simply allow selecting 2 different rider race lines)
+                and then show those riders primary race lines in two different colors on the primary visualization area
+                for easier visual comparison.</li>
+            <li><span class="category-header">All Rider Race Class Performances Shown:</span> currently you may mouse
+                over each race line, and each line represents how <b>one rider</b> has performed in all annual
+                competitions in <b>one race class</b>.  We would like to enable allowing the viewer to see highlighted
+                <b>all</b> of a currently-selected rider's race class performance lines (that would help to show if a
+                rider has a race class "speciality" compared to other race classes, for exmaple)</li>
+            <li><span class="category-header">Bugfix: Show Race Lines Moused Over Above All Other Race Lines:</span>
+                this is a tricky bug that we were unable to solve in time fo r Project 2, despite our best efforts</li>
+
+        </ul>
+        <br /><br />
+
+    </div>
+</article>
+
+<footer>
+    <p>&copy; David Killeffer & Leo Mejia for CS 171 / CSCI-E 64 at Harvard Extension School, Spring 2013.</p>
+    <br />
+    <p>Want to see our code? Check out our <a href="https://github.com/rayden7/cs171-project02" target="_blank">Github</a> repo for everything!</p>
+</footer>
+
+<!-- our custom code for creating the visualization -->
+<script src="js/visualization.js"></script>
+</body>
+</html>
