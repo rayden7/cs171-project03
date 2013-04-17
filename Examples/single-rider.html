@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+        display: none;
+    }
+
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+    /* see http://www.w3.org/TR/SVG/types.html#ColorKeywords for more color names */
+    .race1 {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+    .race2 {
+        fill: none;
+        stroke: slategrey;
+        stroke-width: 1.5px;
+    }
+    .race3 {
+        fill: none;
+        stroke: lightcoral;
+        stroke-width: 1.5px;
+    }
+    .race4 {
+        fill: none;
+        stroke: saddlebrown;
+        stroke-width: 1.5px;
+    }
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+
+    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+            width = 960 - margin.left - margin.right,
+            height = 600 - margin.top - margin.bottom;
+            //width = 1024 - margin.left - margin.right,
+            //height = 900 - margin.top - margin.bottom;
+
+    //var parseDate = d3.time.format("%d-%b-%y").parse;
+    var parseDate = d3.time.format("%Y").parse;
+
+    //var x = d3.time.scale().range([0, width]);
+    var x = d3.scale.linear().range([0, width]);
+
+    var y = d3.scale.linear()
+            .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+
+    var line = d3.svg.line()
+            //.x(function(d) { return x(d.date); })
+            //.y(function(d) { return y(d.close); });
+            .x(function(d) { return x(d.Year); })
+            .y(function(d) { return y(d.Position); });
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+/*
+ RiderID,RaceName,Year,Position,Number,RiderURL,Rider1,Rider2,Machine,Time,Speed
+ 4307,TT 2012 Dainese Superbike TT Race Results,2012,1,1,/TT-Database/competitors.aspx?ride_id=4307,John McGuinness,,1000 Honda,46:03.1,128.078
+ 8526,TT 2012 Dainese Superbike TT Race Results,2012,2,4,/TT-Database/competitors.aspx?ride_id=8526,Cameron DONALD,,1000 Honda,46:17.9,127.78
+ 4310,TT 2012 Dainese Superbike TT Race Results,2012,3,5,/TT-Database/competitors.aspx?ride_id=4310,Bruce Anstey,,1000 Honda,47:00.2,126.938
+ 8430,TT 2012 Dainese Superbike TT Race Results,2012,4,3,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 Suzuki,47:20.2,126.544
+ 9784,TT 2012 Dainese Superbike TT Race Results,2012,5,7,/TT-Database/competitors.aspx?ride_id=9784,Gary Johnson,,1000 Honda,47:35.7,126.241
+*/
+
+
+    var dataset = [];
+
+    d3.csv("single-rider.csv", function(error, data) {
+        data.forEach(function(d) {
+            /*
+            //if (d.Rider1 == "Guy MARTIN" ) {
+                //d.date = parseDate(d.date);
+                //d.close = +d.close;
+                RiderID = +d.RiderID,  // parse the RiderID as a number
+                RaceName = d.RaceName,
+                //Year = parseDate(d.Year.toString()),
+                Year = new Date(d.Year, 0),
+                //Position = +d.Position, // parse the race Position as a number
+                //Position = +d.Position, // parse the race Position as a number
+                Position = parseInt(d.Position), // parse the race Position as a number
+                //Position = parseInt(d.Position), // parse the race Position as a number
+
+                //PosNo = +d.Position, // parse the race Position as a number
+                PosNo = parseInt(d.Position), // parse the race Position as a number
+
+                BikeNumber = +d.BikeNumber,
+                Rider1 = d.Rider1,
+                Rider2 = d.Rider2,
+                Machine = d.Machine,
+                Time = d.Time,
+                Speed = +d.Speed  // parse the Speed as a number
+            //,
+            //}
+            //}, function(error, rows) {
+            //  console.log(rows);
+            /*
+            alert("RiderID: [" + +d.RiderID + "]\n" +
+                  "RaceName: [" + RaceName + "]\n" +
+                  "Year: [" + +d.Year + "]\n" +
+                  "Position: [" + d.Position + "]\n" +
+                  "BikeNumber: [" + +d.BikeNumber + "]\n" +
+                  "Rider1: [" + d.Rider1 + "]\n" +
+                  "Rider2: [" + d.Rider2 + "]\n" +
+                  "Machine: [" + d.Machine + "]\n" +
+                  "Time: [" + d.Time + "]\n" +
+                  "Speed: [" + d.Speed + "]\n"
+            );
+            */
+            dataset.push(
+                    {
+                        RiderID: +d.RiderID,  // parse the RiderID as a number
+                        RaceName: d.RaceName,
+                        //Year: new Date(d.Year, 0),
+                        Year: +d.Year,
+                        //Position: parseInt(d.Position), // parse the race Position as a number
+                        Position: +d.Position, // parse the race Position as a number
+                        BikeNumber: +d.BikeNumber,
+                        Rider1: d.Rider1,
+                        Rider2: d.Rider2,
+                        Machine: d.Machine,
+                        Time: d.Time,
+                        Speed: +d.Speed  // parse the Speed as a number
+                    }
+            );
+        });
+
+        //var positions = [];
+        //for(var record in data) { positions.push(data[record].Position); }
+
+
+
+        //x.domain(d3.extent(data, function(d) { return d.date; }));
+        //y.domain(d3.extent(data, function(d) { return d.close; }));
+
+        //x.domain(d3.extent(data, function(d) { return d.Year; }));
+        x.domain(d3.extent(dataset, function(d) { return d.Year; }));
+        //y.domain(d3.extent(data, function(d) { return d.Position; }));
+        //y.domain(d3.extent(data, function(d) { return d.Position; }));
+        //y.domain(d3.extent(positions));
+
+        //y.domain(d3.extent(dataset, function(d) { return d.Position; }));
+
+
+        //var y_min = d3.min(dataset, function(d) { return d.Position; });
+        var y_min = 1;
+        var y_max = d3.max(dataset, function(d) { return d.Position; }) + 1;
+        y.domain([y_max, y_min]);
+
+
+        //y.domain(d3.invert.extent(dataset, function(d) { return d.Position; }));
+
+
+        /*
+        var positionsArr = [];
+        ////for (var i=0; i < data.length; i++) { positionsArr.push(data[i].Position); }
+        for (var i=0; i < dataset.length; i++) { positionsArr.push(dataset[i].Position); }
+
+        var newPositionsMin = d3.min(positionsArr);
+        var newPositionsMax = d3.max(positionsArr);
+
+        alert(
+              ////"x: ["+ x +"]\n" +
+              ////"y: ["+ y +"]\n" +
+              ////"x.domain: ["+ x.domain+"]\n" +
+              ////"y.domain: ["+ y.domain+"]\n" +
+              ////"new y domain: ["+d3.extent(positions)+"]\n" +
+              ////"all positions: ["+(d3.extent(data, function(d) { return d.Position; })) + "]\n" +
+
+              //"all positions: ["+ foreach(data.function(d) { return d.Position; }).join() + "]\n" +
+              //"all positions: ["+ positions.join() + "]\n" +
+              //"NEW all positions: ["+positionsArr.join()+"]\n" +
+              //"newPositionsMin: ["+newPositionsMin+"]\n" +
+              //"newPositionsMax: ["+newPositionsMax+"]\n"
+              //// data.join() + "]\n" +
+              //"min position: ["+(d3.min(data, function(d) { return d.Position; })) + "]\n" +
+              //"max position: ["+(d3.max(data, function(d) { return d.Position; })) + "]\n" +
+              //"new min position: ["+(d3.min(positions)) + "]\n" +
+              //"new max position: ["+(d3.max(positions)) + "]\n" +
+              ////"new max position: ["+ d3.max(positions, function(array) { return d3.max(array.filter(function(value) { return typeof value === "number"; })) }) + "]\n" +
+              ////"new max position: ["+ Math.max([positions]) + "]\n" +
+              ////"all years: ["+(d3.extent(data, function(d) { return d.Year; })) + "]\n"
+        );
+        */
+
+
+        svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+
+                .append("text")
+                //.attr("transform", "rotate(-90)")
+                .attr("x", 6)
+                //.attr("x", 12)
+                .attr("dx", ".71em")
+                .style("text-anchor", "end")
+                .text("Year");
+
+        svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text("Position");
+
+/*
+ RiderID,RaceName,Year,Position,BikeNumber,RiderURL,Rider1,Rider2,Machine,Time,Speed
+ 8430,TT 2012 Dainese Superbike TT Race Results,2012,4,3,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 Suzuki,47:20.2,126.544
+ 8430,TT 2012 Royal London 360 Superstock TT Results,2012,5,3,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 Suzuki,12:06.8,125.567
+ 8430,TT 2012 Monster Energy Supersport Race 2 Results,2012,8,3,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,600 Suzuki,15:17.9,120.256
+ 8430,TT 2011 Monster Energy Supersport TT Race 1 Results,2011,3,3,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,599 Suzuki,54:56.1,123.628
+ 8430,TT 2011 Royal London 360 Superstock TT Results,2011,3,3,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,999 Suzuki,11:36.6,126.452
+ 8430,TT 2011 Pokerstars Senior TT Results,2011,2,3,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 Suzuki,45:53.0,128.281
+ 8430,TT 2011 Monster Energy Supersport Race 2 Results,2011,3,3,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,599 Suzuki,13:29.3,123.22
+ 8430,TT 2010 PokerStars Superbike TT Race Results,2010,4,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000cc Honda,47:18.1,126.586
+ 8430,TT 2010 Monster Energy Supersport TT 1 Results,2010,2,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,Honda,12:40.8,124.591
+ 8430,TT 2010 Royal London 360 Superstock TT Results,2010,5,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,Honda,11:50.1,126.057
+ 8430,TT 2010 Monster Energy Supersport TT 2 Results,2010,4,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,Honda,13:00.3,124.035
+ 8430,TT 2009 Dainese Superbike TT Results,2009,3,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000cc Honda,46:59.7,126.948
+ 8430,TT 2009 Royal London 360 Superstock TT Results,2009,2,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000cc Honda,11:06.3,127.349
+ 8430,TT 2009 Relentless Supersport TT Race 1 Results,2009,2,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,600cc Honda,13:03.4,123.948
+ 8430,TT 2008 Scottish Life International Superstock TT Results,2008,3,1,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 Honda,12:17.7,125.253
+ 8430,TT 2008 Relentless Supersport Junior TT 2 Results,2008,6,1,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,600 Honda CBR,14:51.7,120.958
+ 8430,TT 2007 Bennetts Superbike TT Results,2007,2,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,Honda FireBlade 1000cc,48:37.1,125.051
+ 8430,TT 2007 Pokerstars Supersport TT Results,2007,3,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,Honda CBR 600cc,13:35.9,123.035
+ 8430,TT 2007 Pokerstars Senior TT Results,2007,2,8,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,Honda FireBlade 1000cc,47:17.0,126.608
+ 8430,TT 2006 Scottish Life Int Superstock Results,2006,4,1,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 YAMAHA R1,13:39.1,122.946
+ 8430,TT 2006 IOMSPC Supersport Results,2006,13,1,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,600 YAMAHA R6,16:55.9,117.704
+ 8430,TT 2006 2e2 Senior Results,2006,5,1,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 YAMAHA R1,49:40.7,123.841
+ 8430,TT 2005 Duke TT Superbike Results,2005,6,15,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 Suzuki,52:22.9,120.863
+ 8430,TT 2005 Scottish Life Intl. TT Superstock Results,2005,5,15,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 SUZUKI GSXR,55:34.5,122.201
+ 8430,TT 2005 Supersport Junior A Results,2005,5,15,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,600 Honda CBR,16:25.4,118.488
+ 8430,TT 2005 IOMSPC Supersport Junior B Results,2005,4,15,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,600 Honda CBR,15:56.0,119.252
+ 8430,TT 2005 Strand Shopping Ctre Senior Results,2005,3,15,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 Suzuki,50:08.2,123.326
+ 8430,TT 2004 Duke Formula One Results,2004,12,24,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 SUZUKI GSXR,1 16 43.5,118.02
+ 8430,TT 2004 Production 600 Results,2004,21,24,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,600 SUZUKI GSXR,1 00 25.8,112.38
+ 8430,TT 2004 Standard Bank Offshore Senior Results,2004,7,29,/TT-Database/competitors.aspx?ride_id=8430,Guy MARTIN,,1000 SUZUKI GSXR,1 15 24.9,120.07
+*/
+
+
+        // just get the Superbike races
+        svg.append("path")
+           .datum(dataset.filter( function(d) {  return d.RaceName.toLowerCase().indexOf("superbike") >= 0; }))
+           //.attr("class", "line")
+           //.attr("class", "race1")
+           //.attr("class", "race2")
+           //.attr("class", "race3")
+           .attr("class", "race1")
+           .attr("d", line);
+
+        svg.append("path")
+                .datum(dataset.filter( function(d) {  return d.RaceName.toLowerCase().indexOf("production") >= 0; }))
+                .attr("class", "race2")
+                .attr("d", line);
+
+        svg.append("path")
+            .datum(dataset.filter( function(d) {  return d.RaceName.toLowerCase().indexOf("superstock") >= 0; }))
+            .attr("class", "race3")
+            .attr("d", line);
+
+        svg.append("path")
+                .datum(dataset.filter( function(d) {  return d.RaceName.toLowerCase().indexOf("senior") >= 0; }))
+                .attr("class", "race4")
+                .attr("d", line);
+
+    });
+
+
+    /*
+    // from https://github.com/mbostock/d3/issues/472
+    //var m = d3.nest().key(function(d) { return d.foo; }).entries(objects).length;
+
+    var color = d3.scale.category10();
+
+
+
+    //An example: dataFiltered = dataloaded.filter(function(d) { return
+    //    d.someThing==currentThing; });
+
+    var races = color.domain().map(function(name) {
+        return {
+            name: name,
+            values: data.map(function(d) {
+                return {date: d.date, temperature: +d[name]};
+            })
+        };
+    });
+*/
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+
+div#raceClassFilter ul {
+    margin-top: 10px;
+    list-style: none;
+    width: 400px;
+    overflow:hidden;
+}
+    div#raceClassFilter ul li {
+        width: 50%;
+        float:left;
+        display:inline;
+        margin-bottom: 5px;
+    }
+
+    div#raceClassFilter ul li:hover {
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+.raceFilterBox {
+    border: 1px solid black;
+    width: 15px;
+    height: 15px;
+    margin-right: 3px;
+    width: 10px;
+    height: 10px;
+    float: left;
+    clear: both;
+}
+
+#viz {
+    border: 1px solid black;
+    background-color: white;
+    min-width: 1050px;
+    min-height: 750px;
+    width: 1100px;
+    height: 950px;
+    height: 850px;
+    margin: 5px;
+    padding: 3px;
+    float: left;
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+}
+
+
+#viz svg {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+#viz svg:last-child {
+    /*background-color: green;*/
+}
+
+
+aside {
+    border: 1px solid black;
+    background-color: #E2E2E2;
+    margin: 5px;
+    padding: 3px;
+    width: 425px;
+    float: left;
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+}
+
+    #viz-filters {
+        padding: 10px;
+    }
+
+    #riderInfo {
+        margin-top: 0;
+        min-height: 650px;
+        height: 695px;
+        padding: 10px;
+        overflow-y: scroll;
+        overflow: -moz-scrollbars-vertical;
+    }
+
+    img.floatleft {
+        border: 1px solid black;
+        float: left;
+        margin: 0 5px 5px 0;
+    }
+
+    #viz-info {
+        border: 1px solid black;
+        background: #ccc;
+        min-width: 1100px;
+        min-height: 200px;
+        width: 98%;
+        margin: 5px;
+        padding: 10px;
+        float: left;
+        clear: both;
+        font-size: 1.25em;
+        border-radius: 0.9em;
+        -moz-border-radius: 0.9em;
+        -webkit-border-radius: 0.9em;
+    }
+
+        #viz-info p {
+            margin-bottom: 1em;
+        }
+
+hr {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    clear: both;
+}
+.ttCareerSummary,
+.ttCareerSummary tr,
+.ttCareerSummary th,
+.ttCareerSummary td {
+    border-collapse:collapse;
+    margin-top: 5px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.riderPics {
+    margin: 3px;
+    border: 1px solid black;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1.5px;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    /* show the x-axis */
+    /*display: none;*/
+}
+
+.x.axis path,
+.y.axis path {
+    /* show the x-axis */
+    /*display: none;*/
+    stroke: black;
+    stroke-width: 1.5px;
+}
+
+.y {
+    color: red;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.speed-line {
+    fill: none;
+    stroke-width: 5.0px;
+    color: orange;
+}
+
+.race-line {
+    fill: none;
+    stroke-width: 1.0px;
+    opacity: 0.50;
+}
+
+.race-line-selected {
+    fill: none;
+    stroke-width: 3.5px;
+}
+
+.colorSelected { stroke: black; }
+
+.color-unselected { stroke: #ccc; }
+
+/* using a new color scale selected from ColorBrewer  */
+.color1, .formulaone  { stroke: #A6CEE3; background-color: #A6CEE3; }
+.color2, .junior      { stroke: #1F78B4; background-color: #1F78B4; }
+.color3, .lightweight { stroke: #B2DF8A; background-color: #B2DF8A; }
+.color4, .production  { stroke: #33A02C; background-color: #33A02C; }
+.color5, .senior      { stroke: #FB9A99; background-color: #FB9A99; }
+.color6, .singles     { stroke: #E31A1C; background-color: #E31A1C; }
+.color7, .superbike   { stroke: #FDBF6F; background-color: #FDBF6F; }
+.color8, .superstock  { stroke: #CAB2D6; background-color: #CAB2D6; }
+.color9, .zero        { stroke: #6A3D9A; background-color: #6A3D9A; }
+
+
+.race-line-tooltip {
+    font-size: 9pt;
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+    background: #ccc;
+    width: 245px;
+    height: 40px;
+    margin: 5px;
+    overflow: hidden;
+    position: absolute;
+    opacity : 0.65;
+}
+
+.race-line-tooltip ul {
+    list-style-type: none;
+    margin-left: 3px;
+    padding: 5px;
+}
+
+.speed-circle,
+.num-finishes-bars {
+    color: #0C2C84;
+    fill: #0C2C84;
+    opacity : 0.65;
+}
+
+.speed-circle-text {
+    color: black;
+    font-size: 7pt;
+}
+
+.rider-detail-graphs {
+    /*background-color: green;*/
+}
+

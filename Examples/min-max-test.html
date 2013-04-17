@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+        display: none;
+    }
+
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+
+    var data = [];
+    for (i=0; i < 10; i++){
+        data.push(
+                    {
+                        "x": i/40,
+                        "y": i/8,
+                        "a": Math.floor(Math.random() * 3),
+                        //"x2": Math.random()
+                        "x2": Math.ceil(Math.random() * 94 * Math.pow(Math.random(), Math.random()))
+                    }
+        );
+    }
+
+    var y_points = [];
+    var x2_points = [];
+    var j;
+    for (j=0; j < data.length; j++) {
+        y_points.push(data[j].y);
+        x2_points.push(data[j].x2);
+    }
+
+
+    //alert("all y_points: ["+y_points.join()+"]");
+    var y_max = d3.max(data, function(d) { return d.y });
+    var y_min = d3.min(data, function(d) { return d.y });
+    var x2_max = d3.max(data, function(d) { return d.x2 });
+    var x2_min = d3.min(data, function(d) { return d.x2 });
+
+    alert(
+          //"all y_points: ["+y_points.join()+"]\n" +
+          //"y_min: ["+y_min+"]\n" +
+          //"y_max: ["+y_max+"]\n\n" +
+          "all x2_points: ["+x2_points.join()+"]\n" +
+          "x2_min: ["+x2_min+"]\n" +
+          "x2_max: ["+x2_max+"]\n"
+    );
+
+/*
+    var x = d3.scale.linear().domain([0, 1]).range([0 + margin, w-margin]),
+            y = d3.scale.linear().domain([0, d3.max(data)]).range([0 + margin, h-margin]),
+            c = d3.scale.linear().domain([0, 3]).range(["hsl(100,50%,50%)", "rgb(350, 50%, 50%)"]).interpolate(d3.interpolateHsl);
+*/
+
+</script>
+</body>
+</html>

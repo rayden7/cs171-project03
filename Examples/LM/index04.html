@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font: 12px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        stroke-width: 1.5px;
+        shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+        /* show the x-axis */
+        /*display: none;*/
+    }
+
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+
+    .race-line { fill: none; stroke-width: 0.5px; }
+
+
+
+</style>
+<body>
+<script src="Script/d3.v3.js"></script>
+<script>
+/*
+var margin = {top: 20, right: 20, bottom: 50, left: 50},
+        width = 400 - margin.left - margin.right,
+        height = 200 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%Y").parse;
+ */
+
+
+// width and height
+var w = 500;
+var h = 150;
+var barPadding = 1;  // <-- New!
+
+var svg = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+
+        //.append("g")
+        //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//var g = d3.select("g");
+
+var dataset = [];
+
+var raceClasses = {
+    // http://cdn.iomtt.com/~/media/Files/2012/Results/Sidecar%20Fast%20times%20-%2026.5.ashx
+    // http://www.iomguide.com/sidecarraces.php
+    sidecar          : {
+        Class:"TT Sidecar",
+        Laps:3,
+        DistanceMiles:113.19,
+        FastestLapRider:"Dave Molyneux & Patrick Farrance",
+        AverageSpeed:110.831,
+        Notes: "The TT Sidecar Motorcycle Races cover 113.19 miles/182.1 km over 3 laps on the Mountain Circuit. The Sidecar A race is on Saturday followed by the Sidecar B on Wednesday and are made up of ACU Formula 2 Sidecars."
+    },
+    // http://www.iomtt.com/TT-2013/TT-Zero.aspx
+    // http://www.iomguide.com/races/tt/ttxgp.php
+    // www.iomtt.com/TT-Database/TT-Records/Race-Records.aspx
+    zero             : {
+        Class:"TTXGP",
+        Laps:1,
+        DistanceMiles:37.7,
+        FastestLapRider:"Michael Rutter",
+        AverageSpeed:104.056,
+        Notes: "The world's first clean emmissions race for motorcycles. The first one lap race is due to take place on June 12, 2009."
+    },
+    // http://cdn.iomtt.com/~/media/Files/2012/Results/060612/Lap%20by%20lap-Supersport%202.ashx
+    // http://www.iomguide.com/races/tt/supersport-junior-tt.php
+    supersport       : {
+        Class:"TT Supersport",
+        Laps:6,
+        DistanceMiles:226.38,
+        FastestLapRider:"Michael Dunlop",
+        AverageSpeed:124.391,
+        Notes: "A new race from 2005 with machines complying with FIM Supersport or MCRCB Supersport specifications:\n\nOver 400cc up to 600cc 4 cylinders\nOver 600cc up to 750cc 2 cylinders"
+    },
+    // http://cdn.iomtt.com/~/media/Files/2012/Results/020612/Superbike/Superbike%20-%20Lap%20by%20lap%20-%202.6.ashx
+    // http://www.iomguide.com/races/tt/tt-superbike.php
+    superbike        : {
+        Class:"TT Superbike",
+        Laps:6,
+        DistanceMiles:226.38,
+        FastestLapRider:"Cameron Donald",
+        AverageSpeed:130.258,
+        Notes: "A new race from 2005 with machines complying with World Superbike and/or British Superbike specifications:\n\nOver 750cc up to 1000cc 4 cylinders\nOver 750cc up to 1000cc 3 cylinders\nOver 800cc up to 1000cc 2 cylinders"
+    },
+    // http://www.iomguide.com/races/tt/tt-superstock.php
+    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2012&race_seq=4
+    superstock       : {
+        Class:"TT Superstock",
+        Laps:4,
+        DistanceMiles:150.8,
+        FastestLapRider:"John McGuinness",
+        AverageSpeed:126.657,
+        Notes: "A new race from 2005 with machines complying with FIM Superstock and/or UEM Stocksport and/or MCRCB Stocksport specifications:\n\nOver 600cc up to 1000cc 4 cylinders\nOver 750cc up to 1000cc 3 cylinders\nOver 850cc up to 1200cc 2 cylinders"
+    },
+    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2009&race_seq=10
+    // http://www.iomtt.com/News/2009/04/20/Increased-interest-in-Lightweight-and-Ultra-Lightweight-TT-Races.aspx
+    // http://www.iomguide.com/ttlightweight.php
+    ultralightweight : {
+        Class:"TT Ultra Lightweight 125",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"Ian Lougher",
+        AverageSpeed:94.911,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Lightweight 400 and Ultra Lightweight 125 Motorcycle Races cover 150.92 miles/242.8 km over 4 laps on the Mountain Circuit. The Lightweight and Ultra Lightweight races are on Monday."
+    },
+    // http://cdn.iomtt.com/~/media/Files/2012/Results/Fast%20times%20-%20Lightweight%2026.5.ashx
+    // http://www.iomguide.com/ttlightweight.php
+    lightweight      : {
+        Class:"TT Lightweight",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"Ryan Farquhar",
+        AverageSpeed:113.587,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Lightweight 400 and Ultra Lightweight 125 Motorcycle Races cover 150.92 miles/242.8 km over 4 laps on the Mountain Circuit. The Lightweight and Ultra Lightweight races are on Monday."
+    },
+    // http://www.iomtt.com/TT-Database/TT-Records/Race-Records.aspx
+    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2009&race_seq=4
+    // http://www.iomguide.com/ttjunior.php
+    junior           : {
+        Class:"TT Junior / Supersport TT",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"Ian Hutchinson",
+        AverageSpeed:124.141,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Junior 600 and TT 250 Motorcycle Races covers 150.92 miles/ 242.8 km over 4 laps on the Mountain Circuit. The Junior Races are on Wednesday morning."
+    },
+    // http://www.iomtt.com/TT-Database/TT-Records/Race-Records.aspx
+    // http://www.iomguide.com/races/tt/senior-tt.php
+    senior           : {
+        Class:"Senior TT",
+        Laps:6,
+        DistanceMiles:226.38,
+        FastestLapRider:"John McGuiness",
+        AverageSpeed:128.078,
+        Notes: "A new race from 2005 with any machine eligible from TT Superbike, TT Superstock or Supersport Junior TT."
+    },
+    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2009&race_seq=8
+    openclass        : {
+        Class:"TTXGP Open Class",
+        Laps:1,
+        DistanceMiles:37.7,
+        FastestLapRider:"Chris Heath",
+        AverageSpeed:66.022,
+        Notes:"Electric-only motorcycles"
+    },
+    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2009&race_seq=7
+    proclass         : {
+        Class:"TTXGP Pro Class",
+        Laps:1,
+        DistanceMiles:37.7,
+        FastestLapRider:"Robert Barber",
+        AverageSpeed:87.434,
+        Notes:"Electric-only motorcycles"
+    },
+    // http://www.iomguide.com/ttformulaone.php
+    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT04&race_seq=1
+    formulaone       : {
+        Class:"TT Formula One",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"John McGuinness",
+        AverageSpeed:125.38,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Formula One Motorcycle Races was started in 1977. It use to covers 226.38 miles/364.2 km over 6 laps on the Mountain Circuit, but as of 2004 it changed to 4 laps."
+    },
+    // http://www.iomguide.com/ttproduction.php
+    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT04&race_seq=5
+    production       : {
+        Class:"TT International Production 1000",
+        Laps:3,
+        DistanceMiles:113.19,
+        FastestLapRider:"Bruce Anstey",
+        AverageSpeed:123.72,
+        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Production 600 and 1000 Motorcycle Races cover 113.19 miles/182.1 km over 3 laps on the Mountain Circuit. The Production 1000 race is on Monday and the Production 600 race on Friday."
+    },
+    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT00&race_seq=7
+    // http://en.wikipedia.org/wiki/2000_Isle_of_Man_TT
+    singles          : {
+        Class:"TT Singles",
+        Laps:4,
+        DistanceMiles:150.92,
+        FastestLapRider:"John McGuinness",
+        AverageSpeed:109.63,
+        Notes: ""
+    }
+};
+
+
+
+function getRaceClass(raceName) {
+    for (var raceKey in raceClasses) {
+        //if (raceName.toLowerCase().indexOf(raceKey) > -1) {
+        var regex = new RegExp(raceKey, "ig");
+        raceName = raceName.replace(/\s+/g, '');  // remove spaces from the race name so we can perform regex matches against the raceClasses which have no spaces
+
+        if (raceName.match(regex)) {
+            return raceClasses[raceKey];
+        }
+        else if (raceName.toLowerCase() == "tt 2002 iom steam pckt  250cc results") {
+            return raceClasses["lightweight"];
+        }
+    }
+    return null;  // race class not found
+}
+
+function getTooltipText(d) {
+    var text = "";
+
+    /*
+     if (d.RaceName !== null && d.RaceName.length > 0)
+     text += "<b>Race: </b>" + d.RaceName + "<br>";
+     if (d.Rider1 !== null && d.Rider1.length > 0 && (d.Rider2 === null || d.Rider2.length == 0))
+     text += "<b>Rider: </b>" + d.Rider1 + "<br>";
+     if (d.Rider1 !== null && d.Rider1.length > 0 && d.Rider2 !== null && d.Rider2.length > 0)
+     text += "<b>Riders: </b>" + d.Rider1 + " & " + d.Rider2 + "<br>";
+     if (d.Year !== null && (typeof(d.Year) === Date) && d.Year.getFullYear() >= 1)
+     text += "<b>Year: </b>" + d.Year.getFullYear().toString() + "<br>";
+     if (d.Position !== null && d.Position > 0) {
+     var posText = (d.Position == 72) ? "DNF" : d.Position;
+     text += "<b>Race Position: </b>" + posText + "<br>";
+     }
+     if (d.Machine !== null && d.Machine.length > 0)
+     text += "<b>Machine: </b>" + d.Machine + "<br>";
+     */
+
+    if (d[0].RaceClass.Class !== null && d[0].RaceClass.Class.length > 0)
+        text += "<b>Race Class: </b>" + d[0].RaceClass.Class + "<br>";
+    if (d[0].Rider1 !== null && d[0].Rider1.length > 0 && (d[0].Rider2 === null || d[0].Rider2.length == 0))
+        text += "<b>Rider: </b>" + d[0].Rider1 + "<br>";
+    if (d[0].Rider1 !== null && d[0].Rider1.length > 0 && d[0].Rider2 !== null && d[0].Rider2.length > 0)
+        text += "<b>Riders: </b>" + d[0].Rider1 + " & " + d[0].Rider2 + "<br>";
+    //if (d[].Year !== null && (typeof(d.Year) === Date) && d.Year.getFullYear() >= 1)
+    //    text += "<b>Year: </b>" + d.Year.getFullYear().toString() + "<br>";
+    //if (d.Position !== null && d.Position > 0) {
+    //    var posText = (d.Position == 72) ? "DNF" : d.Position;
+    //    text += "<b>Race Position: </b>" + posText + "<br>";
+    //}
+    //if (d.Machine !== null && d.Machine.length > 0)
+    //    text += "<b>Machine: </b>" + d.Machine + "<br>";
+
+    return text;
+}
+
+
+
+//d3.csv("races_data.csv", function(error, data) {
+d3.csv("Data/races_data2.csv", function(error, data) {
+    data.forEach(function(d) {
+        dataset.push({
+            RiderID: +d.RiderID,  // parse the RiderID as a number
+            RaceName: d.RaceName,
+            RaceType: d.RaceType,
+            Year: new Date(d.Year,0),  // parse the year into a Date object
+            Position: +d.Position, // parse the race Position as a number
+            BikeNumber: +d.BikeNumber,  // parse the BikeNumber as a number
+            Rider1: d.Rider1,
+            Rider2: d.Rider2,
+            Machine: d.Machine,
+            Time: d.Time,
+            Speed: +d.Speed, // parse the Speed as a number
+            //RaceClass: getRaceClass(d.RaceName).Class,
+            RaceClass: getRaceClass(d.RaceName)  // get information about the main race this record is under
+        });
+    });
+
+
+   // var customYearDomain = [];
+    //var firstYear = d3.min(dataset, function(d) { return d.Year; });
+    //var lastYear = d3.max(dataset, function(d) { return d.Year; });
+    //var twoThousandOneDate = new Date(2001,0).getTime();
+    //for (var i = firstYear; i <= lastYear; i = new Date(i.getFullYear()+1,0) ) {
+     //   if ( i !== twoThousandOneDate) {
+      //      customYearDomain.push(i);
+       // }
+   // }
+
+
+    //var lastPlace = d3.max(dataset, function(d) { return d.Position; });
+   // var dnfPlace = lastPlace + 1;
+
+    var RiderDNF = 0;
+
+    /*dataset.filter(function(d) { if (isNaN(d.Position)) { return d; }}).forEach(function(e) { e.Position = dnfPlace; };
+   svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            .append("text")
+            .attr("x", width / 2)
+            .attr("y", 35)
+            .attr("dx", ".71em")
+            .style("text-anchor", "end")
+            .text("Year");                            */
+
+    var nestedRiders = d3.nest()
+            .key(function(d) { return d.Rider1; })
+            .key(function(d) { return d.Position; })
+            .rollup(function (d){
+                return{
+                    Times: (d.length),
+                    Name: d.Rider1,
+                    Position: d3.min(d, function(g) {return +g.Position})
+                }
+            })
+            .entries(data);
+    var nestedRidersFiltered = d3.nest()
+            .key(function(d) { return d.Rider1; })
+            .key(function(d) { if (isNaN(d.Position))return 0; else return +d.Position})
+            .rollup(function (d){
+                return{
+                    Times: (d.length),
+                    Name: d3.min(d, function(g) {return g.Rider1}),
+                    Position: d3.min(d, function(g) {return +g.Position}),
+                    Year: d3.min(d, function(g) {return g.Year})
+                }
+            })
+            .entries(data.filter(function(d){
+                return  d.Rider1 == "John McGuinness"
+            }));
+    console.log(nestedRidersFiltered[0]);
+    var barScale = d3.scale.linear();
+
+
+    console.log(nestedRidersFiltered[0].values);
+    svg.selectAll("rect")
+            .data(nestedRidersFiltered[0].values)
+            .enter()
+            .append("rect")
+            .attr("fill", "teal")
+            .attr("x", function(d,i){
+               return i*(w / nestedRidersFiltered[0].values.length) ;
+               // console.log(d.key);
+               // return d.key;
+            })
+            .attr("y",function(d){ //console.log(d.values.Position);
+            return h - (d.values.Times * 8);} )
+            .attr("width", w / nestedRidersFiltered[0].values.length - barPadding)
+            .attr("height",  function(d){console.log(d.values.Times);
+                return d.values.Times * 8;});
+
+    svg.selectAll("text")
+            .data(nestedRidersFiltered[0].values)
+            .enter()
+            .append("text")
+            .text(function(d){
+                return d.values.Position;
+            })
+            .attr("x", function(d, i) {
+                return i * (w / nestedRidersFiltered[0].values.length) + (w / nestedRidersFiltered[0].values.length - barPadding) / 2;
+            })
+        /*    .attr("x", function(d,i){
+                return i*(w / nestedRidersFiltered[0].values.length) + 5 ;
+                // console.log(d.key);
+                // return d.key;
+            }) */
+            .attr("y",function(d){ //console.log(d.values.Position);
+                return  h - 1 ;} )
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "11x")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "middle")
+            .attr("fill", "white");
+
+
+});
+
+</script>
+</body>
+</html>

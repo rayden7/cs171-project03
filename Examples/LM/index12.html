@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<meta charset="utf-8">
+<head>
+    <title>The Isle of Man TT - How Long Does It Take To Becoming Proficient?</title>
+
+    <link rel="stylesheet" type="text/css" href="Style/main.css"/>
+    <link rel="stylesheet" type="text/css" href="Style/visualization.css"/>
+
+    <!-- local copy of minified D3 library -->
+    <script src="Script/d3.v3.min.js"></script>
+
+    <!-- local copy of minified jQuery library -->
+    <script src="Script/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>The Isle of Man TT</h1>
+        <!-- This is for the menus -->
+        <ul id="main-nav">
+            <li><a href="index.html">Main</a></li>
+            <li><a href="races.html">Races</a></li>
+            <li><a href="riders.html">Riders</a></li>
+            <li><a href="maps.html">Maps</a></li>
+            <li><a href="credits.html">Credits</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </header>
+
+    <article>
+
+        <!-- this is where the primary visualization will be rendered -->
+        <div id="viz"></div>
+
+        <aside id="viz-filters">
+            <p>this is where the race class filters will go</p>
+        </aside>
+
+        <aside id="riderInfo">
+            <p>this is the aside where individual detailed rider info will show up</p>
+        </aside>
+
+        <div id="viz-info">
+            <p>this is where we will put text explaining our visualization</p>
+        </div>
+    </article>
+
+    <footer>
+        <p>David Killeffer & Leo Mejia</p>
+    </footer>
+
+    <!-- our custom code for creating the visualization -->
+    <script src="Script/visualization.js"></script>
+</body>
+</html>
