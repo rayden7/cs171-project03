@@ -183,9 +183,9 @@ var allRaceClasses = raceClasses;
 // declare the margins, width, and height of the primary visualization area
 var margin = {top: 20, right: 20, bottom: 50, left: 50},
     width = 1050 - margin.left - margin.right,
-    height = 650 - margin.top - margin.bottom;
-    //height = 250 - margin.top - margin.bottom;
-    //height = 450 - margin.top - margin.bottom;
+    height = 500 - margin.top - margin.bottom;
+//height = 250 - margin.top - margin.bottom;
+//height = 450 - margin.top - margin.bottom;
 
 ///// declare the margins, width, and height for the TERTIARY RIDER INFO visualization(s)
 
@@ -264,12 +264,12 @@ window.onload = function() {
     var xAxis = d3.svg.axis()
         .scale(x)
         .tickValues([
-        new Date(1991,0), new Date(1992,0), new Date(1993,0), new Date(1994,0), new Date(1995,0),
-        new Date(1996,0), new Date(1997,0), new Date(1998,0), new Date(1999,0), new Date(2000,0),
-        new Date(2001,0), new Date(2002,0), new Date(2003,0), new Date(2004,0), new Date(2005,0),
-        new Date(2006,0), new Date(2007,0), new Date(2008,0), new Date(2009,0), new Date(2010,0),
-        new Date(2011,0), new Date(2012,0)
-    ])
+            new Date(1991,0), new Date(1992,0), new Date(1993,0), new Date(1994,0), new Date(1995,0),
+            new Date(1996,0), new Date(1997,0), new Date(1998,0), new Date(1999,0), new Date(2000,0),
+            new Date(2001,0), new Date(2002,0), new Date(2003,0), new Date(2004,0), new Date(2005,0),
+            new Date(2006,0), new Date(2007,0), new Date(2008,0), new Date(2009,0), new Date(2010,0),
+            new Date(2011,0), new Date(2012,0)
+        ])
         .orient("bottom");
 
     var yAxis = d3.svg.axis()
@@ -379,7 +379,7 @@ window.onload = function() {
              classes (e.g., maybe there are too many occurrences of this class of race in the given year, or the
              race is not part of a longer-running, year-over-year series and so we can't show rider position placement
              year-over-year, etc.
-            */
+             */
             // only add race data for the races not on the list of ones ot exlude
             if (racesToExclude.indexOf(d.RaceName) == -1) {
                 dataset.push({
@@ -554,7 +554,7 @@ function drawRiderDetailGraphs(d, i) {
 
         var lineScaley = d3.scale.linear()
             .domain([0, d3.max(d, function(d) { return d.Speed; }) + 1])
-             .range([h - padding, padding]);
+            .range([h - padding, padding]);
 
         var lineScaleR =  d3.scale.linear()
             .domain( [72, 1] )
@@ -616,17 +616,17 @@ function drawRiderDetailGraphs(d, i) {
         var barPadding = 2;
 
         var dGrouped = d3.nest()
-                .key(function(d) { return d.Rider1; })
-                .key(function(d) { return +d.Position}).sortKeys(d3.ascending)
-                .rollup(function (d) {
-                    return {
-                        Times: (d.length),
-                        Name: d3.min(d, function(g) {return g.Rider1}),
-                        Position: d3.min(d, function(g) {return +g.Position}),
-                        Year: d3.min(d, function(g) {return g.Year})
-                    }
-                })
-                .entries(d);
+            .key(function(d) { return d.Rider1; })
+            .key(function(d) { return +d.Position}).sortKeys(d3.ascending)
+            .rollup(function (d) {
+                return {
+                    Times: (d.length),
+                    Name: d3.min(d, function(g) {return g.Rider1}),
+                    Position: d3.min(d, function(g) {return +g.Position}),
+                    Year: d3.min(d, function(g) {return g.Year})
+                }
+            })
+            .entries(d);
 
         var barScaley = d3.scale.linear()
             .domain([0, d3.max(dGrouped[0].values, function(d) { return d.values.Times; })])
@@ -639,7 +639,7 @@ function drawRiderDetailGraphs(d, i) {
         var barScalex = d3.scale.linear()
             .domain(
                 [d3.min(dGrouped[0].values, function(d){ return d.Position; }),
-                 d3.max(dGrouped[0].values, function(d){ return d.Position;})])
+                    d3.max(dGrouped[0].values, function(d){ return d.Position;})])
             .range([padding, w ]);
 
         var barXAxis = d3.svg.axis()
@@ -665,7 +665,7 @@ function drawRiderDetailGraphs(d, i) {
             .data(dGrouped[0].values)
             .enter()
             .append("text")
-            .text(function(d){ if ( d.values.Position == 72 ) return "DNF"; else return +d.values.Position; })
+            .text(function(d){ if ( d.values.Position == 71 ) return "DNF"; else return +d.values.Position; })
             .attr("x", function(d, i) { return i*((w - padding) / dGrouped[0].values.length) + padding + 15; })
             .attr("y",function(d){ return  h - padding + 13 ;} )
             .attr("class", "rider-detail-graphs")
@@ -677,24 +677,24 @@ function drawRiderDetailGraphs(d, i) {
             .attr("fill", "black");
 
         svg3.append("g")
-             .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
-             .attr("transform", "translate(0," + (h - padding) + ")")
-             .call(barXAxis)
-             .append("text")
-             .attr("x", w / 2)
-             .attr("y", 30)
-             .style("text-anchor", "end")
-             .text("Race Position");
+            .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
+            .attr("transform", "translate(0," + (h - padding) + ")")
+            .call(barXAxis)
+            .append("text")
+            .attr("x", w / 2)
+            .attr("y", 30)
+            .style("text-anchor", "end")
+            .text("Race Position");
 
-         svg3.append("g")
-             .attr("class", "axis rider-detail-graphs")
-             .attr("transform", "translate(" +  padding + ", 0)")
-             .call(barYAxis)
-             .append("text")
-             .attr("transform", "rotate(-90)")
-             .attr("y", -32)
-             .attr("x", -(h/3)*2.5)
-             .text("Number Race Class Wins");
+        svg3.append("g")
+            .attr("class", "axis rider-detail-graphs")
+            .attr("transform", "translate(" +  padding + ", 0)")
+            .call(barYAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -32)
+            .attr("x", -(h/3)*2.5)
+            .text("Number Race Class Wins");
     }
 
 
@@ -827,8 +827,8 @@ function raceLineMouseOver (d, i) {
         // show any rider pictures we found
         if (
             (riderInfo[0].Picture2 !== null && riderInfo[0].Picture2.length > 0) ||
-            (riderInfo[0].Picture3 !== null && riderInfo[0].Picture3.length > 0)
-        ) {
+                (riderInfo[0].Picture3 !== null && riderInfo[0].Picture3.length > 0)
+            ) {
             riderInfoHTML += "<hr />\n";
             if (riderInfo[0].Picture2 !== null && riderInfo[0].Picture2.length > 0) {
                 // we need to strip out the old, absolute URL to the IOMTT DB rider pictures, and substitute our own local copy of the pictures
