@@ -64,7 +64,7 @@ var raceClasses = {
     // http://www.iomguide.com/ttproduction.php
     // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT04&race_seq=5
     production       : {
-        Class:"TT International Production 1000",
+        Class:"TT Intnl. Production 1000",
         Laps:3,
         DistanceMiles:113.19,
         FastestLapRider:"Bruce Anstey",
@@ -178,14 +178,27 @@ var raceClasses = {
 var allRaceClasses = raceClasses;
 
 
+
+// when a viewer clicks on a rider's race line, save the RiderID that was clicked so we 
+// can preserve the ancillary data display (the rider info panel on the right, the lower 
+// sub-visualizations, etc.)
+var curClickedRiderID;
+
+// when we display a rider's detailed information in the rider detail panel and in the graphs
+// below, make a note of the riderID that is being displayed in those areas; this becomes
+// important to preserve the currently "clicked"/"selected" rider's information until a new
+// rider is clicked
+var curDisplayedRiderID;
+
+
 ///// declare the margins, width, and height for the PRIMARY race line visualization
 
 // declare the margins, width, and height of the primary visualization area
 var margin = {top: 20, right: 20, bottom: 50, left: 50},
     width = 1050 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-//height = 250 - margin.top - margin.bottom;
-//height = 450 - margin.top - margin.bottom;
+    //height = 250 - margin.top - margin.bottom;
+    //height = 450 - margin.top - margin.bottom;
 
 ///// declare the margins, width, and height for the TERTIARY RIDER INFO visualization(s)
 
@@ -214,19 +227,19 @@ var svg = d3.select("#viz").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var svg3 = d3.select("#viz")
-    .append("svg")
-    .attr("width", width3 + margin3.left + margin3.right)
-    .attr("height", height3 + margin3.top + margin3.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
-
 var svg2 = d3.select("#viz")
     .append("svg")
     .attr("width", width2 + margin2.left + margin2.right)
     .attr("height", height2 + margin2.top + margin2.bottom)
     .append("g")
     .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+var svg3 = d3.select("#viz")
+    .append("svg")
+    .attr("width", width3 + margin3.left + margin3.right)
+    .attr("height", height3 + margin3.top + margin3.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
 
 var svg4 = d3.select("#viz")
     .append("svg")
@@ -264,12 +277,12 @@ window.onload = function() {
     var xAxis = d3.svg.axis()
         .scale(x)
         .tickValues([
-            new Date(1991,0), new Date(1992,0), new Date(1993,0), new Date(1994,0), new Date(1995,0),
-            new Date(1996,0), new Date(1997,0), new Date(1998,0), new Date(1999,0), new Date(2000,0),
-            new Date(2001,0), new Date(2002,0), new Date(2003,0), new Date(2004,0), new Date(2005,0),
-            new Date(2006,0), new Date(2007,0), new Date(2008,0), new Date(2009,0), new Date(2010,0),
-            new Date(2011,0), new Date(2012,0)
-        ])
+        new Date(1991,0), new Date(1992,0), new Date(1993,0), new Date(1994,0), new Date(1995,0),
+        new Date(1996,0), new Date(1997,0), new Date(1998,0), new Date(1999,0), new Date(2000,0),
+        new Date(2001,0), new Date(2002,0), new Date(2003,0), new Date(2004,0), new Date(2005,0),
+        new Date(2006,0), new Date(2007,0), new Date(2008,0), new Date(2009,0), new Date(2010,0),
+        new Date(2011,0), new Date(2012,0)
+    ])
         .orient("bottom");
 
     var yAxis = d3.svg.axis()
@@ -292,6 +305,14 @@ window.onload = function() {
         .x(function(d) { return x(d.Year); })
         .y(function(d) { return y(d.Position); })
         .defined(function(d){ return (d.x !== null && d.y !== null); });
+
+
+    //****************************************************************************************************************//
+    //                                                                                                                //
+    // TT VIDEO LINK TO EXPLAIN WHAT THE ISLE OF MAN TT IS - SHOULD PUT IN PROCESS BOOK AND LINK FROM VISUALIZATION   //
+    //      http://www.youtube.com/watch?feature=player_embedded&v=VOTvQuuQ7B4                                        //
+    //                                                                                                                //
+    //****************************************************************************************************************//
 
 
     /*
@@ -379,7 +400,7 @@ window.onload = function() {
              classes (e.g., maybe there are too many occurrences of this class of race in the given year, or the
              race is not part of a longer-running, year-over-year series and so we can't show rider position placement
              year-over-year, etc.
-             */
+            */
             // only add race data for the races not on the list of ones ot exlude
             if (racesToExclude.indexOf(d.RaceName) == -1) {
                 dataset.push({
@@ -476,7 +497,8 @@ window.onload = function() {
                             .attr("class", "race-line "+innerIdx.key)
                             .attr("d", lineClosed)
                             .on("mouseover", raceLineMouseOver )
-                            .on("mouseout", raceLineMouseOut );
+                            .on("mouseout", raceLineMouseOut )
+                            .on("click", riderRaceLineClick );
                     });
                 });
 
@@ -527,7 +549,9 @@ window.onload = function() {
 
 
 
-function drawRiderDetailGraphs(d, i) {
+function drawRiderDetailGraphs(d, i, curObj) {
+
+	//removeRiderDetailGraphs();
 
     // show the line graph of rider speed
     {
@@ -616,17 +640,17 @@ function drawRiderDetailGraphs(d, i) {
         var barPadding = 2;
 
         var dGrouped = d3.nest()
-            .key(function(d) { return d.Rider1; })
-            .key(function(d) { return +d.Position}).sortKeys(d3.ascending)
-            .rollup(function (d) {
-                return {
-                    Times: (d.length),
-                    Name: d3.min(d, function(g) {return g.Rider1}),
-                    Position: d3.min(d, function(g) {return +g.Position}),
-                    Year: d3.min(d, function(g) {return g.Year})
-                }
-            })
-            .entries(d);
+                .key(function(d) { return d.Rider1; })
+                .key(function(d) { return +d.Position}).sortKeys(d3.ascending)
+                .rollup(function (d) {
+                    return {
+                        Times: (d.length),
+                        Name: d3.min(d, function(g) {return g.Rider1}),
+                        Position: d3.min(d, function(g) {return +g.Position}),
+                        Year: d3.min(d, function(g) {return g.Year})
+                    }
+                })
+                .entries(d);
 
         var barScaley = d3.scale.linear()
             .domain([0, d3.max(dGrouped[0].values, function(d) { return d.values.Times; })])
@@ -639,7 +663,7 @@ function drawRiderDetailGraphs(d, i) {
         var barScalex = d3.scale.linear()
             .domain(
                 [d3.min(dGrouped[0].values, function(d){ return d.Position; }),
-                    d3.max(dGrouped[0].values, function(d){ return d.Position;})])
+                 d3.max(dGrouped[0].values, function(d){ return d.Position;})])
             .range([padding, w ]);
 
         var barXAxis = d3.svg.axis()
@@ -665,7 +689,7 @@ function drawRiderDetailGraphs(d, i) {
             .data(dGrouped[0].values)
             .enter()
             .append("text")
-            .text(function(d){ if ( d.values.Position == 71 ) return "DNF"; else return +d.values.Position; })
+            .text(function(d){ if ( d.values.Position == 72 ) return "DNF"; else return +d.values.Position; })
             .attr("x", function(d, i) { return i*((w - padding) / dGrouped[0].values.length) + padding + 15; })
             .attr("y",function(d){ return  h - padding + 13 ;} )
             .attr("class", "rider-detail-graphs")
@@ -677,24 +701,24 @@ function drawRiderDetailGraphs(d, i) {
             .attr("fill", "black");
 
         svg3.append("g")
-            .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
-            .attr("transform", "translate(0," + (h - padding) + ")")
-            .call(barXAxis)
-            .append("text")
-            .attr("x", w / 2)
-            .attr("y", 30)
-            .style("text-anchor", "end")
-            .text("Race Position");
+             .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
+             .attr("transform", "translate(0," + (h - padding) + ")")
+             .call(barXAxis)
+             .append("text")
+             .attr("x", w / 2)
+             .attr("y", 30)
+             .style("text-anchor", "end")
+             .text("Race Position");
 
-        svg3.append("g")
-            .attr("class", "axis rider-detail-graphs")
-            .attr("transform", "translate(" +  padding + ", 0)")
-            .call(barYAxis)
-            .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", -32)
-            .attr("x", -(h/3)*2.5)
-            .text("Number Race Class Wins");
+         svg3.append("g")
+             .attr("class", "axis rider-detail-graphs")
+             .attr("transform", "translate(" +  padding + ", 0)")
+             .call(barYAxis)
+             .append("text")
+             .attr("transform", "rotate(-90)")
+             .attr("y", -32)
+             .attr("x", -(h/3)*2.5)
+             .text("Number Race Class Wins");
     }
 
 
@@ -774,43 +798,18 @@ function drawRiderDetailGraphs(d, i) {
 
 }
 
-function removeRiderDetailGraphs() {
-    d3.selectAll(".rider-detail-graphs").remove();
-}
-
-
-// show a tooltip with rider information and highlight the racing line when mousing over one
-function raceLineMouseOver (d, i) {
-    var con = d3.select("#viz");
-
-    // Since our information box is going to be appended into the
-    // overall visualization container, we need to find out its position
-    // on the screen so that the absolutely positioned infobox shows up
-    // in the right place. It's easy to do this with jQuery
-    var pos = $(con[0][0]).position();
-
-    // d3.mouse returns the mouse coordinates relative to the specified
-    // container. Since we'll be appending the small infobox to the
-    // overall visualization container, we want the mouse coordinates
-    // relative to that.
-    var mouse = d3.mouse(con[0][0]);
-    var info = con.selectAll("div.race-line-tooltip").data([mouse]);
-
-    // change the offset a little bit
-    var cushion = [10, 10];
-    // record the offset as part of the 'this' context, which in this
-    // case stands for the circle that initiated the mouseover event
-    this._xoff = cushion[0] + mouse[0] + pos.left;
-    this._yoff = cushion[1] + mouse[1] + pos.top;
+function drawRiderDetailPanel(d, i, curObj) {
 
     // try to find information in riderDataset on this particular rider based on the RiderID value
     var curRiderID = d[0].RiderID;
+
+    curDisplayedRiderID = curRiderID;
+
     var riderInfo = riderDataset.filter(function(d) { return d.RiderID === curRiderID; });
 
     // if we found the rider info in the riderDataset, build out the ASIDE detailed info on the rider
     if ( riderInfo !== null && riderInfo.length === 1) {
-        var riderInfoHTML = "<h2><a href=\""+ riderInfo[0].TTDatabaseWebpage +"\">"+riderInfo[0].RiderName+"</a></h2>\n";
-        riderInfoHTML += "<p><a href=\""+ riderInfo[0].TTDatabaseWebpage +"\">TT Database rider profile</a></p><br />\n";
+        var riderInfoHTML = "<h2><a href=\""+ riderInfo[0].TTDatabaseWebpage +"\" class=\"external\" target=\"_blank\">"+riderInfo[0].RiderName+"</a></h2>\n";
 
         // clean and show the rider biography
         var bio = riderInfo[0].Biography;
@@ -862,10 +861,112 @@ function raceLineMouseOver (d, i) {
 
         // update the rider info div with the detailed HTML
         $("#riderInfo").html(riderInfoHTML);
-
-
-        console.log(riderInfoHTML);
     }
+}
+
+
+function drawRiderDetailPanel(d, i, curObj) {
+
+    // try to find information in riderDataset on this particular rider based on the RiderID value
+	var curRiderID = d[0].RiderID;
+
+    curDisplayedRiderID = curRiderID;
+
+	var riderInfo = riderDataset.filter(function(d) { return d.RiderID === curRiderID; });
+
+    // if we found the rider info in the riderDataset, build out the ASIDE detailed info on the rider
+	if ( riderInfo !== null && riderInfo.length === 1) {
+	    var riderInfoHTML = "<h2><a href=\""+ riderInfo[0].TTDatabaseWebpage +"\" class=\"external\" target=\"_blank\">"+riderInfo[0].RiderName+"</a></h2>\n";
+
+        // clean and show the rider biography
+		var bio = riderInfo[0].Biography;
+		if (bio !== null && bio.length > 0) {
+		    // if we find any occurrences of two successive single quotes, replace them with one single quote
+			bio = bio.replace(/""+/ig, '"');
+			// update the IOMTT database website relative image path for any inline images to use our local copy of the
+			// images; I used "wget" to download and save local copies of them all, per the Project 2 requirement that
+			// ALL resources must be fully localized
+			bio = bio.replace(/\/images\/cache/ig, 'img/tt-rider-photos/');
+			riderInfoHTML += "<p>"+bio+"</p>\n";
+        }
+
+        // show any rider pictures we found
+		if (
+            (riderInfo[0].Picture2 !== null && riderInfo[0].Picture2.length > 0) ||
+            (riderInfo[0].Picture3 !== null && riderInfo[0].Picture3.length > 0)
+		) {
+            riderInfoHTML += "<hr />\n";
+			if (riderInfo[0].Picture2 !== null && riderInfo[0].Picture2.length > 0) {
+			    // we need to strip out the old, absolute URL to the IOMTT DB rider pictures, and substitute our own local copy of the pictures
+			    var picture2URL = riderInfo[0].Picture2.replace("http://www.iomtt.com/images/cache/", "img/tt-rider-photos/");
+                riderInfoHTML += "<img class=\"riderPics\" src=\""+picture2URL+"\" title=\""+riderInfo[0].RiderName+"\ picture 2\" />\n";
+            }
+            if (riderInfo[0].Picture3 !== null && riderInfo[0].Picture3.length > 0) {
+                // we need to strip out the old, absolute URL to the IOMTT DB rider pictures, and substitute our own local copy of the pictures
+                var picture3URL = riderInfo[0].Picture3.replace("http://www.iomtt.com/images/cache/", "img/tt-rider-photos/");
+                riderInfoHTML += "<img class=\"riderPics\" src=\""+picture3URL+"\" title=\""+riderInfo[0].RiderName+"\ picture 2\" />\n";
+            }
+        }
+
+        // determine if we have non-zero values for career TT race placement in positions 1-10, or DNF occurrences
+		var occ1   = (isNaN(riderInfo[0].TTCareerSummaryPosition1))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition1);
+		var occ2   = (isNaN(riderInfo[0].TTCareerSummaryPosition2))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition2);
+		var occ3   = (isNaN(riderInfo[0].TTCareerSummaryPosition3))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition3);
+		var occ4   = (isNaN(riderInfo[0].TTCareerSummaryPosition4))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition4);
+		var occ5   = (isNaN(riderInfo[0].TTCareerSummaryPosition5))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition5);
+		var occ6   = (isNaN(riderInfo[0].TTCareerSummaryPosition6))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition6);
+		var occ7   = (isNaN(riderInfo[0].TTCareerSummaryPosition7))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition7);
+		var occ8   = (isNaN(riderInfo[0].TTCareerSummaryPosition8))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition8);
+		var occ9   = (isNaN(riderInfo[0].TTCareerSummaryPosition9))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition9);
+		var occ10  = (isNaN(riderInfo[0].TTCareerSummaryPosition10))  ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition10);
+		var occDNF = (isNaN(riderInfo[0].TTCareerSummaryPositionDNF)) ? 0 : parseInt(riderInfo[0].TTCareerSummaryPositionDNF);
+		if ( occ1>0 || occ2>0 || occ3>0 || occ4> 0 || occ5>0 || occ6>0 || occ7>0 || occ8>0 || occ9>0 || occ10>0 || occDNF>0 ) {
+		    riderInfoHTML += "<hr />\n";
+			riderInfoHTML += "<p>This table shows how many times has come in each of the top ten places in any TT race, and how many times they did not finish (DNF) a race they began.</p>\n";
+			riderInfoHTML += "<table class=\"ttCareerSummary\" summary=\"TT Career Summary\"><caption><strong>TT Career Summary</strong></caption><tr><th id=\"position\">Position</th><td headers=\"position\">1</td><td headers=\"position\">2</td><td headers=\"position\">3</td><td headers=\"position\">4</td><td headers=\"position\">5</td><td headers=\"position\">6</td><td headers=\"position\">7</td><td headers=\"position\">8</td><td headers=\"position\">9</td><td headers=\"position\">10</td><td headers=\"position\"><abbr title=\"Did not finish\">DNF</abbr></td></tr><tr><th id=\"numTimes\">No of times</th><td headers=\"numTimes\">"+occ1+"</td><td headers=\"numTimes\">"+occ2+"</td><td headers=\"numTimes\">"+occ3+"</td><td headers=\"numTimes\">"+occ4+"</td><td headers=\"numTimes\">"+occ5+"</td><td headers=\"numTimes\">"+occ6+"</td><td headers=\"numTimes\">"+occ7+"</td><td headers=\"numTimes\">"+occ8+"</td><td headers=\"numTimes\">"+occ9+"</td><td headers=\"numTimes\">"+occ10+"</td><td headers=\"numTimes\">"+occDNF+"</td></tr></table>";
+		}
+
+        // update the rider info div with the detailed HTML
+		$("#riderInfo").html(riderInfoHTML);
+    }
+}
+
+
+function removeRiderDetailPanel(d, i, curObj) {
+    curDisplayedRiderID = undefined;
+    $("#riderInfo").html("");
+}
+
+function removeRiderDetailGraphs(d, i, curObj) {
+    d3.selectAll(".rider-detail-graphs").remove();
+}
+
+
+function drawRiderTooltip(d, i, curObj) {
+
+    removeRiderTooltip(d,i);
+
+    var con = d3.select("#viz");
+
+    // Since our information box is going to be appended into the
+    // overall visualization container, we need to find out its position
+    // on the screen so that the absolutely positioned infobox shows up
+    // in the right place. It's easy to do this with jQuery
+    var pos = $(con[0][0]).position();
+
+    // d3.mouse returns the mouse coordinates relative to the specified
+    // container. Since we'll be appending the small infobox to the
+    // overall visualization container, we want the mouse coordinates
+    // relative to that.
+    var mouse = d3.mouse(con[0][0]);
+    var info = con.selectAll("div.race-line-tooltip").data([mouse]);
+
+    // change the offset a little bit
+    var cushion = [10, 10];
+    // record the offset as part of the 'this' context, which in this
+    // case stands for the circle that initiated the mouseover event
+    this._xoff = cushion[0] + mouse[0] + pos.left;
+    this._yoff = cushion[1] + mouse[1] + pos.top;
 
     // build out the text to show on the TOOLTIP
     var riderInfoText = "<ul>\n";
@@ -884,46 +985,152 @@ function raceLineMouseOver (d, i) {
         .html(riderInfoText);
 
     // highlight the race line by making it have a thicker line stroke and color it darkly
-    d3.select(this).attr("class","race-line-selected colorSelected");
+    //d3.select(this).attr("class","race-line-selected colorSelected");
 
-    drawRiderDetailGraphs(d, i);
+
+    //return this;
+    //return 0;
+}
+
+function removeRiderTooltip(d, i, curObj) {
+    // quickly remove the rider info tooltip; don't want to do a transition because the user will most likely
+    // be mousing over/out of several lines at once since the primary visualization has a ton of race lines
+    d3.selectAll(".race-line-tooltip").remove();
+}
+
+
+
+// when the user clicks on a race line, preserve the current rider detail panel and detail graphs, until they either:
+//     - clear the currently selected rider, or
+//     - click on a different rider's race line (thereby selecting a new rider)
+function riderRaceLineClick(d, i) {
+    //alert("you clicked a rider line:\n\nd: ["+d+"]\ni: ["+i+"]\ncurClickedRiderID: ["+d[0].RiderID+"]");
+
+    // if when the user clicked a rider race line, if the race line clicked is
+    // for a rider other than the one already selected, then call the mouseover
+    // function and pass along the "d" and "i" parameters
+    curClickedRiderID = d[0].RiderID;
+
+    //if (curClickedRiderID !== undefined && curClickedRiderID !== d[0].RiderID) {
+        raceLineMouseOver(d, i, this);
+    //}
+
+    /*
+    // if when the user clicked a rider race line, if the race line clicked is
+    // for a rider other than the one already selected, then call the mouseover
+    // function and pass along the "d" and "i" parameters
+    if (curClickedRiderID !== undefined && curClickedRiderID !== d[0].RiderID) {
+        raceLineMouseOver(d,i);
+    }
+    curClickedRiderID = d[0].RiderID;
+    */
+
+    return 0;
+}
+
+
+// show a tooltip with rider information and highlight the racing line when mousing over one
+function raceLineMouseOver (d, i, curObj) {
+
+    //console.log("raceLineMouseOver:: curClickedRiderID: ["+curClickedRiderID+"]  mouseOverRiderID: ["+d[0].RiderID+"]  typeof curClickedRiderID == undefined: ["+ (typeof curClickedRiderID == undefined)+"]    typeof curClickedRiderID: ["+(typeof curClickedRiderID).toString()+"]  isNaN(curClickedRiderID): ["+(isNaN(curClickedRiderID)).toString()+"]");
+    console.log("raceLineMouseOver::\n\tcurClickedRiderID: ["+curClickedRiderID+"]\n\tmouseOverRiderID: ["+d[0].RiderID+"]\n\tcurDisplayedRiderID: ["+curDisplayedRiderID+"]   this: ["+this+"]   curObj: ["+curObj+"]");
+
+    // highlight the race line by making it have a thicker line stroke and color it darkly
+
+    //d3.select(this).attr("class","race-line-selected colorSelected");
+    //d3.select(curObj).attr("class","race-line-selected colorSelected");
+
+    // because sometimes this function will get called purely as a mouseover event, and sometimes as a click event, we need to know which type of "thing" to use d3 to select to style the mouseover line
+//    if (typeof this != "undefined" && typeof this == "SVGPathElement") {
+        d3.select(this).attr("class","race-line-selected colorSelected");
+//    } else if (typeof curObj == "SVGPathElement") {
+//        d3.select(curObj).attr("class","race-line-selected colorSelected");
+//    }
+
+
+    //drawRiderTooltip(d, i);
+    drawRiderTooltip(d, i, curObj);
+
+    //if (curClickedRiderID === undefined || curClickedRiderID != d[0].RiderID) {
+    //if (curClickedRiderID === undefined ) {
+    //if ( (typeof curClickedRiderID === undefined) || curClickedRiderID == d[0].RiderID) {
+    //if ( isNaN(curClickedRiderID) || curClickedRiderID == d[0].RiderID) {
+    //if ( (typeof curClickedRiderID == "undefined") || curClickedRiderID == d[0].RiderID) {
+    if (
+        (typeof curClickedRiderID == "undefined") ||
+        (
+            typeof curClickedRiderID != "undefined" &&
+            typeof curDisplayedRiderID != "undefined" &&
+            curClickedRiderID !== curDisplayedRiderID
+        )
+    ) {
+        removeRiderDetailPanel(d, i, curObj);
+        removeRiderDetailGraphs(d, i, curObj);
+
+        //console.log("raceLineMouseOver:: drawing new rider detail panels");
+        drawRiderDetailPanel(d, i, curObj);
+        drawRiderDetailGraphs(d, i, curObj);
+    }
 
     return 0;
 }
 
 
 // remove the tooltip and drop the race line highlighting on mouseout
-function raceLineMouseOut (d, i) {
-    // quickly remove the rider info tooltip; don't want to do a transition because the user will most likely
-    // be mousing over/out of several lines at once since the primary visualization has a ton of race lines
-    d3.selectAll(".race-line-tooltip").remove();
+function raceLineMouseOut (d, i, curObj) {
 
-    // remove the rider detailed info
-    $("#riderInfo").html("");
+    //console.log("raceLineMouseOut:: curClickedRiderID: ["+curClickedRiderID+"]  mouseOutRiderID: ["+d[0].RiderID+"]");
 
-    var classToRestore = getRaceClassLineStyle(d[0].RaceType);
+    //// quickly remove the rider info tooltip; don't want to do a transition because the user will most likely
+    //// be mousing over/out of several lines at once since the primary visualization has a ton of race lines
+    //d3.selectAll(".race-line-tooltip").remove();
 
-    // and remove the highlighting of the race line, and return the original class coloring
-    d3.select(this).attr("class","race-line "+classToRestore);
+    //// remove the rider detailed info
+    //$("#riderInfo").html("");
 
-    removeRiderDetailGraphs();
+    //var classToRestore = getRaceClassLineStyle(d[0].RaceType);
 
-    return 0;
+    //// and remove the highlighting of the race line, and return the original class coloring
+    //d3.select(this).attr("class","race-line "+classToRestore);
+
+    //removeRiderTooltip(d, i);
+
+    // only remove all the styles and everything if the currentRiderID is different from the one passed in d
+	if (typeof curClickedRiderID == "undefined" || curClickedRiderID !== d[0].RiderID) {
+    //if (typeof curClickedRiderID == "undefined" ) {
+
+        var classToRestore = getRaceClassLineStyle(d[0].RaceType);
+
+        // and remove the highlighting of the race line, and return the original class coloring
+        d3.select(this).attr("class","race-line "+classToRestore);
+        //d3.select(curObj).attr("class","race-line "+classToRestore);
+
+        removeRiderTooltip(d, i, curObj);
+
+        if (curDisplayedRiderID !== curClickedRiderID) {
+            removeRiderDetailPanel(d, i, curObj);
+            removeRiderDetailGraphs(d, i, curObj);
+        }
+
+	    //// remove the rider detailed info
+    	////$("#riderInfo").html("");
+
+        //removeRiderDetailPanel();
+        //removeRiderDetailGraphs();
+    }
+
+    //return 0;
 }
 
 
 function getRaceClass(raceName) {
-    //for (var raceKey in raceClasses) {
     for (var raceKey in allRaceClasses) {
         var regex = new RegExp(raceKey, "ig");
         raceName = raceName.replace(/\s+/g, '');  // remove spaces from the race name so we can perform regex matches against the raceClasses which have no spaces
 
         if (raceName.match(regex)) {
-            //return raceClasses[raceKey];
             return allRaceClasses[raceKey];
-        }
-        else if (raceName.toLowerCase() == "tt 2002 iom steam pckt  250cc results") {
-            //return raceClasses["lightweight"];
+        } else if (raceName.toLowerCase() == "tt 2002 iom steam pckt  250cc results") {
             return allRaceClasses["lightweight"];
         }
     }
@@ -934,32 +1141,32 @@ function getRaceClass(raceName) {
 function getRaceClassLineStyle(raceClass) {
     switch (raceClass) {
         case "formulaone" :
-            return "color1";
+            return "formulaone";
         case "junior" :
-            return "color2";
+            return "junior";
         case "lightweight" :
-            return "color3";
+            return "lightweight";
         case "production" :
-            return "color4";
+            return "production";
         case "senior" :
-            return "color5";
+            return "senior";
         case "sidecara" :
-            return "color6";
+            return "sidecara";
         case "sidecarb" :
-            return "color7";
+            return "sidecarb";
         case "singles" :
-            return "color8";
+            return "singles";
         case "superbike" :
-            return "color9";
+            return "superbike";
         case "supersporta" :
-            return "color10";
+            return "supersporta";
         case "supersportb" :
-            return "color11";
+            return "supersportb";
         case "superstock" :
-            return "color12";
+            return "superstock";
         case "ultralightweight" :
-            return "color13";
+            return "ultralightweight";
         case "zero" :
-            return "color14";
+            return "zero";
     }
 }

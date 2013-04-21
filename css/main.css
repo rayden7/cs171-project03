@@ -127,6 +127,14 @@ a img {
     border: none;
 }
 
+/* found a neat way to include a small icon for offsite links - borrowed from:
+      http://www.electrictoolbox.com/add-offsite-link-icon-after-external-links-css/
+*/
+a.external {
+    background: url("../img/external.png") center right no-repeat;
+    padding-right: 13px;
+}
+
 header {
     padding: 0;
     margin: 0 auto;
