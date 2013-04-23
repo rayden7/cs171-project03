@@ -175,14 +175,28 @@ hr {
     fill: none;
     stroke-width: 1.0px;
     opacity: 0.50;
+    opacity: 0.25;
+    opacity: 0.15;
 }
 
 .race-line-selected {
     fill: none;
     stroke-width: 3.5px;
+    stroke-width: 4px;
+    opacity: 1.0;
+    opacity: 0.99;
+    opacity: 2.99;
+    opacity: 5;
+    opacity: 1;
+
+    /*stroke-width: 5px;*/
 }
 
-.colorSelected { stroke: black; }
+/* special class applied to rider race lines that have been clicked on and should remain "sticky" until the user either clicks on a different line or refreshes the page */
+.race-line-sticky { }
+
+/* .colorSelected { stroke: black; } */
+.colorSelected {  }
 
 .color-unselected { stroke: #ccc; }
 

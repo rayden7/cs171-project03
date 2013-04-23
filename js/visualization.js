@@ -548,7 +548,6 @@ window.onload = function() {
 }
 
 
-
 function drawRiderDetailGraphs(d, i, curObj) {
 
 	//removeRiderDetailGraphs();
@@ -801,73 +800,6 @@ function drawRiderDetailGraphs(d, i, curObj) {
 function drawRiderDetailPanel(d, i, curObj) {
 
     // try to find information in riderDataset on this particular rider based on the RiderID value
-    var curRiderID = d[0].RiderID;
-
-    curDisplayedRiderID = curRiderID;
-
-    var riderInfo = riderDataset.filter(function(d) { return d.RiderID === curRiderID; });
-
-    // if we found the rider info in the riderDataset, build out the ASIDE detailed info on the rider
-    if ( riderInfo !== null && riderInfo.length === 1) {
-        var riderInfoHTML = "<h2><a href=\""+ riderInfo[0].TTDatabaseWebpage +"\" class=\"external\" target=\"_blank\">"+riderInfo[0].RiderName+"</a></h2>\n";
-
-        // clean and show the rider biography
-        var bio = riderInfo[0].Biography;
-        if (bio !== null && bio.length > 0) {
-            // if we find any occurrences of two successive single quotes, replace them with one single quote
-            bio = bio.replace(/""+/ig, '"');
-            // update the IOMTT database website relative image path for any inline images to use our local copy of the
-            // images; I used "wget" to download and save local copies of them all, per the Project 2 requirement that
-            // ALL resources must be fully localized
-            bio = bio.replace(/\/images\/cache/ig, 'img/tt-rider-photos/');
-            riderInfoHTML += "<p>"+bio+"</p>\n";
-        }
-
-        // show any rider pictures we found
-        if (
-            (riderInfo[0].Picture2 !== null && riderInfo[0].Picture2.length > 0) ||
-                (riderInfo[0].Picture3 !== null && riderInfo[0].Picture3.length > 0)
-            ) {
-            riderInfoHTML += "<hr />\n";
-            if (riderInfo[0].Picture2 !== null && riderInfo[0].Picture2.length > 0) {
-                // we need to strip out the old, absolute URL to the IOMTT DB rider pictures, and substitute our own local copy of the pictures
-                var picture2URL = riderInfo[0].Picture2.replace("http://www.iomtt.com/images/cache/", "img/tt-rider-photos/");
-                riderInfoHTML += "<img class=\"riderPics\" src=\""+picture2URL+"\" title=\""+riderInfo[0].RiderName+"\ picture 2\" />\n";
-            }
-            if (riderInfo[0].Picture3 !== null && riderInfo[0].Picture3.length > 0) {
-                // we need to strip out the old, absolute URL to the IOMTT DB rider pictures, and substitute our own local copy of the pictures
-                var picture3URL = riderInfo[0].Picture3.replace("http://www.iomtt.com/images/cache/", "img/tt-rider-photos/");
-                riderInfoHTML += "<img class=\"riderPics\" src=\""+picture3URL+"\" title=\""+riderInfo[0].RiderName+"\ picture 2\" />\n";
-            }
-        }
-
-        // determine if we have non-zero values for career TT race placement in positions 1-10, or DNF occurrences
-        var occ1   = (isNaN(riderInfo[0].TTCareerSummaryPosition1))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition1);
-        var occ2   = (isNaN(riderInfo[0].TTCareerSummaryPosition2))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition2);
-        var occ3   = (isNaN(riderInfo[0].TTCareerSummaryPosition3))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition3);
-        var occ4   = (isNaN(riderInfo[0].TTCareerSummaryPosition4))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition4);
-        var occ5   = (isNaN(riderInfo[0].TTCareerSummaryPosition5))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition5);
-        var occ6   = (isNaN(riderInfo[0].TTCareerSummaryPosition6))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition6);
-        var occ7   = (isNaN(riderInfo[0].TTCareerSummaryPosition7))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition7);
-        var occ8   = (isNaN(riderInfo[0].TTCareerSummaryPosition8))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition8);
-        var occ9   = (isNaN(riderInfo[0].TTCareerSummaryPosition9))   ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition9);
-        var occ10  = (isNaN(riderInfo[0].TTCareerSummaryPosition10))  ? 0 : parseInt(riderInfo[0].TTCareerSummaryPosition10);
-        var occDNF = (isNaN(riderInfo[0].TTCareerSummaryPositionDNF)) ? 0 : parseInt(riderInfo[0].TTCareerSummaryPositionDNF);
-        if ( occ1>0 || occ2>0 || occ3>0 || occ4> 0 || occ5>0 || occ6>0 || occ7>0 || occ8>0 || occ9>0 || occ10>0 || occDNF>0 ) {
-            riderInfoHTML += "<hr />\n";
-            riderInfoHTML += "<p>This table shows how many times has come in each of the top ten places in any TT race, and how many times they did not finish (DNF) a race they began.</p>\n";
-            riderInfoHTML += "<table class=\"ttCareerSummary\" summary=\"TT Career Summary\"><caption><strong>TT Career Summary</strong></caption><tr><th id=\"position\">Position</th><td headers=\"position\">1</td><td headers=\"position\">2</td><td headers=\"position\">3</td><td headers=\"position\">4</td><td headers=\"position\">5</td><td headers=\"position\">6</td><td headers=\"position\">7</td><td headers=\"position\">8</td><td headers=\"position\">9</td><td headers=\"position\">10</td><td headers=\"position\"><abbr title=\"Did not finish\">DNF</abbr></td></tr><tr><th id=\"numTimes\">No of times</th><td headers=\"numTimes\">"+occ1+"</td><td headers=\"numTimes\">"+occ2+"</td><td headers=\"numTimes\">"+occ3+"</td><td headers=\"numTimes\">"+occ4+"</td><td headers=\"numTimes\">"+occ5+"</td><td headers=\"numTimes\">"+occ6+"</td><td headers=\"numTimes\">"+occ7+"</td><td headers=\"numTimes\">"+occ8+"</td><td headers=\"numTimes\">"+occ9+"</td><td headers=\"numTimes\">"+occ10+"</td><td headers=\"numTimes\">"+occDNF+"</td></tr></table>";
-        }
-
-        // update the rider info div with the detailed HTML
-        $("#riderInfo").html(riderInfoHTML);
-    }
-}
-
-
-function drawRiderDetailPanel(d, i, curObj) {
-
-    // try to find information in riderDataset on this particular rider based on the RiderID value
 	var curRiderID = d[0].RiderID;
 
     curDisplayedRiderID = curRiderID;
@@ -923,7 +855,7 @@ function drawRiderDetailPanel(d, i, curObj) {
 		if ( occ1>0 || occ2>0 || occ3>0 || occ4> 0 || occ5>0 || occ6>0 || occ7>0 || occ8>0 || occ9>0 || occ10>0 || occDNF>0 ) {
 		    riderInfoHTML += "<hr />\n";
 			riderInfoHTML += "<p>This table shows how many times has come in each of the top ten places in any TT race, and how many times they did not finish (DNF) a race they began.</p>\n";
-			riderInfoHTML += "<table class=\"ttCareerSummary\" summary=\"TT Career Summary\"><caption><strong>TT Career Summary</strong></caption><tr><th id=\"position\">Position</th><td headers=\"position\">1</td><td headers=\"position\">2</td><td headers=\"position\">3</td><td headers=\"position\">4</td><td headers=\"position\">5</td><td headers=\"position\">6</td><td headers=\"position\">7</td><td headers=\"position\">8</td><td headers=\"position\">9</td><td headers=\"position\">10</td><td headers=\"position\"><abbr title=\"Did not finish\">DNF</abbr></td></tr><tr><th id=\"numTimes\">No of times</th><td headers=\"numTimes\">"+occ1+"</td><td headers=\"numTimes\">"+occ2+"</td><td headers=\"numTimes\">"+occ3+"</td><td headers=\"numTimes\">"+occ4+"</td><td headers=\"numTimes\">"+occ5+"</td><td headers=\"numTimes\">"+occ6+"</td><td headers=\"numTimes\">"+occ7+"</td><td headers=\"numTimes\">"+occ8+"</td><td headers=\"numTimes\">"+occ9+"</td><td headers=\"numTimes\">"+occ10+"</td><td headers=\"numTimes\">"+occDNF+"</td></tr></table>";
+			riderInfoHTML += "<table class=\"ttCareerSummary\" summary=\"TT Career Summary\"><caption><strong>TT Career Summary</strong></caption><tr><th id=\"position\">Position</th><td headers=\"position\">1</td><td headers=\"position\">2</td><td headers=\"position\">3</td><td headers=\"position\">4</td><td headers=\"position\">5</td><td headers=\"position\">6</td><td headers=\"position\">7</td><td headers=\"position\">8</td><td headers=\"position\">9</td><td headers=\"position\">10</td><td headers=\"position\"><abbr title=\"Did not finish\">DNF</abbr></td></tr><tr><th id=\"numTimes\"># of times</th><td headers=\"numTimes\">"+occ1+"</td><td headers=\"numTimes\">"+occ2+"</td><td headers=\"numTimes\">"+occ3+"</td><td headers=\"numTimes\">"+occ4+"</td><td headers=\"numTimes\">"+occ5+"</td><td headers=\"numTimes\">"+occ6+"</td><td headers=\"numTimes\">"+occ7+"</td><td headers=\"numTimes\">"+occ8+"</td><td headers=\"numTimes\">"+occ9+"</td><td headers=\"numTimes\">"+occ10+"</td><td headers=\"numTimes\">"+occDNF+"</td></tr></table>";
 		}
 
         // update the rider info div with the detailed HTML
@@ -983,13 +915,6 @@ function drawRiderTooltip(d, i, curObj) {
         .attr("class","race-line-tooltip")
         .attr("style", "top: " + this._yoff + "px; left: " + this._xoff + "px;")
         .html(riderInfoText);
-
-    // highlight the race line by making it have a thicker line stroke and color it darkly
-    //d3.select(this).attr("class","race-line-selected colorSelected");
-
-
-    //return this;
-    //return 0;
 }
 
 function removeRiderTooltip(d, i, curObj) {
@@ -1004,58 +929,44 @@ function removeRiderTooltip(d, i, curObj) {
 //     - clear the currently selected rider, or
 //     - click on a different rider's race line (thereby selecting a new rider)
 function riderRaceLineClick(d, i) {
-    //alert("you clicked a rider line:\n\nd: ["+d+"]\ni: ["+i+"]\ncurClickedRiderID: ["+d[0].RiderID+"]");
-
-    // if when the user clicked a rider race line, if the race line clicked is
-    // for a rider other than the one already selected, then call the mouseover
-    // function and pass along the "d" and "i" parameters
+    // update the global marker variable to denote which rider was clicked
     curClickedRiderID = d[0].RiderID;
 
-    //if (curClickedRiderID !== undefined && curClickedRiderID !== d[0].RiderID) {
-        raceLineMouseOver(d, i, this);
-    //}
-
-    /*
-    // if when the user clicked a rider race line, if the race line clicked is
-    // for a rider other than the one already selected, then call the mouseover
-    // function and pass along the "d" and "i" parameters
-    if (curClickedRiderID !== undefined && curClickedRiderID !== d[0].RiderID) {
-        raceLineMouseOver(d,i);
-    }
-    curClickedRiderID = d[0].RiderID;
-    */
-
+    // let the mouseover function determine how to update the display
+    raceLineMouseOver(d, i, this);
     return 0;
 }
 
 
 // show a tooltip with rider information and highlight the racing line when mousing over one
 function raceLineMouseOver (d, i, curObj) {
+    // sometimes this function is called when just mousing over a race line, but it is also called when a rider
+    // clicks on a race line; when being called from "racelineclick", the current object is passed to the function
+    // rather than being the implicit "this" that you get when this function is just called from "mouseover".
+    // This is an important difference because it changes how we use D3 to select the currently clicked or
+    // moused-over race line to change the styles of the race line
+    try {
+        // this will remove the styling of any previously-existing already clicked rider race lines
+        d3.selectAll(".race-line-selected")
+          .attr("class", function(curD) {
+                var classToRestore = getRaceClassLineStyle(d[0].RaceType);
+                if (curD[0].RiderID != curClickedRiderID) {
+                    return ("race-line "+classToRestore);
+                } else {
+                    return (getRaceClassLineStyle(curD[0].RaceType)+" race-line-selected");
+                }
+            });
 
-    //console.log("raceLineMouseOver:: curClickedRiderID: ["+curClickedRiderID+"]  mouseOverRiderID: ["+d[0].RiderID+"]  typeof curClickedRiderID == undefined: ["+ (typeof curClickedRiderID == undefined)+"]    typeof curClickedRiderID: ["+(typeof curClickedRiderID).toString()+"]  isNaN(curClickedRiderID): ["+(isNaN(curClickedRiderID)).toString()+"]");
-    console.log("raceLineMouseOver::\n\tcurClickedRiderID: ["+curClickedRiderID+"]\n\tmouseOverRiderID: ["+d[0].RiderID+"]\n\tcurDisplayedRiderID: ["+curDisplayedRiderID+"]   this: ["+this+"]   curObj: ["+curObj+"]");
+        // and this will select the new current race line
+        d3.select(this).attr("class", getRaceClassLineStyle(d[0].RaceType)+" race-line-selected");
+        d3.select(curObj).attr("class", getRaceClassLineStyle(d[0].RaceType)+" race-line-selected");
+    }
+    // disregard any errors that are caught - they're just a side-effect of calling d3.select() on the wrong object
+    // based on whether this function was called by "mouseover" on the race line, or from "racelineclick"
+    catch (err) { }
 
-    // highlight the race line by making it have a thicker line stroke and color it darkly
-
-    //d3.select(this).attr("class","race-line-selected colorSelected");
-    //d3.select(curObj).attr("class","race-line-selected colorSelected");
-
-    // because sometimes this function will get called purely as a mouseover event, and sometimes as a click event, we need to know which type of "thing" to use d3 to select to style the mouseover line
-//    if (typeof this != "undefined" && typeof this == "SVGPathElement") {
-        d3.select(this).attr("class","race-line-selected colorSelected");
-//    } else if (typeof curObj == "SVGPathElement") {
-//        d3.select(curObj).attr("class","race-line-selected colorSelected");
-//    }
-
-
-    //drawRiderTooltip(d, i);
     drawRiderTooltip(d, i, curObj);
 
-    //if (curClickedRiderID === undefined || curClickedRiderID != d[0].RiderID) {
-    //if (curClickedRiderID === undefined ) {
-    //if ( (typeof curClickedRiderID === undefined) || curClickedRiderID == d[0].RiderID) {
-    //if ( isNaN(curClickedRiderID) || curClickedRiderID == d[0].RiderID) {
-    //if ( (typeof curClickedRiderID == "undefined") || curClickedRiderID == d[0].RiderID) {
     if (
         (typeof curClickedRiderID == "undefined") ||
         (
@@ -1066,44 +977,21 @@ function raceLineMouseOver (d, i, curObj) {
     ) {
         removeRiderDetailPanel(d, i, curObj);
         removeRiderDetailGraphs(d, i, curObj);
-
-        //console.log("raceLineMouseOver:: drawing new rider detail panels");
         drawRiderDetailPanel(d, i, curObj);
         drawRiderDetailGraphs(d, i, curObj);
     }
-
     return 0;
 }
 
 
 // remove the tooltip and drop the race line highlighting on mouseout
 function raceLineMouseOut (d, i, curObj) {
-
-    //console.log("raceLineMouseOut:: curClickedRiderID: ["+curClickedRiderID+"]  mouseOutRiderID: ["+d[0].RiderID+"]");
-
-    //// quickly remove the rider info tooltip; don't want to do a transition because the user will most likely
-    //// be mousing over/out of several lines at once since the primary visualization has a ton of race lines
-    //d3.selectAll(".race-line-tooltip").remove();
-
-    //// remove the rider detailed info
-    //$("#riderInfo").html("");
-
-    //var classToRestore = getRaceClassLineStyle(d[0].RaceType);
-
-    //// and remove the highlighting of the race line, and return the original class coloring
-    //d3.select(this).attr("class","race-line "+classToRestore);
-
-    //removeRiderTooltip(d, i);
-
     // only remove all the styles and everything if the currentRiderID is different from the one passed in d
 	if (typeof curClickedRiderID == "undefined" || curClickedRiderID !== d[0].RiderID) {
-    //if (typeof curClickedRiderID == "undefined" ) {
-
         var classToRestore = getRaceClassLineStyle(d[0].RaceType);
 
         // and remove the highlighting of the race line, and return the original class coloring
         d3.select(this).attr("class","race-line "+classToRestore);
-        //d3.select(curObj).attr("class","race-line "+classToRestore);
 
         removeRiderTooltip(d, i, curObj);
 
@@ -1111,15 +999,7 @@ function raceLineMouseOut (d, i, curObj) {
             removeRiderDetailPanel(d, i, curObj);
             removeRiderDetailGraphs(d, i, curObj);
         }
-
-	    //// remove the rider detailed info
-    	////$("#riderInfo").html("");
-
-        //removeRiderDetailPanel();
-        //removeRiderDetailGraphs();
     }
-
-    //return 0;
 }
 
 
