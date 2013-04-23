@@ -196,7 +196,8 @@ var curDisplayedRiderID;
 // declare the margins, width, and height of the primary visualization area
 var margin = {top: 20, right: 20, bottom: 50, left: 50},
     width = 1050 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    //height = 500 - margin.top - margin.bottom;
+    height = 600 - margin.top - margin.bottom;
     //height = 250 - margin.top - margin.bottom;
     //height = 450 - margin.top - margin.bottom;
 
@@ -345,7 +346,8 @@ window.onload = function() {
 
 
     // load in the CSV of all the rider information data
-    d3.csv("csv/rider-data.csv", function(error, data) {
+    //d3.csv("csv/rider-data.csv", function(error, data) {
+    d3.csv("csv/rider-data-with-casualties.csv", function(error, data) {
         data.forEach(function(d) {
             riderDataset.push({
                 RiderID: +d.RiderID, // parse the RiderID as a number
@@ -503,10 +505,36 @@ window.onload = function() {
                 });
 
             }
+
+            // draw the X-axis indicating the year the races were held (note that in 2001 the TT was cancelled due to
+            // the Foot & Mouth Disease outbreak (see: http://www.iomtt.com/TT-Database/Events.aspx?meet_code=TT01)
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+                .append("text")
+                .attr("x", width / 2)
+                .attr("y", 35)
+                .attr("dx", ".71em")
+                .style("text-anchor", "end")
+                .text("Year");
+
+            // draw the Y-axis denoting race position, and also draw tick marks
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -40)
+                .attr("x", -(height / 2))
+                .attr("dy", ".71em")
+                .text("Race Position");
+
+            yAxis.ticks(dnfPlace);
         }
 
 
-
+        /*
         // draw the X-axis indicating the year the races were held (note that in 2001 the TT was cancelled due to
         // the Foot & Mouth Disease outbreak (see: http://www.iomtt.com/TT-Database/Events.aspx?meet_code=TT01)
         svg.append("g")
@@ -533,6 +561,9 @@ window.onload = function() {
 
         yAxis.ticks(dnfPlace);
 
+        */
+
+
         // RACE CLASS filtering
         $("#raceClassFilter ul li").click(function(e){
             // get the name of the currently selected race class
@@ -543,14 +574,30 @@ window.onload = function() {
             return 0;
         });
 
+
+        /*
+        function clearAllSelectedRiders() {
+            removeRiderDetailPanel();
+            removeRiderDetailGraphs();
+            removeRiderTooltip();
+            redrawRaceLines();
+        }
+        */
+
+
+        //clearAllSelectedRiders();
+
     });
+
+
+
+
+
 
 }
 
 
 function drawRiderDetailGraphs(d, i, curObj) {
-
-	//removeRiderDetailGraphs();
 
     // show the line graph of rider speed
     {
@@ -863,7 +910,6 @@ function drawRiderDetailPanel(d, i, curObj) {
     }
 }
 
-
 function removeRiderDetailPanel(d, i, curObj) {
     curDisplayedRiderID = undefined;
     $("#riderInfo").html("");
@@ -872,7 +918,6 @@ function removeRiderDetailPanel(d, i, curObj) {
 function removeRiderDetailGraphs(d, i, curObj) {
     d3.selectAll(".rider-detail-graphs").remove();
 }
-
 
 function drawRiderTooltip(d, i, curObj) {
 
@@ -924,6 +969,18 @@ function removeRiderTooltip(d, i, curObj) {
 }
 
 
+// if a user clicks to remove any currently selected rider, clear
+// the rider detail panel, sub-visualizations, and any selected race lines
+function clearAllSelectedRiders() {
+    $("#riderSelectionFilter").html("");
+    removeRiderDetailPanel();
+    removeRiderDetailGraphs();
+    removeRiderTooltip();
+    d3.selectAll(".race-line-selected")
+      .attr("class", function(d) {
+          return ("race-line "+getRaceClassLineStyle(d[0].RaceType));
+      });
+}
 
 // when the user clicks on a race line, preserve the current rider detail panel and detail graphs, until they either:
 //     - clear the currently selected rider, or
@@ -931,6 +988,16 @@ function removeRiderTooltip(d, i, curObj) {
 function riderRaceLineClick(d, i) {
     // update the global marker variable to denote which rider was clicked
     curClickedRiderID = d[0].RiderID;
+
+    // update the "Selected Rider" filter section to show just the name of the currently selected rider
+    var riderName = d[0].Rider1;
+    $("#riderSelectionFilter").html("");
+    $("#riderSelectionFilter").append("<h3>Selected Rider</h3>");
+    $("#riderSelectionFilter").append("<ul id=\"riderSelection\">");
+    var curRiderElement = "<li><span class=\"raceFilter\" id=\"formulaoneee\"><div class=\"riderFilterBox darkred\">&#10006;</div> "+riderName+"</span></li>";
+    $("#riderSelection").append(function(){
+        return $(curRiderElement).click(clearAllSelectedRiders);
+    });
 
     // let the mouseover function determine how to update the display
     raceLineMouseOver(d, i, this);

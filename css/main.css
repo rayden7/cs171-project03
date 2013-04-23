@@ -17,8 +17,8 @@ select,
 textarea {
     color: #222;
 }
-
 @font-face {
+    font-family: 'Futura-Medium';
     src: url('../fonts/futura.eot');
     src: url('../fonts/futura.eot?#iefix') format('embedded-opentype'),
     url('../fonts/futura.woff') format('woff'),
@@ -35,12 +35,19 @@ textarea {
 
 body {
     font-size: 1em;
+    font-size: 0.65em;
+    font-size: 0.75em;
     line-height: 1.4;
+    line-height: 0.95em;
+    line-height: 1.0;
+    font-family: Arial;
     font-family: Futura-Medium, Hei, "Helvetica Neue", "Helvetica Nue", "Helvetica";
     margin: 0;
     padding: 0;
     background-color: #E2E2E2;
+    background-color: #ffffff;
 }
+
 
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
@@ -117,8 +124,9 @@ textarea {
 
 body,
 #main {
-    font: 12px sans-serif;
+    /*font: 12px sans-serif;*/
     border: none;
+    background-color: #ffffff;
     padding: 0;
     margin: 0;
 }
@@ -154,6 +162,10 @@ header {
 
 header h1 {
     padding-top: 10px;
+}
+
+h2 {
+    margin-bottom: 10px;
 }
 
 ul#main-nav {

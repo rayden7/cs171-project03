@@ -1,11 +1,23 @@
 
-div#raceClassFilter ul {
+
+div#raceClassFilter h3:first-child,
+div#riderSelectionFilter h3 {
+    margin: 10px 0;
+}
+div#raceClassFilter h3:first-child {
+    margin: 0;
+}
+
+
+div#raceClassFilter ul,
+div#riderSelectionFilter ul {
     margin-top: 10px;
     list-style: none;
     width: 300px;
     overflow:hidden;
 }
-div#raceClassFilter ul li {
+div#raceClassFilter ul li,
+div#riderSelectionFilter ul li {
     /*width: 50%;*/
     float:left;
     display:inline;
@@ -13,12 +25,36 @@ div#raceClassFilter ul li {
     clear: both;
 }
 
-div#raceClassFilter ul li:hover {
+div#raceClassFilter ul li .raceFilterBox,
+div#riderSelectionFilter ul li .riderFilterBox {
+    border: 1px solid transparent;
+    opacity: 0.3;
+}
+
+div#raceClassFilter ul li:hover,
+div#riderSelectionFilter ul li:hover {
     cursor: pointer;
     font-weight: bold;
 }
 
-.raceFilterBox {
+div#raceClassFilter ul li:hover .raceFilterBox,
+div#riderSelectionFilter ul li:hover .riderFilterBox {
+    border: 1px solid black;
+    opacity: 1;
+}
+
+
+div#riderSelectionFilter ul li:hover .riderFilterBox {
+    color: #ffffff;
+}
+
+
+
+/* riderFilterBox */
+
+
+.raceFilterBox,
+.riderFilterBox {
     /*border: 1px solid black;*/
     width: 15px;
     height: 15px;
@@ -27,7 +63,26 @@ div#raceClassFilter ul li:hover {
     height: 10px;
     float: left;
     clear: both;
+    color: #ffffff;
+    text-align: center;
 }
+.riderFilterBox {
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+
+    border-radius: 1.2em;
+    -moz-border-radius: 1.2em;
+    -webkit-border-radius: 1.2em;
+    width: 15px;
+
+    padding-bottom: 3px;
+}
+
+.darkred {
+    background-color: darkred;
+}
+
 
 #viz {
     /*border: 1px solid black;*/
@@ -41,6 +96,7 @@ div#raceClassFilter ul li:hover {
     height: 950px;
     height: 850px;
     height: 700px;
+    height: 800px;
     margin: 5px;
     padding: 3px;
     float: left;
@@ -64,6 +120,7 @@ div#raceClassFilter ul li:hover {
 aside {
     /*border: 1px solid black;*/
     background-color: #E2E2E2;
+    background-color: #ffffff;
     margin: 5px;
     padding: 3px;
     width: 150px;
@@ -108,6 +165,10 @@ img.floatleft {
     /*border-radius: 0.9em;*/
     /*-moz-border-radius: 0.9em;*/
     /*-webkit-border-radius: 0.9em;*/
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+
 }
 
 #viz-info p {
@@ -174,26 +235,16 @@ hr {
 .race-line {
     fill: none;
     stroke-width: 1.0px;
-    opacity: 0.50;
-    opacity: 0.25;
     opacity: 0.15;
+    opacity: 0.3;
+    opacity: 0.2;
 }
 
 .race-line-selected {
     fill: none;
-    stroke-width: 3.5px;
     stroke-width: 4px;
-    opacity: 1.0;
-    opacity: 0.99;
-    opacity: 2.99;
-    opacity: 5;
     opacity: 1;
-
-    /*stroke-width: 5px;*/
 }
-
-/* special class applied to rider race lines that have been clicked on and should remain "sticky" until the user either clicks on a different line or refreshes the page */
-.race-line-sticky { }
 
 /* .colorSelected { stroke: black; } */
 .colorSelected {  }
