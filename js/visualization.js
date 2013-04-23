@@ -196,10 +196,10 @@ var curDisplayedRiderID;
 // declare the margins, width, and height of the primary visualization area
 var margin = {top: 20, right: 20, bottom: 50, left: 50},
     width = 1050 - margin.left - margin.right,
-    //height = 500 - margin.top - margin.bottom;
-    height = 600 - margin.top - margin.bottom;
+//    height = 500 - margin.top - margin.bottom;
+    //height = 600 - margin.top - margin.bottom;
     //height = 250 - margin.top - margin.bottom;
-    //height = 450 - margin.top - margin.bottom;
+    height = 450 - margin.top - margin.bottom;
 
 ///// declare the margins, width, and height for the TERTIARY RIDER INFO visualization(s)
 
