@@ -980,6 +980,8 @@ function clearAllSelectedRiders() {
       .attr("class", function(d) {
           return ("race-line "+getRaceClassLineStyle(d[0].RaceType));
       });
+    curClickedRiderID = undefined;
+    curDisplayedRiderID = undefined;
 }
 
 // when the user clicks on a race line, preserve the current rider detail panel and detail graphs, until they either:
