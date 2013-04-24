@@ -988,21 +988,31 @@ function clearAllSelectedRiders() {
 //     - clear the currently selected rider, or
 //     - click on a different rider's race line (thereby selecting a new rider)
 function riderRaceLineClick(d, i) {
-    // update the global marker variable to denote which rider was clicked
-    curClickedRiderID = d[0].RiderID;
 
-    // update the "Selected Rider" filter section to show just the name of the currently selected rider
-    var riderName = d[0].Rider1;
-    $("#riderSelectionFilter").html("");
-    $("#riderSelectionFilter").append("<h3>Selected Rider</h3>");
-    $("#riderSelectionFilter").append("<ul id=\"riderSelection\">");
-    var curRiderElement = "<li><span class=\"raceFilter\" id=\"formulaoneee\"><div class=\"riderFilterBox darkred\">&#10006;</div> "+riderName+"</span></li>";
-    $("#riderSelection").append(function(){
-        return $(curRiderElement).click(clearAllSelectedRiders);
-    });
+    // if the rider race line that was clicked is the same as the one currently selected, de-select the race line
+    // and remove the detailed rider info
+    if ( curClickedRiderID == d[0].RiderID ) {
+        clearAllSelectedRiders();
+    }
+    // regular race line clicked for first time - show detailed rider info
+    else {
+        // update the global marker variable to denote which rider was clicked
+        curClickedRiderID = d[0].RiderID;
 
-    // let the mouseover function determine how to update the display
-    raceLineMouseOver(d, i, this);
+        // update the "Selected Rider" filter section to show just the name of the currently selected rider
+        var riderName = d[0].Rider1;
+        $("#riderSelectionFilter").html("");
+        $("#riderSelectionFilter").append("<h3>Selected Rider</h3>");
+        $("#riderSelectionFilter").append("<ul id=\"riderSelection\">");
+        var curRiderElement = "<li><span class=\"raceFilter\" id=\"formulaoneee\"><div class=\"riderFilterBox darkred\">&#10006;</div> "+riderName+"</span></li>";
+        $("#riderSelection").append(function(){
+            return $(curRiderElement).click(clearAllSelectedRiders);
+        });
+
+        // let the mouseover function determine how to update the display
+        raceLineMouseOver(d, i, this);
+    }
+
     return 0;
 }
 
