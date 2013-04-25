@@ -9,6 +9,15 @@ div#raceClassFilter h3:first-child {
 }
 
 
+
+
+
+
+
+
+
+
+/*
 div#raceClassFilter ul,
 div#riderSelectionFilter ul {
     margin-top: 10px;
@@ -18,7 +27,6 @@ div#riderSelectionFilter ul {
 }
 div#raceClassFilter ul li,
 div#riderSelectionFilter ul li {
-    /*width: 50%;*/
     float:left;
     display:inline;
     margin-bottom: 5px;
@@ -43,6 +51,60 @@ div#riderSelectionFilter ul li:hover .riderFilterBox {
     opacity: 1;
 }
 
+div#riderSelectionFilter ul li:hover .riderFilterBox {
+    color: #ffffff;
+}
+*/
+
+
+
+
+div#raceClassFilter ul,
+div#riderSelectionFilter ul {
+    margin-top: 10px;
+    list-style: none;
+    width: 300px;
+    overflow:hidden;
+}
+div#raceClassFilter ul li,
+div#riderSelectionFilter ul li {
+    float:left;
+    display:inline;
+    margin-bottom: 5px;
+    clear: both;
+}
+
+div#raceClassFilter ul li,
+div#riderSelectionFilter ul li {
+    font-weight: bold;
+}
+
+
+.unselectedClass {
+    opacity: 0.35;
+}
+
+div#raceClassFilter ul li .raceFilterBox,
+div#riderSelectionFilter ul li .riderFilterBox {
+    border: 1px solid transparent;
+    border: 1px solid black;
+    font-weight: bold;
+    opacity: 0.3;
+    opacity: 1;
+    font-weight: bold;
+}
+
+div#raceClassFilter ul li:hover,
+div#riderSelectionFilter ul li:hover {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+div#raceClassFilter ul li:hover .raceFilterBox,
+div#riderSelectionFilter ul li:hover .riderFilterBox {
+    border: 1px solid black;
+    opacity: 1;
+}
 
 div#riderSelectionFilter ul li:hover .riderFilterBox {
     color: #ffffff;
@@ -85,26 +147,16 @@ div#riderSelectionFilter ul li:hover .riderFilterBox {
 
 
 #viz {
-    /*border: 1px solid black;*/
     background-color: white;
-
-    /*background-color: #E2E2E2;*/
+    min-width: 1050px;
     min-width: 1050px;
     min-height: 600px;
-    width: 1100px;
-    width: 1000px;
-    height: 950px;
-    height: 850px;
-    height: 700px;
-    height: 800px;
+    width: 1050px;
+    height: 630px;
     margin: 5px;
     padding: 3px;
     float: left;
-    /*border-radius: 0.9em;*/
-    /*-moz-border-radius: 0.9em;*/
-    /*-webkit-border-radius: 0.9em;*/
 }
-
 
 #viz svg {
     float: left;
@@ -116,18 +168,12 @@ div#riderSelectionFilter ul li:hover .riderFilterBox {
     /*background-color: green;*/
 }
 
-
 aside {
-    /*border: 1px solid black;*/
-    background-color: #E2E2E2;
     background-color: #ffffff;
     margin: 5px;
     padding: 3px;
-    width: 150px;
+    width: 160px;
     float: left;
-    /*border-radius: 0.9em;*/
-    /*-moz-border-radius: 0.9em;*/
-    /*-webkit-border-radius: 0.9em;*/
 }
 
 #viz-filters {
@@ -139,7 +185,9 @@ aside {
     margin-top: 0;
     width: 300px;
     min-height: 695px;
+    min-height: 575px;
     height: 695px;
+    height: 615px;
     padding: 10px;
     overflow-y: scroll;
     overflow: -moz-scrollbars-vertical;
@@ -299,3 +347,6 @@ hr {
     /*background-color: green;*/
 }
 
+svg:hover {
+    cursor: crosshair;
+}
