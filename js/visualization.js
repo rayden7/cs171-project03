@@ -93,28 +93,6 @@ var raceClasses = {
         Notes: "A new race from 2005 with any machine eligible from TT Superbike, TT Superstock or Supersport Junior TT.",
         Visible:true
     },
-    /*
-    // http://cdn.iomtt.com/~/media/Files/2012/Results/Sidecar%20Fast%20times%20-%2026.5.ashx
-    // http://www.iomguide.com/sidecarraces.php
-    sidecara : {
-        Class:"TT Sidecar Race A",
-        Laps:3,
-        DistanceMiles:113.19,
-        FastestLapRider:"Dave Molyneux & Patrick Farrance",
-        AverageSpeed:110.831,
-        Notes: "The TT Sidecar Motorcycle Races cover 113.19 miles/182.1 km over 3 laps on the Mountain Circuit. The Sidecar A race is on Saturday followed by the Sidecar B on Wednesday and are made up of ACU Formula 2 Sidecars."
-    },
-    // http://cdn.iomtt.com/~/media/Files/2012/Results/Sidecar%20Fast%20times%20-%2026.5.ashx
-    // http://www.iomguide.com/sidecarraces.php
-    sidecarb : {
-        Class:"TT Sidecar Race B",
-        Laps:3,
-        DistanceMiles:113.19,
-        FastestLapRider:"Dave Molyneux & Patrick Farrance",
-        AverageSpeed:110.831,
-        Notes: "The TT Sidecar Motorcycle Races cover 113.19 miles/182.1 km over 3 laps on the Mountain Circuit. The Sidecar A race is on Saturday followed by the Sidecar B on Wednesday and are made up of ACU Formula 2 Sidecars."
-    },
-    */
     // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT00&race_seq=7
     // http://en.wikipedia.org/wiki/2000_Isle_of_Man_TT
     singles : {
@@ -137,28 +115,6 @@ var raceClasses = {
         Notes: "A new race from 2005 with machines complying with World Superbike and/or British Superbike specifications:\nOver 750cc up to 1000cc 4 cylinders\nOver 750cc up to 1000cc 3 cylinders\nOver 800cc up to 1000cc 2 cylinders",
         Visible:true
     },
-    /*
-    // http://cdn.iomtt.com/~/media/Files/2012/Results/060612/Lap%20by%20lap-Supersport%202.ashx
-    // http://www.iomguide.com/races/tt/supersport-junior-tt.php
-    supersporta : {
-        Class:"TT Supersport Race A",
-        Laps:6,
-        DistanceMiles:226.38,
-        FastestLapRider:"Michael Dunlop",
-        AverageSpeed:124.391,
-        Notes: "A new race from 2005 with machines complying with FIM Supersport or MCRCB Supersport specifications:\n\nOver 400cc up to 600cc 4 cylinders\nOver 600cc up to 750cc 2 cylinders"
-    },
-    // http://cdn.iomtt.com/~/media/Files/2012/Results/060612/Lap%20by%20lap-Supersport%202.ashx
-    // http://www.iomguide.com/races/tt/supersport-junior-tt.php
-    supersportb : {
-        Class:"TT Supersport Race B",
-        Laps:6,
-        DistanceMiles:226.38,
-        FastestLapRider:"Michael Dunlop",
-        AverageSpeed:124.391,
-        Notes: "A new race from 2005 with machines complying with FIM Supersport or MCRCB Supersport specifications:\n\nOver 400cc up to 600cc 4 cylinders\nOver 600cc up to 750cc 2 cylinders"
-    },
-    */
     // http://www.iomguide.com/races/tt/tt-superstock.php
     // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2012&race_seq=4
     superstock : {
@@ -170,19 +126,6 @@ var raceClasses = {
         Notes: "A new race from 2005 with machines complying with FIM Superstock and/or UEM Stocksport and/or MCRCB Stocksport specifications:\nOver 600cc up to 1000cc 4 cylinders\nOver 750cc up to 1000cc 3 cylinders\nOver 850cc up to 1200cc 2 cylinders",
         Visible:true
     },
-    /*
-    // http://www.iomtt.com/TT-Database/Events/Races.aspx?meet_code=TT2009&race_seq=10
-    // http://www.iomtt.com/News/2009/04/20/Increased-interest-in-Lightweight-and-Ultra-Lightweight-TT-Races.aspx
-    // http://www.iomguide.com/ttlightweight.php
-    ultralightweight : {
-        Class:"TT Ultra Lightweight 125",
-        Laps:4,
-        DistanceMiles:150.92,
-        FastestLapRider:"Ian Lougher",
-        AverageSpeed:94.911,
-        Notes: "The TT Races is part of the TT Festival covering two weeks from the end of May to the beginning of June. The first week consists of practice racing with the second week being the main racing event. The TT (Tourist Trophy) Lightweight 400 and Ultra Lightweight 125 Motorcycle Races cover 150.92 miles/242.8 km over 4 laps on the Mountain Circuit. The Lightweight and Ultra Lightweight races are on Monday."
-    },
-    */
     // http://www.iomtt.com/TT-2013/TT-Zero.aspx
     // http://www.iomguide.com/races/tt/ttxgp.php
     // www.iomtt.com/TT-Database/TT-Records/Race-Records.aspx
@@ -589,11 +532,8 @@ function nl2br (str, is_xhtml) {
 // using "Tipsy" jQuery plugin: http://onehackoranother.com/projects/jquery/tipsy/#download
 $("#raceClassFilter ul li").tipsy({
     fade: true,
-    //gravity: 'w',
     gravity: 'nw',
     html: true,
-    //opacity: 0.9,
-    //opacity: 0.65,
     opacity: 0.85,
     // build out the text to show on the TOOLTIP
     title: function(){
