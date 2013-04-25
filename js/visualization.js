@@ -579,12 +579,14 @@ window.onload = function() {
 
 // PHP's "nl2br()" equivalent in JavaScript - borrowed from:
 //     http://stackoverflow.com/questions/7467840/nl2br-equivalent-in-javascript
+// used to put breaks in for tooltip race class descriptions where appropriate
 function nl2br (str, is_xhtml) {
     var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
     return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 }
 
-// show a tooltip when mousing over a race class with information on that race class
+// show a tooltip when mousing over a race class with information on that race class;
+// using "Tipsy" jQuery plugin: http://onehackoranother.com/projects/jquery/tipsy/#download
 $("#raceClassFilter ul li").tipsy({
     fade: true,
     //gravity: 'w',
