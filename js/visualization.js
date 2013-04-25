@@ -693,7 +693,7 @@ function drawRiderDetailGraphs(d, i, curObj) {
             .data(dGrouped[0].values)
             .enter()
             .append("text")
-            .text(function(d){ if ( d.values.Position == 72 ) return "DNF"; else return +d.values.Position; })
+            .text(function(d){ if ( d.values.Position == 71 ) return "DNF"; else return +d.values.Position; })
             .attr("x", function(d, i) { return i*((w - padding) / dGrouped[0].values.length) + padding + 15; })
             .attr("y",function(d){ return  h - padding + 13 ;} )
             .attr("class", "rider-detail-graphs")
