@@ -563,14 +563,16 @@ function drawRiderDetailGraphs(d, i, curObj) {
         var w = width2;
         var h = height2;
         var numTicks = d.length
+        var avgSpeedD = d.filter( function(d){ return d.Speed > 0 });
         // define the X-axis scale and Y-axis scale for the average speed line graph for an individually mouseed-over rider
+
         var lineScalex = d3.time.scale()
-            .domain([d3.min(d, function(d){ return d.Year; }), d3.max(d, function(d){ return d.Year; })] )
+            .domain([d3.min(avgSpeedD, function(d){ return d.Year; }), d3.max(d, function(d){ return d.Year; })] )
             .range([padding, w ]);
 
         var lineXAxis = d3.svg.axis()
             .scale(lineScalex)
-            .ticks(numTicks)
+            .ticks(5)
             .orient("bottom");
 
         // https://github.com/mbostock/d3/wiki/Time-Intervals#wiki-year
@@ -581,7 +583,7 @@ function drawRiderDetailGraphs(d, i, curObj) {
         // step of 5 will return 2010, 2015, 2020, etc.
 
         var lineScaley = d3.scale.linear()
-            .domain([0, d3.max(d, function(d) { return d.Speed; }) + 1])
+            .domain([0, d3.max(avgSpeedD, function(d) { return d.Speed; }) + 1])
             .range([h - padding, padding]);
 
         var lineScaleR =  d3.scale.linear()
@@ -592,13 +594,13 @@ function drawRiderDetailGraphs(d, i, curObj) {
             .scale(lineScaley)
             .orient("left")
             .ticks(5);
-
-        var line2 = d3.svg.line()
-            .x(function(d) { return lineScalex(d.Year); })
-            .y(function(d) { return lineScaley(d.Speed); });
+//
+//        var line2 = d3.svg.line()
+//            .x(function(d) { return lineScalex(d.Year); })
+//            .y(function(d) { return lineScaley(d.Speed); });
 
         svg2.selectAll("circle")
-            .data(d)
+            .data(avgSpeedD)
             .enter()
             .append("circle")
             .attr("class", "rider-detail-graphs speed-circle")
@@ -607,7 +609,7 @@ function drawRiderDetailGraphs(d, i, curObj) {
             .attr("r", function(d){ return lineScaleR(Math.ceil(d.Speed)); });
 
         svg2.selectAll("text")
-            .data(d).enter()
+            .data(avgSpeedD).enter()
             .append("text")
             .text(function(d) { return  d.Position; })
             .attr("class", "rider-detail-graphs speed-circle-text")
