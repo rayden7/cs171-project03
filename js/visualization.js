@@ -511,6 +511,8 @@ window.onload = function() {
                 }
             });
 
+            clearAllSelectedRiders();
+
             redrawRaceLines();
         });
 
