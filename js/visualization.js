@@ -589,7 +589,8 @@ function drawRiderDetailGraphs(d, i, curObj) {
         // step of 5 will return 2010, 2015, 2020, etc.
 
         var lineScaley = d3.scale.linear()
-            .domain([50, d3.max(avgSpeedD, function(d) { return d.Speed; }) + 1])
+           // .domain([70, d3.max(avgSpeedD, function(d) { return d.Speed; }) + 1])
+            .domain([d3.min(avgSpeedD, function(d) { return d.Speed; }) - 10, d3.max(avgSpeedD, function(d) { return d.Speed; }) + 1])
             .range([h - padding, padding]);
 
         var lineScaleR =  d3.scale.linear()
