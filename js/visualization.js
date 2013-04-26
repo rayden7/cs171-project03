@@ -609,15 +609,19 @@ function drawRiderDetailGraphs(d, i, curObj) {
             .attr("class", "rider-detail-graphs speed-circle")
             .attr("cy", function(d){ return lineScaley(d.Speed); })
             .attr("cx", function(d) { return lineScalex(d.Year); })
-            .attr("r", function(d){ return lineScaleR(Math.ceil(d.Speed)); });
+            .attr("r", function(d){ return lineScaleR(Math.ceil(d.Speed)); })
+            .on("mouseover", circleMouseOver )
+            .on("mouseout", circleMouseOut )
+        ;
 
-        svg2.selectAll("text")
+        // removing this text as the new tooltip represents the data much better.
+/*        svg2.selectAll("text")
             .data(avgSpeedD).enter()
             .append("text")
             .text(function(d) { return  d.Position; })
             .attr("class", "rider-detail-graphs speed-circle-text")
             .attr("x", function(d) { return lineScalex(d.Year) + lineScaleR(Math.ceil(d.Speed)) - 5; })
-            .attr("y", function(d) { return lineScaley(d.Speed)- lineScaleR(Math.ceil(d.Speed)) + 5; });
+            .attr("y", function(d) { return lineScaley(d.Speed)- lineScaleR(Math.ceil(d.Speed)) + 5; });*/
 
         svg2.append("g")
             .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
