@@ -562,7 +562,11 @@ function drawRiderDetailGraphs(d, i, curObj) {
         var padding = 30;
         var w = width2;
         var h = height2;
-        var numTicks = d.length
+        var numTicks = 0;
+        if(d.length < 8){
+            numTicks = d.length;
+        }else numTicks = 8;
+
         var avgSpeedD = d.filter( function(d){ return d.Speed > 0 });
         // define the X-axis scale and Y-axis scale for the average speed line graph for an individually mouseed-over rider
 
@@ -572,7 +576,7 @@ function drawRiderDetailGraphs(d, i, curObj) {
 
         var lineXAxis = d3.svg.axis()
             .scale(lineScalex)
-            .ticks(5)
+            .ticks(numTicks)
             .orient("bottom");
 
         // https://github.com/mbostock/d3/wiki/Time-Intervals#wiki-year
@@ -583,7 +587,7 @@ function drawRiderDetailGraphs(d, i, curObj) {
         // step of 5 will return 2010, 2015, 2020, etc.
 
         var lineScaley = d3.scale.linear()
-            .domain([0, d3.max(avgSpeedD, function(d) { return d.Speed; }) + 1])
+            .domain([50, d3.max(avgSpeedD, function(d) { return d.Speed; }) + 1])
             .range([h - padding, padding]);
 
         var lineScaleR =  d3.scale.linear()
@@ -592,8 +596,7 @@ function drawRiderDetailGraphs(d, i, curObj) {
 
         var lineYAxis = d3.svg.axis()
             .scale(lineScaley)
-            .orient("left")
-            .ticks(5);
+            .orient("left");
 //
 //        var line2 = d3.svg.line()
 //            .x(function(d) { return lineScalex(d.Year); })
