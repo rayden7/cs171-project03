@@ -324,6 +324,26 @@ hr {
     position: absolute;
     opacity : 0.65;
 }
+.circle-tooltip {
+    font-size: 9pt;
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+    background: #ccc;
+    width: 125px;
+    height: 40px;
+    margin: 5px;
+    overflow: hidden;
+    position: absolute;
+    opacity : 0.65;
+}
+
+
+.circle-tooltip ul {
+    list-style-type: none;
+    margin-left: 3px;
+    padding: 5px;
+}
 
 .race-line-tooltip ul {
     list-style-type: none;

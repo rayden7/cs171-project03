@@ -773,15 +773,21 @@ function drawRiderDetailGraphs(d, i, curObj) {
                 .attr("class", "rider-detail-graphs speed-circle")
                 .attr("cy", function(d){ return scatterScaleY(d.Position); })
                 .attr("cx", function(d) { return scatterScaleX(d.Year); })
-                .attr("r", function(d){ return scatterScaleR(Math.ceil(d.Speed)); });
+                .attr("r", function(d){ return scatterScaleR(Math.ceil(d.Speed)); })
+                .on("mouseover", circleMouseOver )
+                .on("mouseout", circleMouseOut )
+            ;
+            // The text object below are no longer needed since the user now has the ability to mouse over the circle and see the same data.
+            // With the added bonus that it now has a heading and it makes more sense.
 
-            svg4.selectAll("text")
+
+/*            svg4.selectAll("text")
                 .data(d).enter()
                 .append("text")
                 .text(function(d) { return Math.ceil(d.Speed); })
                 .attr("class", "rider-detail-graphs speed-circle-text")
                 .attr("x", function(d) { return scatterScaleX(d.Year)-10; })
-                .attr("y", function(d) { return scatterScaleY(d.Position)-scatterScaleR(Math.ceil(d.Speed)); });
+                .attr("y", function(d) { return scatterScaleY(d.Position)-scatterScaleR(Math.ceil(d.Speed)); });*/
 
             svg4.append("g")
                 .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
@@ -1092,4 +1098,60 @@ function getRaceClassLineStyle(raceClass) {
         case "zero" :
             return "zero";
     }
+}
+
+function circleMouseOver(d, i) {
+
+    drawCircleTooltip(d, i);
+
+}
+function circleMouseOut (d, i) {
+
+        removeCircleTooltip(d, i);
+
+}
+
+function removeCircleTooltip(d, i) {
+      // remover tooltip if the user mouses out.
+      d3.selectAll(".circle-tooltip").remove();
+}
+
+function drawCircleTooltip(d, i) {
+
+//    removeCircleTooltip(d,i);
+
+    var con = d3.select("#viz");
+
+    // Since our information box is going to be appended into the
+    // overall visualization container, we need to find out its position
+    // on the screen so that the absolutely positioned infobox shows up
+    // in the right place. It's easy to do this with jQuery
+    var pos = $(con[0][0]).position();
+
+    // d3.mouse returns the mouse coordinates relative to the specified
+    // container. Since we'll be appending the small infobox to the
+    // overall visualization container, we want the mouse coordinates
+    // relative to that.
+    var mouse = d3.mouse(con[0][0]);
+    var info = con.selectAll("div.circle-tooltip").data([mouse]);
+
+    // change the offset a little bit
+    var cushion = [10, 10];
+    // record the offset as part of the 'this' context, which in this
+    // case stands for the circle that initiated the mouseover event
+    this._xoff = cushion[0] + mouse[0] + pos.left;
+    this._yoff = cushion[1] + mouse[1] + pos.top;
+//    alert(d);
+    // build out the text to show on the TOOLTIP
+    var riderInfoText = "<ul>\n";
+    riderInfoText += "<li><b>Position:</b> "+d.Position+"</li>\n";
+    riderInfoText += "<li><b>Speed:</b> "+d.Speed+"</li>\n";
+    riderInfoText += "</ul>\n";
+//    alert(d);
+    // show the TOOLTIP in the main visualization area
+    info.enter()
+        .append("div")
+        .attr("class","circle-tooltip")
+        .attr("style", "top: " + this._yoff + "px; left: " + this._xoff + "px;")
+        .html(riderInfoText);
 }
