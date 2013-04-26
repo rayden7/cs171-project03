@@ -6,41 +6,11 @@ tipsy, facebook style tooltips for jquery
 
 GITHUB REPO: https://github.com/jaz303/tipsy
 */
-
-/*
-.race-line-tooltip {
-    font-size: 9pt;
-    border-radius: 0.9em;
-    -moz-border-radius: 0.9em;
-    -webkit-border-radius: 0.9em;
-    background: #ccc;
-    width: 245px;
-    height: 40px;
-    margin: 5px;
-    overflow: hidden;
-    position: absolute;
-    opacity : 0.65;
-}
-
-.race-line-tooltip ul {
-    list-style-type: none;
-    margin-left: 3px;
-    padding: 5px;
-}
-*/
-
-
 .tipsy {
-    font-size: 10px;
-    font-size: .9em;
     font-size: 9pt;
     position: absolute;
     padding: 5px;
     z-index: 100000;
-    /*
-    opacity: 0.65;
-    opacity: 1;
-    */
 }
 
 .tipsy ul,
@@ -49,7 +19,6 @@ GITHUB REPO: https://github.com/jaz303/tipsy
     margin-left: 3px;
     padding: 5px;
 }
-
 
 /* .tipsy-inner { background-color: #000; color: #FFF; max-width: 200px; padding: 5px 8px 4px 8px; text-align: center; } */
 .tipsy-inner {
@@ -62,16 +31,11 @@ GITHUB REPO: https://github.com/jaz303/tipsy
     text-align: left;
 }
 
-
 /* Rounded corners */
 .tipsy-inner {
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-
-    border-radius: 0.9em;
-    -moz-border-radius: 0.9em;
-    -webkit-border-radius: 0.9em;
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
 }
 
 /* Uncomment for shadow */
