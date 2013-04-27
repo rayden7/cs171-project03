@@ -227,6 +227,15 @@ var g4 = svg4.select("g");
 // execute the CSV load and generate the graph once the window has loaded
 window.onload = function() {
 
+   if(document.title == "The Isle of Man TT - How Long Does It Take To Become Proficient?" ) {
+       mainViz();
+   }
+
+}
+
+function mainViz(){
+
+
     var x = d3.time.scale().range([0, width]);
 
     var y = d3.scale.linear().range([height, 0]);
@@ -360,7 +369,7 @@ window.onload = function() {
              classes (e.g., maybe there are too many occurrences of this class of race in the given year, or the
              race is not part of a longer-running, year-over-year series and so we can't show rider position placement
              year-over-year, etc.
-            */
+             */
             // only add race data for the races not on the list of ones ot exlude
             if (racesToExclude.indexOf(d.RaceName) == -1) {
                 dataset.push({
@@ -519,7 +528,6 @@ window.onload = function() {
     });
 
 }
-
 
 
 // PHP's "nl2br()" equivalent in JavaScript - borrowed from:
