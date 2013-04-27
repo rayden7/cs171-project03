@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<meta charset="utf-8">
+<head>
+    <title>The Isle of Man TT - How Long Does It Take To Become Proficient?</title>
+
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/visualization.css"/>
+    <link rel="stylesheet" type="text/css" href="css/tipsy.css"/>
+
+    <!-- local copy of minified D3 library -->
+    <script src="js/d3.v3.min.js"></script>
+
+    <!-- local copy of minified jQuery library -->
+    <script src="js/jquery-1.9.1.min.js"></script>
+
+    <!-- local copy of jQuery plugin "tipsy" for race class mouseover tooltips -->
+    <script src="js/jquery.tipsy.js"></script>
+</head>
+<body>
+<header>
+    <div class="subheader">   <!--
+            <img class="tt-img tt-img-floatleft" src="img/iomtt-logo-smaller.png" />
+                                    -->
+        <h1 class="tt-img tt-img-floatleft">The Isle of Man TT</h1>
+        <img class="tt-img tt-img-floatright" src="img/iomtt-logo-smaller.png" />
+    </div>
+    <div>
+        <!-- This is for the menus -->
+        <ul id="main-nav">
+            <li><a href="index.html">Main</a></li>
+            <!-- will include information on the race classes in project 3 -->
+            <!--<li><a href="races.html">Races</a></li>-->
+            <li><a href="maps.html">Maps</a></li>
+            <li><a href="inspiration.html">Inspiration</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </div>
+</header>
+
+<article>
+
+    <!-- this is where the primary visualization will be rendered -->
+    <aside id="viz-text">
+
+
+    </aside>
+
+
+    <div id="mainviz"></div>
+
+
+
+    <!-- this is where detailed rider info will display when the user mouses over a race line -->
+    <aside id="viz-text2"></aside>
+
+    <div id="viz-info-2">
+    </div>
+</article>
+
+<footer>
+    <p>&copy; David Killeffer & Leo Mejia for CS 171 / CSCI-E 64 at Harvard Extension School, Spring 2013.</p>
+    </footer>
+
+<!-- our custom code for creating the visualization -->
+<script src="js/visualization.js"></script>
+</body>
+</html>
