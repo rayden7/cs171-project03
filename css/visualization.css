@@ -1,5 +1,4 @@
 
-
 div#raceClassFilter h3:first-child,
 div#riderSelectionFilter h3 {
     margin: 10px 0;
@@ -7,57 +6,6 @@ div#riderSelectionFilter h3 {
 div#raceClassFilter h3:first-child {
     margin: 0;
 }
-
-
-
-
-
-
-
-
-
-
-/*
-div#raceClassFilter ul,
-div#riderSelectionFilter ul {
-    margin-top: 10px;
-    list-style: none;
-    width: 300px;
-    overflow:hidden;
-}
-div#raceClassFilter ul li,
-div#riderSelectionFilter ul li {
-    float:left;
-    display:inline;
-    margin-bottom: 5px;
-    clear: both;
-}
-
-div#raceClassFilter ul li .raceFilterBox,
-div#riderSelectionFilter ul li .riderFilterBox {
-    border: 1px solid transparent;
-    opacity: 0.3;
-}
-
-div#raceClassFilter ul li:hover,
-div#riderSelectionFilter ul li:hover {
-    cursor: pointer;
-    font-weight: bold;
-}
-
-div#raceClassFilter ul li:hover .raceFilterBox,
-div#riderSelectionFilter ul li:hover .riderFilterBox {
-    border: 1px solid black;
-    opacity: 1;
-}
-
-div#riderSelectionFilter ul li:hover .riderFilterBox {
-    color: #ffffff;
-}
-*/
-
-
-
 
 div#raceClassFilter ul,
 div#riderSelectionFilter ul {
@@ -210,13 +158,9 @@ img.floatleft {
     float: left;
     clear: both;
     font-size: 1.25em;
-    /*border-radius: 0.9em;*/
-    /*-moz-border-radius: 0.9em;*/
-    /*-webkit-border-radius: 0.9em;*/
     border-radius: 0.9em;
     -moz-border-radius: 0.9em;
     -webkit-border-radius: 0.9em;
-
 }
 
 #viz-info p {
@@ -363,10 +307,6 @@ hr {
     font-size: 7pt;
 }
 
-.rider-detail-graphs {
-    /*background-color: green;*/
-}
+.rider-detail-graphs { }
 
-svg:hover {
-    cursor: crosshair;
-}
+svg:hover { cursor: crosshair; }

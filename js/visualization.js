@@ -227,252 +227,194 @@ var g4 = svg4.select("g");
 // execute the CSV load and generate the graph once the window has loaded
 window.onload = function() {
 
-   if(document.title == "The Isle of Man TT - How Long Does It Take To Become Proficient?" ) {
-       mainViz();
-   }
+    if (window.location.href.contains("index.html")) {
 
-}
+        var x = d3.time.scale().range([0, width]);
 
-function mainViz(){
+        var y = d3.scale.linear().range([height, 0]);
 
-
-    var x = d3.time.scale().range([0, width]);
-
-    var y = d3.scale.linear().range([height, 0]);
-
-    // NOTE: we are initially declaring our X and Y axes because we want to use custom labels,
-    // and we are intimately familiar with the dataset, so we know the ranges for each
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .tickValues([
+        // NOTE: we are initially declaring our X and Y axes because we want to use custom labels,
+        // and we are intimately familiar with the dataset, so we know the ranges for each
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .tickValues([
             new Date(1991,0), new Date(1992,0), new Date(1993,0), new Date(1994,0), new Date(1995,0),
             new Date(1996,0), new Date(1997,0), new Date(1998,0), new Date(1999,0), new Date(2000,0),
             new Date(2001,0), new Date(2002,0), new Date(2003,0), new Date(2004,0), new Date(2005,0),
             new Date(2006,0), new Date(2007,0), new Date(2008,0), new Date(2009,0), new Date(2010,0),
             new Date(2011,0), new Date(2012,0)
         ])
-        .orient("bottom");
+            .orient("bottom");
 
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .tickValues([1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,24,28,32,36,40,44,48,52,56,60,64,68,70,71,72])
-        .tickFormat(function(d) {
-            if (isNaN(d)) {
-                return d.toString();
-            } else {
-                return d;
-            }
-        })
-        .orient("left");
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .tickValues([1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,24,28,32,36,40,44,48,52,56,60,64,68,70,71])
+            .tickFormat(function(d) {
+                if (isNaN(d)) {
+                    return d.toString();
+                } else {
+                    return d;
+                }
+            })
+            .orient("left");
 
-    var line = d3.svg.line()
-        .x(function(d) { return x(d.Year); })
-        .y(function(d) { return y(d.Position); });
+        var line = d3.svg.line()
+            .x(function(d) { return x(d.Year); })
+            .y(function(d) { return y(d.Position); });
 
-    var lineClosed = d3.svg.line()
-        .x(function(d) { return x(d.Year); })
-        .y(function(d) { return y(d.Position); })
-        .defined(function(d){ return (d.x !== null && d.y !== null); });
-
-
-    //****************************************************************************************************************//
-    //                                                                                                                //
-    // TT VIDEO LINK TO EXPLAIN WHAT THE ISLE OF MAN TT IS - SHOULD PUT IN PROCESS BOOK AND LINK FROM VISUALIZATION   //
-    //      http://www.youtube.com/watch?feature=player_embedded&v=VOTvQuuQ7B4                                        //
-    //                                                                                                                //
-    //****************************************************************************************************************//
+        var lineClosed = d3.svg.line()
+            .x(function(d) { return x(d.Year); })
+            .y(function(d) { return y(d.Position); })
+            .defined(function(d){ return (d.x !== null && d.y !== null); });
 
 
-    /*
-     * Because the different race names have overlaps (e.g., there are often several races of a given class in a
-     * particular year, some races only offered in a single year, etc.) it is necessary to correlate a given race
-     * with a particular "raceClass".  Because there were several splinterings of different race classes, often times
-     * a given category of race would change, or there might be multiple variants of a given race in a given year,
-     * both (or more) of which a competitor might have raced in.  This presents a problem in the visualization - an odd
-     * vertical line banding occurs because it attempts to connect two different race classes in the same year to each
-     * other.  To resolve this we restrict ourselves to the set of uniquely identified race classes mentioned below, and
-     * we ensure that ONLY ONE of each race class occurs per year, so there is no chance for the weird vertical line
-     * banding effect we had originally seen in some of our earlier visualization iterations.
-     */
-    var racesToExclude = [
-        "TT 1999 Lightweight 400 TT Results",
-        "TT 2000 Lightweight 400 TT Results",
-        "TT 2002 IOM Steam Pckt 250cc Results",
-        "TT 2002 Production 600 Results",
-        "TT 2003 Production 600 Results",
-        "TT 2004 Production 600 Results",
-        "TT 2009 TTXGP Open Class Results",
-        "TT 2005 IOMSPC Supersport Junior B Results",
-        "TT 2006 IOMSPC Supersport Results",
-        "TT 2006 IOMSPC Supersport Results",
-        "TT 2007 Pokerstars Supersport TT Results",
-        "TT 2008 Relentless Supersport Junior TT 2 Results",
-        "TT 2009 Motorsport Merchandise Lightweight 250 TT #2 Results",
-        "TT 2009 Motorsport Merchandise Ultra Lightweight 125 TT #2 Results"
-    ];
+        //****************************************************************************************************************//
+        //                                                                                                                //
+        // TT VIDEO LINK TO EXPLAIN WHAT THE ISLE OF MAN TT IS - SHOULD PUT IN PROCESS BOOK AND LINK FROM VISUALIZATION   //
+        //      http://www.youtube.com/watch?feature=player_embedded&v=VOTvQuuQ7B4                                        //
+        //                                                                                                                //
+        //****************************************************************************************************************//
 
 
-    // load in the CSV of all the rider information data
-    //d3.csv("csv/rider-data.csv", function(error, data) {
-    d3.csv("csv/rider-data-with-casualties.csv", function(error, data) {
-        data.forEach(function(d) {
-            riderDataset.push({
-                RiderID: +d.RiderID, // parse the RiderID as a number
-                RiderName: d.RiderName,
-                TTDatabaseWebpage: d.TTDatabaseWebpage,
-                UPPERCASERider: d.UPPERCASERider,
-                Biography: d.Biography,
-                Picture1: d.Picture1,
-                Picture2: d.Picture2,
-                Picture3: d.Picture3,
-                Weight: +d.Weight, // parse rider weight as a number
-                Height: d.Height,
-                Website: d.Website,
-                // parse out all the frequencies of race placement as integer values
-                TTCareerSummaryPosition1: +d.TTCareerSummaryPosition1,
-                TTCareerSummaryPosition2: +d.TTCareerSummaryPosition2,
-                TTCareerSummaryPosition3: +d.TTCareerSummaryPosition3,
-                TTCareerSummaryPosition4: +d.TTCareerSummaryPosition4,
-                TTCareerSummaryPosition5: +d.TTCareerSummaryPosition5,
-                TTCareerSummaryPosition6: +d.TTCareerSummaryPosition6,
-                TTCareerSummaryPosition7: +d.TTCareerSummaryPosition7,
-                TTCareerSummaryPosition8: +d.TTCareerSummaryPosition8,
-                TTCareerSummaryPosition9: +d.TTCareerSummaryPosition9,
-                TTCareerSummaryPosition10: +d.TTCareerSummaryPosition10,
-                TTCareerSummaryPositionDNF: +d.TTCareerSummaryPositionDNF
+        /*
+         * Because the different race names have overlaps (e.g., there are often several races of a given class in a
+         * particular year, some races only offered in a single year, etc.) it is necessary to correlate a given race
+         * with a particular "raceClass".  Because there were several splinterings of different race classes, often times
+         * a given category of race would change, or there might be multiple variants of a given race in a given year,
+         * both (or more) of which a competitor might have raced in.  This presents a problem in the visualization - an odd
+         * vertical line banding occurs because it attempts to connect two different race classes in the same year to each
+         * other.  To resolve this we restrict ourselves to the set of uniquely identified race classes mentioned below, and
+         * we ensure that ONLY ONE of each race class occurs per year, so there is no chance for the weird vertical line
+         * banding effect we had originally seen in some of our earlier visualization iterations.
+         */
+        var racesToExclude = [
+            "TT 1999 Lightweight 400 TT Results",
+            "TT 2000 Lightweight 400 TT Results",
+            "TT 2002 IOM Steam Pckt 250cc Results",
+            "TT 2002 Production 600 Results",
+            "TT 2003 Production 600 Results",
+            "TT 2004 Production 600 Results",
+            "TT 2009 TTXGP Open Class Results",
+            "TT 2005 IOMSPC Supersport Junior B Results",
+            "TT 2006 IOMSPC Supersport Results",
+            "TT 2006 IOMSPC Supersport Results",
+            "TT 2007 Pokerstars Supersport TT Results",
+            "TT 2008 Relentless Supersport Junior TT 2 Results",
+            "TT 2009 Motorsport Merchandise Lightweight 250 TT #2 Results",
+            "TT 2009 Motorsport Merchandise Ultra Lightweight 125 TT #2 Results"
+        ];
+
+
+        // load in the CSV of all the rider information data
+        //d3.csv("csv/rider-data.csv", function(error, data) {
+        d3.csv("csv/rider-data-with-casualties.csv", function(error, data) {
+            data.forEach(function(d) {
+                riderDataset.push({
+                    RiderID: +d.RiderID, // parse the RiderID as a number
+                    RiderName: d.RiderName,
+                    TTDatabaseWebpage: d.TTDatabaseWebpage,
+                    UPPERCASERider: d.UPPERCASERider,
+                    Biography: d.Biography,
+                    Picture1: d.Picture1,
+                    Picture2: d.Picture2,
+                    Picture3: d.Picture3,
+                    Weight: +d.Weight, // parse rider weight as a number
+                    Height: d.Height,
+                    Website: d.Website,
+                    // parse out all the frequencies of race placement as integer values
+                    TTCareerSummaryPosition1: +d.TTCareerSummaryPosition1,
+                    TTCareerSummaryPosition2: +d.TTCareerSummaryPosition2,
+                    TTCareerSummaryPosition3: +d.TTCareerSummaryPosition3,
+                    TTCareerSummaryPosition4: +d.TTCareerSummaryPosition4,
+                    TTCareerSummaryPosition5: +d.TTCareerSummaryPosition5,
+                    TTCareerSummaryPosition6: +d.TTCareerSummaryPosition6,
+                    TTCareerSummaryPosition7: +d.TTCareerSummaryPosition7,
+                    TTCareerSummaryPosition8: +d.TTCareerSummaryPosition8,
+                    TTCareerSummaryPosition9: +d.TTCareerSummaryPosition9,
+                    TTCareerSummaryPosition10: +d.TTCareerSummaryPosition10,
+                    TTCareerSummaryPositionDNF: +d.TTCareerSummaryPositionDNF
+                });
             });
         });
-    });
 
 
-    // load in the CSV of all the races data
-    d3.csv("csv/races_data.csv", function(error, data) {
-        data.forEach(function(d) {
-            /*
-             races to discard data for:
+        // load in the CSV of all the races data
+        d3.csv("csv/races_data.csv", function(error, data) {
+            data.forEach(function(d) {
+                /*
+                 races to discard data for:
 
-             TT 1999 Lightweight 400 TT Results
-             TT 2000 Lightweight 400 TT Results
-             TT 2002 IOM Steam Pckt 250cc Results16
-             TT 2002 Production 600 Results
-             TT 2003 Production 600 Results
-             TT 2004 Production 600 Results
-             TT 2009 TTXGP Open Class Results
-             TT 2005 IOMSPC Supersport Junior B Results
-             TT 2008 Relentless Supersport Junior TT 2 Results
-             TT 2009 Motorsport Merchandise Lightweight 250 TT #2 Results
-             TT 2009 Motorsport Merchandise Ultra Lightweight 125 TT #2 Results
-             TT 2006 IOMSPC Supersport Results
-             TT 2007 Pokerstars Supersport TT Results
+                 TT 1999 Lightweight 400 TT Results
+                 TT 2000 Lightweight 400 TT Results
+                 TT 2002 IOM Steam Pckt 250cc Results16
+                 TT 2002 Production 600 Results
+                 TT 2003 Production 600 Results
+                 TT 2004 Production 600 Results
+                 TT 2009 TTXGP Open Class Results
+                 TT 2005 IOMSPC Supersport Junior B Results
+                 TT 2008 Relentless Supersport Junior TT 2 Results
+                 TT 2009 Motorsport Merchandise Lightweight 250 TT #2 Results
+                 TT 2009 Motorsport Merchandise Ultra Lightweight 125 TT #2 Results
+                 TT 2006 IOMSPC Supersport Results
+                 TT 2007 Pokerstars Supersport TT Results
 
-             these races should be excluded because either they don't map well to one of the already-existing race
-             classes (e.g., maybe there are too many occurrences of this class of race in the given year, or the
-             race is not part of a longer-running, year-over-year series and so we can't show rider position placement
-             year-over-year, etc.
-             */
-            // only add race data for the races not on the list of ones ot exlude
-            if (racesToExclude.indexOf(d.RaceName) == -1) {
-                dataset.push({
-                    RiderID: +d.RiderID,  // parse the RiderID as a number
-                    RaceName: d.RaceName,
-                    RaceType: d.RaceType,
-                    Year: new Date(d.Year,0),  // parse the year into a Date object
-                    Position: +d.Position, // parse the race Position as a number
-                    BikeNumber: +d.BikeNumber,  // parse the BikeNumber as a number
-                    Rider1: d.Rider1,
-                    Rider2: d.Rider2,
-                    Machine: d.Machine,
-                    Time: d.Time,
-                    Speed: +d.Speed, // parse the Speed as a number
-                    RaceClass: getRaceClass(d.RaceName)  // get information about the main race this record is under
-                });
-            }
-        });
-
-
-        //************************************************************************************************************//
-        /**
-         * SPECIAL CASE: "DID NOT FINISH" (a.k.a., "DNF") race position records
-         *
-         * For nearly all the races, there is a category of the rider's position called "DNF" (Did Not Finish).
-         * For whatever reason, the rider did not complete the race (injury, mechanical failure, death, etc.).
-         * In the cases where a rider's race record had a position value of "DNF", we need to assign it a place
-         * that we can show on the graph.  Because we will not know the highest positional value until after we
-         * have processed ALL the race records in the dataset, we cannot predict where the DNF records should appear
-         * (we know at the "bottom" of the y-axis graph, just not how far down on the graph), after all the records
-         * have been loaded into the "dataset" variable, any that have a "Position" attribute of "NaN" we know are
-         * records that should be "DNF" (because when we coerced the Position attribute into an integer it would
-         * fail for DNF records).
-         *
-         * Now we can get the maximum regular positional integer Y-value, we can assign "DNF" to be the next highest value.
-         * Then, we can quickly iterate over all the records in "dataset" and assign the integer value for "DNF" to any
-         * records that have Position equal to "NaN".
-         *
-         * Lastly, we will need to update the display of the Y-axis graph to include "DNF" as the label for the lowest row.
-         *
-         */
-        var lastPlace = d3.max(dataset, function(d) { return d.Position; });
-        var dnfPlace = lastPlace + 1;
-        dataset.filter(function(d) { if (isNaN(d.Position)) { return d; }}).forEach(function(e) { e.Position = dnfPlace; });
-
-        //********************************************************************************************************************//
-
-        x.domain(d3.extent(dataset, function(d) { return d.Year; }));
-
-        // go from last place (72nd place is reserved for "DNF" - did not finish - records, all the way up to first place)
-        y.domain([dnfPlace, 1]);
-
-
-        // draw the X-axis indicating the year the races were held (note that in 2001 the TT was cancelled due to
-        // the Foot & Mouth Disease outbreak (see: http://www.iomtt.com/TT-Database/Events.aspx?meet_code=TT01)
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis)
-            .append("text")
-            .attr("x", width / 2)
-            .attr("y", 35)
-            .attr("dx", ".71em")
-            .style("text-anchor", "end")
-            .text("Year");
-
-
-        //************************************* draw the main visualization area *************************************//
-        redrawRaceLines();
-
-
-        // build out the primary race lines visualization by looping over all the race classes, filtering out each
-        // class by rider and race type, and then draw all the race lines for the given class
-        function redrawRaceLines() {
-
-            // start by clearing all race lines from the graph in case any are present
-            d3.selectAll("path").remove();
-
-            // loop over each of the raceClasses, filter the dataset to get just riders in each class,
-            // then draw all the race lines for the specified class
-            for (var raceClass in raceClasses) {
-                // filter out each race and group them first by unique rider, then by race type, and finally,
-                // restrict the dataset to be only for that specified RaceClass
-                var raceClassRecords = d3.nest()
-                    .key(function(d) { return d.Rider1; })    // group all the records for the individual Rider
-                    .key(function(d) { return d.RaceType; })  // and further group the records for individual race classes
-                    .entries( dataset.filter(function(d) { return d.RaceClass === raceClasses[raceClass] && raceClasses[raceClass].Visible; }) );
-
-                raceClassRecords.forEach(function(idx) {
-                    idx.values.forEach(function(innerIdx) {
-                        g.append("svg:path")
-                            .datum( innerIdx.values )
-                            .attr("class", "race-line "+innerIdx.key)
-                            .attr("d", lineClosed)
-                            .on("mouseover", raceLineMouseOver )
-                            .on("mouseout", raceLineMouseOut )
-                            .on("click", riderRaceLineClick );
+                 these races should be excluded because either they don't map well to one of the already-existing race
+                 classes (e.g., maybe there are too many occurrences of this class of race in the given year, or the
+                 race is not part of a longer-running, year-over-year series and so we can't show rider position placement
+                 year-over-year, etc.
+                 */
+                // only add race data for the races not on the list of ones ot exlude
+                if (racesToExclude.indexOf(d.RaceName) == -1) {
+                    dataset.push({
+                        RiderID: +d.RiderID,  // parse the RiderID as a number
+                        RaceName: d.RaceName,
+                        RaceType: d.RaceType,
+                        Year: new Date(d.Year,0),  // parse the year into a Date object
+                        Position: +d.Position, // parse the race Position as a number
+                        BikeNumber: +d.BikeNumber,  // parse the BikeNumber as a number
+                        Rider1: d.Rider1,
+                        Rider2: d.Rider2,
+                        Machine: d.Machine,
+                        Time: d.Time,
+                        Speed: +d.Speed, // parse the Speed as a number
+                        RaceClass: getRaceClass(d.RaceName)  // get information about the main race this record is under
                     });
-                });
+                }
+            });
 
-            }
 
-            d3.selectAll("text").remove();
+            //************************************************************************************************************//
+            /**
+             * SPECIAL CASE: "DID NOT FINISH" (a.k.a., "DNF") race position records
+             *
+             * For nearly all the races, there is a category of the rider's position called "DNF" (Did Not Finish).
+             * For whatever reason, the rider did not complete the race (injury, mechanical failure, death, etc.).
+             * In the cases where a rider's race record had a position value of "DNF", we need to assign it a place
+             * that we can show on the graph.  Because we will not know the highest positional value until after we
+             * have processed ALL the race records in the dataset, we cannot predict where the DNF records should appear
+             * (we know at the "bottom" of the y-axis graph, just not how far down on the graph), after all the records
+             * have been loaded into the "dataset" variable, any that have a "Position" attribute of "NaN" we know are
+             * records that should be "DNF" (because when we coerced the Position attribute into an integer it would
+             * fail for DNF records).
+             *
+             * Now we can get the maximum regular positional integer Y-value, we can assign "DNF" to be the next highest value.
+             * Then, we can quickly iterate over all the records in "dataset" and assign the integer value for "DNF" to any
+             * records that have Position equal to "NaN".
+             *
+             * Lastly, we will need to update the display of the Y-axis graph to include "DNF" as the label for the lowest row.
+             *
+             */
+            var lastPlace = d3.max(dataset, function(d) { return d.Position; });
+            var dnfPlace = lastPlace + 1;
+            dataset.filter(function(d) { if (isNaN(d.Position)) { return d; }}).forEach(function(e) { e.Position = dnfPlace; });
+
+            //********************************************************************************************************************//
+
+            x.domain(d3.extent(dataset, function(d) { return d.Year; }));
+
+            // go from last place (71st place is reserved for "DNF" - did not finish - records, all the way up to first place)
+            y.domain([dnfPlace, 1]);
+
 
             // draw the X-axis indicating the year the races were held (note that in 2001 the TT was cancelled due to
             // the Foot & Mouth Disease outbreak (see: http://www.iomtt.com/TT-Database/Events.aspx?meet_code=TT01)
@@ -487,46 +429,98 @@ function mainViz(){
                 .style("text-anchor", "end")
                 .text("Year");
 
-            // draw the Y-axis denoting race position, and also draw tick marks
-            svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -40)
-                .attr("x", -(height / 2))
-                .attr("dy", ".71em")
-                .text("Race Position");
 
-            yAxis.ticks(dnfPlace);
-        }
+            //************************************* draw the main visualization area *************************************//
+            redrawRaceLines();
 
 
-        // RACE CLASS filtering
-        $("#raceClassFilter ul li").click(function(e){
-            // get the name of the currently selected race class
-            var raceClassToFilter = this.children[0].id;
+            // build out the primary race lines visualization by looping over all the race classes, filtering out each
+            // class by rider and race type, and then draw all the race lines for the given class
+            function redrawRaceLines() {
 
-            // toggle the visibility of the currently selected race class
-            raceClasses[raceClassToFilter].Visible = !raceClasses[raceClassToFilter].Visible;
+                // start by clearing all race lines from the graph in case any are present
+                d3.selectAll("path").remove();
 
-            // toggle whether the current race class should be bolded or lightened
-            $(this).toggleClass("unselectedClass");
+                // loop over each of the raceClasses, filter the dataset to get just riders in each class,
+                // then draw all the race lines for the specified class
+                for (var raceClass in raceClasses) {
+                    // filter out each race and group them first by unique rider, then by race type, and finally,
+                    // restrict the dataset to be only for that specified RaceClass
+                    var raceClassRecords = d3.nest()
+                        .key(function(d) { return d.Rider1; })    // group all the records for the individual Rider
+                        .key(function(d) { return d.RaceType; })  // and further group the records for individual race classes
+                        .entries( dataset.filter(function(d) { return d.RaceClass === raceClasses[raceClass] && raceClasses[raceClass].Visible; }) );
 
-            // dim the other race classes that aren't selected
-            $("#raceClassFilter ul li").each(function(index){
-                if (this !== e.currentTarget && this.children[0] != null && typeof raceClasses[this.children[0].id] == "undefined" ) {
-                    $(this).addClass("unselectedClass");
+                    raceClassRecords.forEach(function(idx) {
+                        idx.values.forEach(function(innerIdx) {
+                            g.append("svg:path")
+                                .datum( innerIdx.values )
+                                .attr("class", "race-line "+innerIdx.key)
+                                .attr("d", lineClosed)
+                                .on("mouseover", raceLineMouseOver )
+                                .on("mouseout", raceLineMouseOut )
+                                .on("click", riderRaceLineClick );
+                        });
+                    });
+
                 }
+
+                d3.selectAll("text").remove();
+
+                // draw the X-axis indicating the year the races were held (note that in 2001 the TT was cancelled due to
+                // the Foot & Mouth Disease outbreak (see: http://www.iomtt.com/TT-Database/Events.aspx?meet_code=TT01)
+                svg.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis)
+                    .append("text")
+                    .attr("x", width / 2)
+                    .attr("y", 35)
+                    .attr("dx", ".71em")
+                    .style("text-anchor", "end")
+                    .text("Year");
+
+                // draw the Y-axis denoting race position, and also draw tick marks
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis)
+                    .append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", -40)
+                    .attr("x", -(height / 2))
+                    .attr("dy", ".71em")
+                    .text("Race Position");
+
+                yAxis.ticks(dnfPlace);
+            }
+
+
+            // RACE CLASS filtering
+            $("#raceClassFilter ul li").click(function(e){
+                // get the name of the currently selected race class
+                var raceClassToFilter = this.children[0].id;
+
+                // toggle the visibility of the currently selected race class
+                raceClasses[raceClassToFilter].Visible = !raceClasses[raceClassToFilter].Visible;
+
+                // toggle whether the current race class should be bolded or lightened
+                $(this).toggleClass("unselectedClass");
+
+                // dim the other race classes that aren't selected
+                $("#raceClassFilter ul li").each(function(index){
+                    if (this !== e.currentTarget && this.children[0] != null && typeof raceClasses[this.children[0].id] == "undefined" ) {
+                        $(this).addClass("unselectedClass");
+                    }
+                });
+
+                clearAllSelectedRiders();
+
+                redrawRaceLines();
             });
 
-            clearAllSelectedRiders();
-
-            redrawRaceLines();
         });
 
-    });
-
+    }
 }
 
 
@@ -566,7 +560,6 @@ $("#raceClassFilter ul li").tipsy({
 
 
 function drawRiderDetailGraphs(d, i, curObj) {
-
     // show the line graph of rider speed
     {
         var padding = 30;
@@ -597,7 +590,6 @@ function drawRiderDetailGraphs(d, i, curObj) {
         // step of 5 will return 2010, 2015, 2020, etc.
 
         var lineScaley = d3.scale.linear()
-           // .domain([70, d3.max(avgSpeedD, function(d) { return d.Speed; }) + 1])
             .domain([d3.min(avgSpeedD, function(d) { return d.Speed; }) - 10, d3.max(avgSpeedD, function(d) { return d.Speed; }) + 1])
             .range([h - padding, padding]);
 
@@ -608,10 +600,6 @@ function drawRiderDetailGraphs(d, i, curObj) {
         var lineYAxis = d3.svg.axis()
             .scale(lineScaley)
             .orient("left");
-//
-//        var line2 = d3.svg.line()
-//            .x(function(d) { return lineScalex(d.Year); })
-//            .y(function(d) { return lineScaley(d.Speed); });
 
         svg2.selectAll("circle")
             .data(avgSpeedD)
@@ -622,18 +610,9 @@ function drawRiderDetailGraphs(d, i, curObj) {
             .attr("cx", function(d) { return lineScalex(d.Year); })
             .attr("r", function(d){ return lineScaleR(Math.ceil(d.Speed)); })
             .on("mouseover", circleMouseOver )
-            .on("mouseout", circleMouseOut )
-        ;
+            .on("mouseout", circleMouseOut );
 
         // removing this text as the new tooltip represents the data much better.
-/*        svg2.selectAll("text")
-            .data(avgSpeedD).enter()
-            .append("text")
-            .text(function(d) { return  d.Position; })
-            .attr("class", "rider-detail-graphs speed-circle-text")
-            .attr("x", function(d) { return lineScalex(d.Year) + lineScaleR(Math.ceil(d.Speed)) - 5; })
-            .attr("y", function(d) { return lineScaley(d.Speed)- lineScaleR(Math.ceil(d.Speed)) + 5; });*/
-
         svg2.append("g")
             .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
             .attr("transform", "translate(0," + (h - padding) + ")")
@@ -642,9 +621,7 @@ function drawRiderDetailGraphs(d, i, curObj) {
             .style("text-anchor", "end")
             .attr("dx", "-2.8em")
             .attr("dy", ".15em")
-            .attr("transform", function(d) {
-                return "rotate(-65)"
-            })
+            .attr("transform", function(d) { return "rotate(-65)" })
             .append("text")
             .attr("x", w / 2)
             .attr("y", 100)
@@ -752,7 +729,6 @@ function drawRiderDetailGraphs(d, i, curObj) {
              .text("Number Race Class Wins");
     }
 
-
     // show a graph with dots corresponding to the rider's average speed for races where they placed in positions
     // 1-5; the relative size of the circle corresponds to their fastest lap speed
     {
@@ -797,20 +773,10 @@ function drawRiderDetailGraphs(d, i, curObj) {
                 .attr("cx", function(d) { return scatterScaleX(d.Year); })
                 .attr("r", function(d){ return scatterScaleR(Math.ceil(d.Speed)); })
                 .on("mouseover", circleMouseOver )
-                .on("mouseout", circleMouseOut )
-            ;
+                .on("mouseout", circleMouseOut );
+
             // The text object below are no longer needed since the user now has the ability to mouse over the circle and see the same data.
             // With the added bonus that it now has a heading and it makes more sense.
-
-
-/*            svg4.selectAll("text")
-                .data(d).enter()
-                .append("text")
-                .text(function(d) { return Math.ceil(d.Speed); })
-                .attr("class", "rider-detail-graphs speed-circle-text")
-                .attr("x", function(d) { return scatterScaleX(d.Year)-10; })
-                .attr("y", function(d) { return scatterScaleY(d.Position)-scatterScaleR(Math.ceil(d.Speed)); });*/
-
             svg4.append("g")
                 .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
                 .attr("transform", "translate(0," + (h - padding) + ")")
@@ -832,13 +798,11 @@ function drawRiderDetailGraphs(d, i, curObj) {
                 .text("Race Position");
         }
     }
-
 }
 
 function removeRiderDetailGraphs(d, i, curObj) {
     d3.selectAll(".rider-detail-graphs").remove();
 }
-
 
 function drawRiderDetailPanel(d, i, curObj) {
 
@@ -910,7 +874,6 @@ function removeRiderDetailPanel(d, i, curObj) {
     curDisplayedRiderID = undefined;
     $("#riderInfo").html("");
 }
-
 
 function drawRiderTooltip(d, i, curObj) {
 
@@ -1072,6 +1035,57 @@ function raceLineMouseOut (d, i, curObj) {
     }
 }
 
+function circleMouseOver(d, i) {
+    drawCircleTooltip(d, i);
+}
+
+function circleMouseOut (d, i) {
+    removeCircleTooltip(d, i);
+}
+
+// remover tooltip if the user mouses out.
+function removeCircleTooltip(d, i) {
+    d3.selectAll(".circle-tooltip").remove();
+}
+
+function drawCircleTooltip(d, i) {
+
+    var con = d3.select("#viz");
+
+    // Since our information box is going to be appended into the
+    // overall visualization container, we need to find out its position
+    // on the screen so that the absolutely positioned infobox shows up
+    // in the right place. It's easy to do this with jQuery
+    var pos = $(con[0][0]).position();
+
+    // d3.mouse returns the mouse coordinates relative to the specified
+    // container. Since we'll be appending the small infobox to the
+    // overall visualization container, we want the mouse coordinates
+    // relative to that.
+    var mouse = d3.mouse(con[0][0]);
+    var info = con.selectAll("div.circle-tooltip").data([mouse]);
+
+    // change the offset a little bit
+    var cushion = [10, 10];
+    // record the offset as part of the 'this' context, which in this
+    // case stands for the circle that initiated the mouseover event
+    this._xoff = cushion[0] + mouse[0] + pos.left;
+    this._yoff = cushion[1] + mouse[1] + pos.top;
+
+    // build out the text to show on the TOOLTIP
+    var riderInfoText = "<ul>\n";
+    riderInfoText += "<li><b>Position:</b> "+d.Position+"</li>\n";
+    riderInfoText += "<li><b>Speed:</b> "+d.Speed+"</li>\n";
+    riderInfoText += "</ul>\n";
+
+    // show the TOOLTIP in the lower visualization area
+    info.enter()
+        .append("div")
+        .attr("class","circle-tooltip")
+        .attr("style", "top: " + this._yoff + "px; left: " + this._xoff + "px;")
+        .html(riderInfoText);
+}
+
 function getRaceClass(raceName) {
     for (var raceKey in raceClasses) {
         var regex = new RegExp(raceKey, "ig");
@@ -1079,13 +1093,11 @@ function getRaceClass(raceName) {
 
         if (raceName.match(regex)) {
             return raceClasses[raceKey];
-        //} else if (raceName.toLowerCase() == "tt 2002 iom steam pckt  250cc results") {
+            //} else if (raceName.toLowerCase() == "tt 2002 iom steam pckt  250cc results") {
         } else if (raceName.toLowerCase() == "tt2002iomsteampckt250ccresults") {
             return raceClasses["lightweight"];
         }
     }
-
-
     return null;  // race class not found
 }
 
@@ -1120,60 +1132,4 @@ function getRaceClassLineStyle(raceClass) {
         case "zero" :
             return "zero";
     }
-}
-
-function circleMouseOver(d, i) {
-
-    drawCircleTooltip(d, i);
-
-}
-function circleMouseOut (d, i) {
-
-        removeCircleTooltip(d, i);
-
-}
-
-function removeCircleTooltip(d, i) {
-      // remover tooltip if the user mouses out.
-      d3.selectAll(".circle-tooltip").remove();
-}
-
-function drawCircleTooltip(d, i) {
-
-//    removeCircleTooltip(d,i);
-
-    var con = d3.select("#viz");
-
-    // Since our information box is going to be appended into the
-    // overall visualization container, we need to find out its position
-    // on the screen so that the absolutely positioned infobox shows up
-    // in the right place. It's easy to do this with jQuery
-    var pos = $(con[0][0]).position();
-
-    // d3.mouse returns the mouse coordinates relative to the specified
-    // container. Since we'll be appending the small infobox to the
-    // overall visualization container, we want the mouse coordinates
-    // relative to that.
-    var mouse = d3.mouse(con[0][0]);
-    var info = con.selectAll("div.circle-tooltip").data([mouse]);
-
-    // change the offset a little bit
-    var cushion = [10, 10];
-    // record the offset as part of the 'this' context, which in this
-    // case stands for the circle that initiated the mouseover event
-    this._xoff = cushion[0] + mouse[0] + pos.left;
-    this._yoff = cushion[1] + mouse[1] + pos.top;
-//    alert(d);
-    // build out the text to show on the TOOLTIP
-    var riderInfoText = "<ul>\n";
-    riderInfoText += "<li><b>Position:</b> "+d.Position+"</li>\n";
-    riderInfoText += "<li><b>Speed:</b> "+d.Speed+"</li>\n";
-    riderInfoText += "</ul>\n";
-//    alert(d);
-    // show the TOOLTIP in the main visualization area
-    info.enter()
-        .append("div")
-        .attr("class","circle-tooltip")
-        .attr("style", "top: " + this._yoff + "px; left: " + this._xoff + "px;")
-        .html(riderInfoText);
 }
