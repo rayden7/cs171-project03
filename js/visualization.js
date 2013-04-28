@@ -638,9 +638,16 @@ function drawRiderDetailGraphs(d, i, curObj) {
             .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
             .attr("transform", "translate(0," + (h - padding) + ")")
             .call(lineXAxis)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-2.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)"
+            })
             .append("text")
             .attr("x", w / 2)
-            .attr("y", 30)
+            .attr("y", 100)
             .style("text-anchor", "end")
             .text("Year");
 
