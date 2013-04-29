@@ -1,0 +1,2 @@
+USE project03;
+LOAD DATA LOCAL INFILE "rider-data-with-casualties_limited_fields.csv" INTO TABLE riders  FIELDS TERMINATED BY ',';

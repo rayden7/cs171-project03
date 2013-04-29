@@ -1,0 +1,2 @@
+USE project03;
+LOAD DATA LOCAL INFILE "races_datav2.csv" INTO TABLE race_data  FIELDS TERMINATED BY ',';
