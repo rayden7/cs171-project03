@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font: 12px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+        /* show the x-axis */
+        /*display: none;*/
+    }
+    .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+
+    .race-line { fill: none; stroke-width: 0.5px; }
+
+        /* see http://www.w3.org/TR/SVG/types.html#ColorKeywords for more color names */
+
+
+</style>
+<body>
+<script src="Script/d3.v3.js"></script>
+<script>
+
+
+var w = 800;
+var h = 450;
+var barPadding = 1;
+
+
+var dataset = [];
+
+
+var newDataset = [];
+var newDataset2 = [];
+var newDataset3 = [];
+
+var svg = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h)
+        .append("g");
+
+var svg2 = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h)
+        ;
+
+
+var svg3 = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h)
+        .append("g");
+var padding = 30;
+
+
+
+d3.csv("Data/Deaths_grouped_by_years_of_experience.csv", function(error, data){
+    data.forEach(function(d) {
+        newDataset2.push({
+            Experience: +d.experience,
+            NumRecords: +d.numberOfDeathRiders
+        });
+    });
+
+
+    var barScaleY = d3.scale.linear()
+            .domain([0, d3.max(newDataset2 , function(d) { return d.NumRecords; })])
+            .rangeRound([h - padding , padding]);
+
+
+    var barScaleY2 = d3.scale.linear()
+            .domain([d3.max(newDataset2, function(d) { return d.NumRecords; }), 0])
+            .rangeRound([  h - padding,padding]);
+
+
+
+    var barScaleX = d3.scale.linear()
+            .domain(
+                    [d3.min(newDataset2, function(d){ return d.Experience; }),
+                        d3.max(newDataset2, function(d){ return d.Experience;})])
+            .range([padding, w ]);
+
+    var barXAxis = d3.svg.axis()
+            .scale(barScaleX)
+            .orient("bottom");
+
+    var barYAxis = d3.svg.axis()
+            .scale(barScaleY)
+            .orient("left");
+
+    svg2.selectAll("rect")
+            .data(newDataset2)
+            .enter()
+            .append("rect")
+            .attr("fill", "teal")
+            .attr("x", function(d,i){ return i*((w - padding) / newDataset2.length) + padding + 1 ; })
+            .attr("y",function(d){ return h - (barScaleY2(d.NumRecords));} )
+            .attr("width", (w - padding) / newDataset2.length - barPadding)
+            .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
+
+    svg2.selectAll("text")
+            .data(newDataset2)
+            .enter()
+            .append("text")
+            .text(function(d){  return d.Experience; })
+            .attr("x", function(d, i) { return i*((w - padding) / newDataset2.length) + padding + 15; })
+            .attr("y",function(d){ return  h - padding - 13 ;} )
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "11x")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "middle")
+            .attr("fill", "black");
+
+    svg2.append("g")
+            .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
+            .attr("transform", "translate(0," + (h - padding) + ")")
+            .call(barXAxis)
+            .append("text")
+            .attr("x", w / 2)
+            .attr("y", 30)
+            .style("text-anchor", "end")
+            .text("Years of experience at TT races");
+
+    svg2.append("g")
+            .attr("class", "axis rider-detail-graphs")
+            .attr("transform", "translate(" +  padding + ", 0)")
+            .call(barYAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -32)
+            .attr("x", -(h/3)*2.5)
+            .text("Number Race Class Wins");
+});
+
+
+d3.csv("Data/Death_riders_per_place.csv", function(error, data){
+    data.forEach(function(d) {
+        newDataset3.push({
+            DeathPlace: d.deathPlace,
+            NumRecords: +d.NumberOfDeadRiders
+        });
+    });
+
+
+    newDataset3 = newDataset3.filter(function(d){return d.NumRecords > 1} );
+    var barScaleY = d3.scale.linear()
+            .domain([0, d3.max(newDataset3 , function(d) { return d.NumRecords; })])
+            .rangeRound([h - padding , padding]);
+
+    var barScaleY2 = d3.scale.linear()
+            .domain([d3.max(newDataset3, function(d) { return d.NumRecords; }), 0])
+            .rangeRound([  h - padding,padding]);
+
+    var barYAxis = d3.svg.axis()
+            .scale(barScaleY)
+            .orient("left");
+
+    svg3.selectAll("rect")
+            .data(newDataset3)
+            .enter()
+            .append("rect")
+            .attr("fill", "teal")
+            .attr("x", function(d,i){
+                return i*((w - padding) / newDataset3.length) + padding + 1 ; })
+            .attr("y",function(d){ return h - (barScaleY2(d.NumRecords));} )
+            .attr("width", (w - padding) / newDataset3.length - barPadding)
+            .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
+
+    svg3.append("g")
+            .attr("class", "axis rider-detail-graphs")
+            .attr("transform", "translate(" +  padding + ", 0)")
+            .call(barYAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -32)
+            .attr("x", -(h/3)*2.5)
+            .text("Number of Death by Place");
+});
+
+
+d3.csv("Data/Death_riders_per_event.csv", function(error, data){
+    data.forEach(function(d) {
+        newDataset.push({
+            DeathEvent: d.deathevent,
+            NumRecords: +d.NumberOfDeadRiders
+        });
+    });
+
+    var barScaleY = d3.scale.linear()
+            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords; })])
+            .rangeRound([h - padding , padding]);
+
+    var barScaleY2 = d3.scale.linear()
+            .domain([d3.max(newDataset, function(d) { return d.NumRecords; }), 0])
+            .rangeRound([  h - padding,padding]);
+
+    var barYAxis = d3.svg.axis()
+            .scale(barScaleY)
+            .orient("left");
+
+    svg.selectAll("rect")
+            .data(newDataset)
+            .enter()
+            .append("rect")
+            .attr("fill", "teal")
+            .attr("x", function(d,i){ return i*((w - padding)/ newDataset.length) + padding + 1 ; })
+            .attr("y",function(d){return h - (barScaleY2(d.NumRecords));} )
+            .attr("width", (w - padding) / newDataset.length - barPadding)
+            .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
+
+    svg.append("g")
+            .attr("class", "axis rider-detail-graphs")
+            .attr("transform", "translate(" +  padding + ", 0)")
+            .call(barYAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -32)
+            .attr("x", -(h/3)*2.5)
+            .text("Death Per Event.");
+
+
+});
+
+
+
+</script>
+</body>
+</html>

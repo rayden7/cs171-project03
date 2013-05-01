@@ -701,7 +701,6 @@ function drawRiderDetailGraphs(d, i, curObj) {
             .attr("x", function(d, i) { return i*((w - padding) / dGrouped[0].values.length) + padding + 15; })
             .attr("y",function(d){ return  h - padding + 13 ;} )
             .attr("class", "rider-detail-graphs")
-
             .attr("font-family", "sans-serif")
             .attr("font-size", "11x")
             .attr("font-weight", "bold")
