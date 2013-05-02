@@ -36,7 +36,7 @@ window.onload = function() {
             });
         });
 
-        var chart = d3.select("body").append("svg")
+        var chart = d3.select("#viz1").append("svg")
             .attr("class", "chart")
             .attr("width", w)
             .attr("height", h)
@@ -114,7 +114,7 @@ window.onload = function() {
             });
         });
 
-        var chart = d3.select("body").append("svg")
+        var chart = d3.select("#viz2").append("svg")
                 .attr("class", "chart")
                 .attr("width", w)
                 .attr("height", h)
@@ -193,7 +193,7 @@ window.onload = function() {
 
         newDataset3 = newDataset3.filter(function(d){return d.NumRecords > 2} );
 
-        var chart = d3.select("body").append("svg")
+        var chart = d3.select("#viz3").append("svg")
             .attr("class", "chart")
             .attr("width", w)
             .attr("height", h)

@@ -1,0 +1,344 @@
+
+div#raceClassFilter h3:first-child,
+div#riderSelectionFilter h3 {
+    margin: 10px 0;
+}
+div#raceClassFilter h3:first-child {
+    margin: 0;
+}
+
+div#raceClassFilter ul,
+div#riderSelectionFilter ul {
+    margin-top: 10px;
+    list-style: none;
+    width: 300px;
+    overflow:hidden;
+}
+div#raceClassFilter ul li,
+div#riderSelectionFilter ul li {
+    float:left;
+    display:inline;
+    margin-bottom: 5px;
+    clear: both;
+}
+
+div#raceClassFilter ul li,
+div#riderSelectionFilter ul li {
+    font-weight: bold;
+}
+
+
+.unselectedClass {
+    opacity: 0.35;
+}
+
+div#raceClassFilter ul li .raceFilterBox,
+div#riderSelectionFilter ul li .riderFilterBox {
+    border: 1px solid transparent;
+    border: 1px solid black;
+    font-weight: bold;
+    opacity: 0.3;
+    opacity: 1;
+    font-weight: bold;
+}
+
+div#raceClassFilter ul li:hover,
+div#riderSelectionFilter ul li:hover {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+div#raceClassFilter ul li:hover .raceFilterBox,
+div#riderSelectionFilter ul li:hover .riderFilterBox {
+    border: 1px solid black;
+    opacity: 1;
+}
+
+div#riderSelectionFilter ul li:hover .riderFilterBox {
+    color: #ffffff;
+}
+
+
+
+/* riderFilterBox */
+
+
+.raceFilterBox,
+.riderFilterBox {
+    /*border: 1px solid black;*/
+    width: 15px;
+    height: 15px;
+    margin-right: 3px;
+    width: 10px;
+    height: 10px;
+    float: left;
+    clear: both;
+    color: #ffffff;
+    text-align: center;
+}
+.riderFilterBox {
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+
+    border-radius: 1.2em;
+    -moz-border-radius: 1.2em;
+    -webkit-border-radius: 1.2em;
+    width: 15px;
+
+    padding-bottom: 3px;
+}
+
+.darkred {
+    background-color: darkred;
+}
+
+
+#viz {
+    background-color: white;
+    min-width: 1050px;
+    min-width: 1050px;
+    min-height: 600px;
+    width: 1050px;
+    height: 630px;
+    margin: 5px;
+    padding: 3px;
+    float: left;
+}
+
+#viz svg {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+#viz svg:last-child {
+    /*background-color: green;*/
+}
+
+aside {
+    background-color: #ffffff;
+    margin: 5px;
+    padding: 3px;
+    width: 160px;
+    float: left;
+}
+
+#viz-filters {
+    padding: 5px;
+    float: left;
+}
+
+#riderInfo {
+    margin-top: 0;
+    width: 300px;
+    min-height: 695px;
+    min-height: 575px;
+    height: 695px;
+    height: 615px;
+    padding: 10px;
+    overflow-y: scroll;
+    overflow: -moz-scrollbars-vertical;
+}
+
+img.floatleft {
+    /*border: 1px solid black;*/
+    float: left;
+    margin: 0 5px 5px 0;
+}
+
+#viz-info {
+    /*border: 1px solid black;*/
+    background: #ccc;
+    min-width: 1100px;
+    min-height: 200px;
+    width: 98%;
+    margin: 5px;
+    padding: 10px;
+    float: left;
+    clear: both;
+    font-size: 1.25em;
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+}
+
+#viz-info p {
+    margin-bottom: 1em;
+}
+
+hr {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    clear: both;
+}
+.ttCareerSummary,
+.ttCareerSummary tr,
+.ttCareerSummary th,
+.ttCareerSummary td {
+    border-collapse:collapse;
+    margin-top: 5px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.riderPics {
+    margin: 3px;
+    border: 1px solid black;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1.5px;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    /* show the x-axis */
+    /*display: none;*/
+}
+
+.x.axis path,
+.y.axis path {
+    /* show the x-axis */
+    /*display: none;*/
+    stroke: black;
+    stroke-width: 1.5px;
+}
+
+.y {
+    color: red;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.speed-line {
+    fill: none;
+    stroke-width: 5.0px;
+    color: orange;
+}
+
+.race-line {
+    fill: none;
+    stroke-width: 1.0px;
+    opacity: 0.15;
+    opacity: 0.3;
+    opacity: 0.2;
+}
+
+.race-line-selected {
+    fill: none;
+    stroke-width: 4px;
+    opacity: 1;
+}
+
+/* .colorSelected { stroke: black; } */
+.colorSelected {  }
+
+.color-unselected { stroke: #ccc; }
+
+/* using a new color scale selected from ColorBrewer  */
+.color1, .formulaone  { stroke: #A6CEE3; background-color: #A6CEE3; }
+.color2, .junior      { stroke: #1F78B4; background-color: #1F78B4; }
+.color3, .lightweight { stroke: #B2DF8A; background-color: #B2DF8A; }
+.color4, .production  { stroke: #33A02C; background-color: #33A02C; }
+.color5, .senior      { stroke: #FB9A99; background-color: #FB9A99; }
+.color6, .singles     { stroke: #E31A1C; background-color: #E31A1C; }
+.color7, .superbike   { stroke: #FDBF6F; background-color: #FDBF6F; }
+.color8, .superstock  { stroke: #CAB2D6; background-color: #CAB2D6; }
+.color9, .zero        { stroke: #6A3D9A; background-color: #6A3D9A; }
+
+
+.race-line-tooltip {
+    font-size: 9pt;
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+    background: #ccc;
+    width: 245px;
+    height: 40px;
+    margin: 5px;
+    overflow: hidden;
+    position: absolute;
+    opacity : 0.65;
+}
+.circle-tooltip {
+    font-size: 9pt;
+    border-radius: 0.9em;
+    -moz-border-radius: 0.9em;
+    -webkit-border-radius: 0.9em;
+    background: #ccc;
+    width: 125px;
+    height: 40px;
+    margin: 5px;
+    overflow: hidden;
+    position: absolute;
+    opacity : 0.65;
+}
+
+
+.circle-tooltip ul {
+    list-style-type: none;
+    margin-left: 3px;
+    padding: 5px;
+}
+
+.race-line-tooltip ul {
+    list-style-type: none;
+    margin-left: 3px;
+    padding: 5px;
+}
+
+.speed-circle,
+.num-finishes-bars {
+    color: #0C2C84;
+    fill: #0C2C84;
+    opacity : 0.65;
+}
+
+.speed-circle-text {
+    color: black;
+    font-size: 7pt;
+}
+
+.rider-detail-graphs { }
+
+svg:hover { cursor: crosshair; }
+
+
+
+/* styles for the "Casualties" visualization page */
+
+#viz1,
+#viz2,
+#viz3 {
+    background: white;
+    width: 350px;
+    height: 250px;
+    /*border: 1px solid black;*/
+    float: left;
+    padding: 10px;
+}
+
+#viz2 {
+    /*background: orange;*/
+    float: right;
+    clear: left;
+}
+
+#viz3 {
+    /*background: green;*/
+    float: left;
+}
+
+article {
+    padding: 30px;
+
+}
+

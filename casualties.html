@@ -5,7 +5,8 @@
     <title>The Isle of Man TT - How can we save lives?</title>
 
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
-    <link rel="stylesheet" type="text/css" href="css/visualization.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="css/visualization.css"/>-->
+    <link rel="stylesheet" type="text/css" href="css/casualtiesVisualization.css"/>
     <link rel="stylesheet" type="text/css" href="css/tipsy.css"/>
 
     <!-- local copy of minified D3 library -->
@@ -34,24 +35,35 @@
         </ul>
     </div>
 </header>
+
 <article>
 
+    <h2>The Tragic Side of The Isle of Man TT: Rider Casualties</h2>
+    <div id="viz1"></div>
+    <div id="viz2"></div>
+    <div id="viz3"></div>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum fermentum est sit amet consequat. Aliquam tempor, nisl a viverra molestie, sapien diam scelerisque erat, non accumsan nunc mi a eros. Pellentesque interdum ligula id diam consectetur laoreet nec consectetur dui. Nulla facilisi. In felis elit, sodales non accumsan vitae, sollicitudin et quam. Etiam libero massa, venenatis quis convallis dignissim, fermentum vel lorem. Suspendisse ac purus vel sapien mattis scelerisque tempor nec lacus. Ut luctus condimentum leo, sed varius tellus fringilla non. Proin et nisl id enim pretium adipiscing quis nec dui. Sed mauris orci, auctor sit amet pretium pharetra, porta at ipsum. Mauris id elit dui. Pellentesque convallis auctor interdum. Donec sollicitudin vulputate egestas. Donec eleifend nisl sed tortor rutrum rutrum. Sed cursus iaculis rutrum. Maecenas diam erat, ornare non molestie et, commodo sed nibh.</p>
+    <p>Integer sit amet elementum neque. Suspendisse lorem massa, fringilla at tincidunt ac, commodo eu sem. Mauris convallis ultrices sem, ut consectetur urna pellentesque id. Etiam venenatis, felis sed molestie pretium, eros odio ornare eros, vel fermentum ipsum justo nec tellus. Nullam viverra, dui sed tristique feugiat, metus sem lobortis diam, vel molestie felis velit id ante. Donec ac dui dui, interdum accumsan magna. Integer accumsan, odio suscipit pulvinar vehicula, purus sapien tempus neque, ut euismod leo metus at turpis.</p>
+    <p>Curabitur ullamcorper lacinia ultricies. Aenean in lectus in tortor consequat vehicula. Sed tristique tempus neque ac imperdiet. Morbi bibendum ultrices quam, at tempor dolor rhoncus at. Fusce posuere lobortis orci, id aliquam mi iaculis eu. Nullam pulvinar egestas sem, sed lacinia ligula adipiscing at. Pellentesque laoreet molestie malesuada. Donec porttitor lobortis egestas. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam sit amet justo diam. Vivamus nibh lectus, tempor ac aliquet a, ultricies in eros. Aenean arcu justo, sagittis sit amet aliquam eu, consequat varius sapien.</p>
+    <p>Aliquam et erat quis augue aliquam iaculis. Donec quis leo tellus. Nulla facilisi. Quisque at luctus nisl. Phasellus vitae sapien quam. Ut mattis placerat ipsum, vitae bibendum quam vehicula a. Sed dapibus lacinia tempor. Duis tempor diam vitae elit accumsan malesuada. Fusce elementum velit at ipsum euismod mollis. Fusce aliquam fermentum lacus, pharetra ultricies dolor fermentum quis. In elementum erat non neque vestibulum a scelerisque leo egestas.</p>
+    <p>Maecenas egestas, ante feugiat imperdiet laoreet, dolor quam cursus ligula, sed sodales enim tellus sed neque. Praesent ullamcorper turpis et ligula hendrerit sollicitudin. Mauris adipiscing, ipsum ut iaculis sagittis, erat libero ornare arcu, ac sagittis magna dui at nisi. Ut malesuada vulputate velit, vestibulum pharetra nunc ornare non. Nunc id sem justo, at dignissim eros. Ut nec sapien justo, nec euismod mi. Vivamus a turpis eros, ac sodales est. Donec et quam vitae nunc pharetra tristique. Phasellus venenatis pretium arcu. Pellentesque purus nisl, elementum vitae faucibus in, tempus id diam. Nam nisi dolor, consequat sagittis scelerisque ac, congue mattis nisl. Cras sed laoreet mauris.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum fermentum est sit amet consequat. Aliquam tempor, nisl a viverra molestie, sapien diam scelerisque erat, non accumsan nunc mi a eros. Pellentesque interdum ligula id diam consectetur laoreet nec consectetur dui. Nulla facilisi. In felis elit, sodales non accumsan vitae, sollicitudin et quam. Etiam libero massa, venenatis quis convallis dignissim, fermentum vel lorem. Suspendisse ac purus vel sapien mattis scelerisque tempor nec lacus. Ut luctus condimentum leo, sed varius tellus fringilla non. Proin et nisl id enim pretium adipiscing quis nec dui. Sed mauris orci, auctor sit amet pretium pharetra, porta at ipsum. Mauris id elit dui. Pellentesque convallis auctor interdum. Donec sollicitudin vulputate egestas. Donec eleifend nisl sed tortor rutrum rutrum. Sed cursus iaculis rutrum. Maecenas diam erat, ornare non molestie et, commodo sed nibh.</p>
+    <p>Integer sit amet elementum neque. Suspendisse lorem massa, fringilla at tincidunt ac, commodo eu sem. Mauris convallis ultrices sem, ut consectetur urna pellentesque id. Etiam venenatis, felis sed molestie pretium, eros odio ornare eros, vel fermentum ipsum justo nec tellus. Nullam viverra, dui sed tristique feugiat, metus sem lobortis diam, vel molestie felis velit id ante. Donec ac dui dui, interdum accumsan magna. Integer accumsan, odio suscipit pulvinar vehicula, purus sapien tempus neque, ut euismod leo metus at turpis.</p>
+    <p>Curabitur ullamcorper lacinia ultricies. Aenean in lectus in tortor consequat vehicula. Sed tristique tempus neque ac imperdiet. Morbi bibendum ultrices quam, at tempor dolor rhoncus at. Fusce posuere lobortis orci, id aliquam mi iaculis eu. Nullam pulvinar egestas sem, sed lacinia ligula adipiscing at. Pellentesque laoreet molestie malesuada. Donec porttitor lobortis egestas. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam sit amet justo diam. Vivamus nibh lectus, tempor ac aliquet a, ultricies in eros. Aenean arcu justo, sagittis sit amet aliquam eu, consequat varius sapien.</p>
+    <p>Aliquam et erat quis augue aliquam iaculis. Donec quis leo tellus. Nulla facilisi. Quisque at luctus nisl. Phasellus vitae sapien quam. Ut mattis placerat ipsum, vitae bibendum quam vehicula a. Sed dapibus lacinia tempor. Duis tempor diam vitae elit accumsan malesuada. Fusce elementum velit at ipsum euismod mollis. Fusce aliquam fermentum lacus, pharetra ultricies dolor fermentum quis. In elementum erat non neque vestibulum a scelerisque leo egestas.</p>
+    <p>Maecenas egestas, ante feugiat imperdiet laoreet, dolor quam cursus ligula, sed sodales enim tellus sed neque. Praesent ullamcorper turpis et ligula hendrerit sollicitudin. Mauris adipiscing, ipsum ut iaculis sagittis, erat libero ornare arcu, ac sagittis magna dui at nisi. Ut malesuada vulputate velit, vestibulum pharetra nunc ornare non. Nunc id sem justo, at dignissim eros. Ut nec sapien justo, nec euismod mi. Vivamus a turpis eros, ac sodales est. Donec et quam vitae nunc pharetra tristique. Phasellus venenatis pretium arcu. Pellentesque purus nisl, elementum vitae faucibus in, tempus id diam. Nam nisi dolor, consequat sagittis scelerisque ac, congue mattis nisl. Cras sed laoreet mauris.</p>
+
     <!-- this is where the primary visualization will be rendered -->
-    <aside id="viz-text">
-
-
-    </aside>
-
-
-    <div id="viz"></div>
-
+    <!--<aside id="viz-text"></aside>-->
 
 
     <!-- this is where detailed rider info will display when the user mouses over a race line -->
+    <!--
     <aside id="viz-text2"></aside>
 
-    <div id="viz-info-2">
-    </div>
+    <div id="viz-info-2"></div>
+    -->
+
 </article>
 
 <footer>
