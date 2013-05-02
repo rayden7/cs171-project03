@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font: 12px sans-serif;
+    }
+
+    .chart rect {
+        stroke: white;
+        fill: steelblue;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+        /* show the x-axis */
+        /*display: none;*/
+    }
+    .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+
+    .race-line { fill: none; stroke-width: 0.5px; }
+
+        /* see http://www.w3.org/TR/SVG/types.html#ColorKeywords for more color names */
+
+
+</style>
+<body>
+<script src="Script/d3.v3.js"></script>
+<script>
+
+
+var w = 350;
+var h = 225;
+var barPadding = 3;
+
+
+var newDataset = [];
+var newDataset2 = [];
+var newDataset3 = [];
+
+var padding = 30;
+
+d3.csv("Data/Death_riders_per_eventv2.csv", function(error, data){
+    data.forEach(function(d) {
+        newDataset.push({
+            DeathEvent: d.deathevent,
+            NumRecords: +d.NumberOfDeadRiders
+        });
+    });
+
+    var chart = d3.select("body").append("svg")
+            .attr("class", "chart")
+            .attr("width", w)
+            .attr("height", h)
+                  .append("g")
+                    .attr("transform", "translate(100,35)") ;
+
+    var x = d3.scale.linear()
+            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords;})])
+            .range([0, w - (padding*3)-15]);
+
+    var y = d3.scale.ordinal()
+            .domain([ d3.min(newDataset , function(d) { return d.NumRecords;}), d3.max(newDataset , function(d) { return d.NumRecords;})])
+             .rangeBands([0, 40]);
+
+
+    chart.selectAll("rect")
+            .data(newDataset)
+            .enter().append("rect")
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
+            .attr("width", function(d){return x(d.NumRecords) ;})
+            .attr("height", function(d){return y.rangeBand(d.NumRecords) -3;})   ;
+//            .attr("height", 20)   ;
+
+    chart.selectAll("text")
+            .data(newDataset)
+            .enter().append("text")
+//            .attr("x", function(d){return x(d.NumRecords);})
+            .attr("x", -4)
+//            .attr("y", function(d) { return y(d.NumRecords) + y.rangeBand() / 2; })
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords) + 10; })
+            .attr("dx", -5) // padding-right
+            .attr("dy", ".35em") // vertical-align: middle
+            .attr("text-anchor", "end") // text-align: right
+            .text(function(d){return d.DeathEvent});
+
+
+    chart.selectAll("line")
+            .data(x.ticks(10))
+            .enter().append("line")
+            .attr("x1", x)
+            .attr("x2", x)
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset.length)
+            .style("stroke", "#ccc");
+
+    chart.selectAll(".rule")
+            .data(x.ticks(10))
+            .enter().append("text")
+            .attr("class", "rule")
+            .attr("x", x)
+            .attr("y", 0)
+            .attr("dy", -3)
+            .attr("text-anchor", "middle")
+            .text(String);
+
+
+    chart.append("line")
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset.length)
+            .style("stroke", "#000");
+});
+function groupYears(i){
+
+    if (0 <= i && i < 4) {
+        return "0 - 3";
+    }
+    else if ( 4 <= i && i < 8) {
+        return  "4 - 7";
+    }
+    else {
+        return  "Over 8";
+    }
+
+}
+d3.csv("Data/Deaths_grouped_by_years_of_experiencev2.csv", function(error, data){
+    data.forEach(function(d) {
+        newDataset2.push({
+            Experience: d.experience,
+         //   BucketExperience: groupYears(+d.experience),
+            NumRecords: +d.numberOfDeathRiders
+        });
+    });
+
+    var chart = d3.select("body").append("svg")
+                    .attr("class", "chart")
+                    .attr("width", w)
+                    .attr("height", h)
+                    .append("g")
+                    .attr("transform", "translate(100,35)")
+
+            ;
+
+    var x = d3.scale.linear()
+            .domain([0, d3.max(newDataset2 , function(d) { return d.NumRecords;})])
+            .range([0, w - (padding * 3)]);
+
+    var y = d3.scale.ordinal()
+            .domain([ d3.min(newDataset2 , function(d) { return d.NumRecords;})
+                , d3.max(newDataset2 , function(d) { return d.NumRecords;})])
+            .rangeBands([0, 40]);
+
+
+    chart.selectAll("rect")
+            .data(newDataset2)
+            .enter().append("rect")
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
+            .attr("width", function(d){return x(d.NumRecords);})
+            .attr("height", function(d){return y.rangeBand(d.NumRecords) - 2;});
+
+    chart.selectAll("text")
+            .data(newDataset2)
+            .enter().append("text")
+            .attr("x", -3)
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords) + 5; })
+            .attr("dx", -3) // padding-right
+            .attr("dy", ".35em") // vertical-align: middle
+            .attr("text-anchor", "end") // text-align: right
+            .text(function(d){return d.Experience});
+
+
+    chart.selectAll("line")
+            .data(x.ticks(10))
+            .enter().append("line")
+            .attr("x1", x)
+            .attr("x2", x)
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset2.length)
+            .style("stroke", "#ccc");
+
+    chart.selectAll(".rule")
+            .data(x.ticks(10))
+            .enter().append("text")
+            .attr("class", "rule")
+            .attr("x", x)
+            .attr("y", 0)
+            .attr("dy", -3)
+            .attr("text-anchor", "middle")
+            .text(String);
+
+    chart.append("line")
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset2.length)
+            .style("stroke", "#000");
+});
+
+
+d3.csv("Data/Death_riders_per_location.csv", function(error, data){
+    data.forEach(function(d) {
+        newDataset3.push({
+            DeathPlace: d.deathPlace,
+            NumRecords: +d.NumberOfDeadRiders
+        });
+    });
+
+ newDataset3 = newDataset3.filter(function(d){return d.NumRecords > 2} );
+
+    var chart = d3.select("body").append("svg")
+                    .attr("class", "chart")
+                    .attr("width", w)
+                    .attr("height", h)
+                    .append("g")
+                    .attr("transform", "translate(115,35)") ;
+
+    var x = d3.scale.linear()
+            .domain([0, d3.max(newDataset3 , function(d) { return d.NumRecords;})])
+            .range([0, w - (padding * 3) - 30]);
+
+    var y = d3.scale.ordinal()
+            .domain([ d3.min(newDataset3 , function(d) { return d.NumRecords;})
+                , d3.max(newDataset3 , function(d) { return d.NumRecords;})])
+//            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords;})])
+            .rangeBands([0, 12]);
+
+    chart.selectAll("rect")
+            .data(newDataset3)
+            .enter().append("rect")
+            .attr("y", function(d,i){ return i*((h - padding) / newDataset3.length) ; })
+//            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
+            .attr("width", function(d){return x(d.NumRecords);})
+            .attr("height", ((h - padding) / newDataset3.length) - barPadding) ;
+
+    chart.selectAll("text")
+            .data(newDataset3)
+            .enter().append("text")
+            .attr("x", -3)
+            .attr("y", function(d,i){ return i*((h - padding) / newDataset3.length) + 5; })
+            .attr("dx", -3) // padding-right
+            .attr("dy", ".35em") // vertical-align: middle
+            .attr("text-anchor", "end") // text-align: right
+            .text(function(d){return d.DeathPlace});
+
+    chart.selectAll("line")
+            .data(x.ticks(6))
+            .enter().append("line")
+            .attr("x1", x )
+            .attr("x2", x )
+            .attr("y1", 0)
+            .attr("y2", (20 * newDataset3.length))
+            .style("stroke", "#ccc");
+
+    chart.selectAll(".rule")
+            .data(x.ticks(6))
+            .enter().append("text")
+            .attr("class", "rule")
+            .attr("x", x)
+            .attr("y", 0)
+            .attr("dy", -3)
+            .attr("text-anchor", "middle")
+            .text(String);
+    /*
+            .append("text")
+            .attr("x", w / 2)
+            .attr("y", 30)
+            .style("text-anchor", "end")
+            .text("Years of experience at TT races");
+*/
+    chart.append("line")
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset3.length)
+            .style("stroke", "#000");
+});
+
+var test = 0;
+
+</script>
+</body>
+</html>

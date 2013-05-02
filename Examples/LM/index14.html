@@ -6,6 +6,11 @@
         font: 12px sans-serif;
     }
 
+    .chart rect {
+        stroke: white;
+        fill: steelblue;
+    }
+
     .axis path,
     .axis line {
         fill: none;
@@ -40,17 +45,16 @@
 <script>
 
 
-var w = 500;
-var h = 450;
+var w = 250;
+var h = 225;
 var barPadding = 2;
-
-
-var dataset = [];
 
 
 var newDataset = [];
 var newDataset2 = [];
 var newDataset3 = [];
+
+
 
 var svg = d3.select("body")
         .append("svg")
@@ -93,8 +97,6 @@ d3.csv("Data/Death_riders_per_event.csv", function(error, data){
     var barYAxis = d3.svg.axis()
             .scale(barScaleY)
             .orient("left");
-
-
     var barScaleX = d3.scale.linear()
             .domain(
                     [d3.min(newDataset, function(d){ return d.Experience; }),
@@ -104,8 +106,6 @@ d3.csv("Data/Death_riders_per_event.csv", function(error, data){
     var barXAxis = d3.svg.axis()
             .scale(barScaleX)
             .orient("bottom");
-
-
 
     svg.selectAll("rect")
             .data(newDataset)
@@ -122,18 +122,23 @@ d3.csv("Data/Death_riders_per_event.csv", function(error, data){
             .enter()
             .append("text")
             .text(function(d){  return d.DeathEvent; })
-            .attr("x", function(d, i) { return i*((w - padding) / newDataset.length) + padding + 15; })
-            .attr("y",function(d){ return  h - padding - 13 ;} )
+
+//            .attr('transform', 'translate(-' + yAxisSpacing + ',' + height / 2 + ') rotate(-90)')
+//            .attr('transform', function(d,i){return 'translate(' + (0) + ',' + (0) + ') rotate(-65)'})
+//            .attr('transform', function(d,i){return 'translate(' + (i*((w - padding  ) / newDataset.length)  + (padding *2 ) ) + ',' + (h - (barScaleY2(d.NumRecords)) ) + ') rotate(-90)'})
+            .attr('transform', function(d,i){return 'translate(' + (i*((w - padding  ) / newDataset.length)  + (padding *2 ) ) + ',' + (h - padding) + ') rotate(-90)'})
+//            .attr('transform', function(d,i){return 'translate(' + (i*((w - padding) / newDataset.length) + padding + 15) + ',' + (0) + ') rotate(-65)'})
+//            .attr('transform', function(d,i){return 'translate(-' +  + ',' + (h - padding - 13) + ') rotate(-65)'})
+//            .attr("transform", function(d) { return "rotate(-65)" })
+//            .attr("x", function(d, i) { return i*((w - padding) / newDataset.length) + padding + 15; })
+//            .attr("y",function(d){ return  h - padding - 13 ;} )barScaleY2(d.NumRecords)
             .attr("font-family", "sans-serif")
             .attr("font-size", "11x")
             .attr("font-weight", "bold")
             .attr("text-anchor", "middle")
             .attr("fill", "black")
 //            .attr("transform", "rotate(-90)")
-
     ;
-
-
     svg.append("g")
             .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
             .attr("transform", "translate(0," + (h - padding) + ")")
@@ -150,9 +155,78 @@ d3.csv("Data/Death_riders_per_event.csv", function(error, data){
             .call(barYAxis)
             .append("text")
             .attr("transform", "rotate(-90)")
+
             .attr("y", -32)
             .attr("x", -(h/3)*2.5)
             .text("Death Per Event.");
+
+    var chart = d3.select("body").append("svg")
+            .attr("class", "chart")
+            .attr("width", 500)
+            .attr("height", 300)
+                  .append("g")
+                    .attr("transform", "translate(100,25)")
+
+            ;
+
+    var x = d3.scale.linear()
+//            .domain([0, d3.max(newDataset)])
+            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords;})])
+            .range([0, 420]);
+
+    var y = d3.scale.ordinal()
+            .domain([ d3.min(newDataset , function(d) { return d.NumRecords;}), d3.max(newDataset , function(d) { return d.NumRecords;})])
+//            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords;})])
+            .rangeBands([0, 40]);
+
+
+    chart.selectAll("rect")
+            .data(newDataset)
+            .enter().append("rect")
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
+            .attr("width", function(d){return x(d.NumRecords);})
+            .attr("height", function(d){return y.rangeBand(d.NumRecords);})   ;
+//            .attr("height", 20)   ;
+
+    chart.selectAll("text")
+            .data(newDataset)
+            .enter().append("text")
+//            .attr("x", function(d){return x(d.NumRecords);})
+            .attr("x", 0)
+//            .attr("y", function(d) { return y(d.NumRecords) + y.rangeBand() / 2; })
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords) + 5; })
+            .attr("dx", -3) // padding-right
+            .attr("dy", ".35em") // vertical-align: middle
+            .attr("text-anchor", "end") // text-align: right
+            .text(function(d){return d.DeathEvent});
+
+
+    chart.selectAll("line")
+            .data(x.ticks(10))
+            .enter().append("line")
+            .attr("x1", x)
+            .attr("x2", x)
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset.length)
+            .style("stroke", "#ccc");
+
+    chart.selectAll(".rule")
+            .data(x.ticks(10))
+            .enter().append("text")
+            .attr("class", "rule")
+            .attr("x", x)
+            .attr("y", 0)
+            .attr("dy", -3)
+            .attr("text-anchor", "middle")
+            .text(String);
+
+
+    chart.append("line")
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset.length)
+            .style("stroke", "#000");
+
+
 
 
 });
@@ -174,8 +248,6 @@ d3.csv("Data/Deaths_grouped_by_years_of_experience.csv", function(error, data){
     var barScaleY2 = d3.scale.linear()
             .domain([d3.max(newDataset2, function(d) { return d.NumRecords; }), 0])
             .rangeRound([  h - padding,padding]);
-
-
 
     var barScaleX = d3.scale.linear()
             .domain(
@@ -259,8 +331,7 @@ d3.csv("Data/Death_riders_per_place.csv", function(error, data){
             .orient("left");
 
     var barScaleX = d3.scale.linear()
-            .domain(
-                    [d3.min(newDataset3, function(d){ return d.Experience; }),
+            .domain( [d3.min(newDataset3, function(d){ return d.Experience; }),
                         d3.max(newDataset3 , function(d){ return d.Experience;})])
             .range([padding, w ]);
 
@@ -268,37 +339,28 @@ d3.csv("Data/Death_riders_per_place.csv", function(error, data){
             .scale(barScaleX)
             .orient("bottom");
 
-
     svg3.selectAll("rect")
             .data(newDataset3)
             .enter()
             .append("rect")
             .attr("fill", "teal")
-            .attr("x", function(d,i){
-                return i*((w - padding) / newDataset3.length) + padding + 1 ; })
+            .attr("x", function(d,i){ return i*((w - padding) / newDataset3.length) + padding + 1 ; })
             .attr("y",function(d){ return h - (barScaleY2(d.NumRecords));} )
             .attr("width", (w - padding) / newDataset3.length - barPadding)
             .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
 
     svg3.selectAll("text")
-
             .attr("transform", function(d) { return "rotate(-65)" })
             .data(newDataset3)
-
             .enter()
             .append("text").text(function(d){  return d.DeathPlace; })
-
             .attr("x", function(d, i) { return i*((w - padding) / newDataset3.length) + padding + 15; })
             .attr("y",function(d){ return  h - padding - 13 ;} )
-
             .attr("font-family", "sans-serif")
             .attr("font-size", "11x")
             .attr("font-weight", "bold")
             .attr("text-anchor", "middle")
             .attr("fill", "black")
-
-//            .attr("transform", function(d) { return "rotate(-65)" })
-
     ;
 
     svg3.append("g")
@@ -321,10 +383,10 @@ d3.csv("Data/Death_riders_per_place.csv", function(error, data){
             .attr("y", -32)
             .attr("x", -(h/3)*2.5)
             .text("Number of Death by Place");
+
 });
 
-
-
+var test = 0;
 
 </script>
 </body>

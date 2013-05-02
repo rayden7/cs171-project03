@@ -17,39 +17,39 @@
 
 
 
-var w = 500;
-var h = 450;
-var barPadding = 2;
-
-
-var dataset = [];
-
-
-var newDataset = [];
-var newDataset2 = [];
-var newDataset3 = [];
-
-var svg = d3.select("mainViz")
-        .append("svg")
-        .attr("width", w)
-        .attr("height", h)
-    ;
-
-var svg2 = d3.select("mainViz")
-        .append("svg")
-        .attr("width", w)
-        .attr("height", h)
-    ;
-
-
-var svg3 = d3.select("mainViz")
-        .append("svg")
-        .attr("width", w)
-        .attr("height", h)
-    ;
-var padding = 30;
-
 window.onload = function() {
+
+
+
+
+    var w = 500;
+    var h = 450;
+    var barPadding = 2;
+
+    var newDataset = [];
+    var newDataset2 = [];
+    var newDataset3 = [];
+
+    var svg = d3.select("viz")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+        ;
+
+    var svg2 = d3.select("viz")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+        ;
+
+
+    var svg3 = d3.select("viz")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+        ;
+    var padding = 30;
+
 
 d3.csv("csv/Death_riders_per_event.csv", function(error, data){
     data.forEach(function(d) {
