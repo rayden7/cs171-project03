@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/html">
 <meta charset="utf-8">
 <head>
-    <title>The Isle of Man TT - How Long Does It Take To Become Proficient?</title>
-
+    <title>The Most Dangerous Race: The Isle of Man TT</title>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
     <link rel="stylesheet" type="text/css" href="css/visualization.css"/>
     <link rel="stylesheet" type="text/css" href="css/tipsy.css"/>
@@ -19,10 +18,8 @@
 </head>
 <body>
 <header>
-    <div class="subheader">   <!--
-            <img class="tt-img tt-img-floatleft" src="img/iomtt-logo-smaller.png" />
-                                    -->
-        <h1 class="tt-img tt-img-floatleft">The Isle of Man TT</h1>
+    <div class="subheader">
+        <h1 class="tt-img tt-img-floatleft">The Isle of Man TT: Modern-Era Rider Race Performance</h1>
         <img class="tt-img tt-img-floatright" src="img/iomtt-logo-smaller.png" />
     </div>
     <div>
@@ -30,8 +27,6 @@
         <ul id="main-nav">
             <li><a href="index.html">Main</a></li>
             <li><a href="casualties.html">Casualties</a></li>
-            <!-- will include information on the race classes in project 3 -->
-            <!--<li><a href="races.html">Races</a></li>-->
             <li><a href="maps.html">Maps</a></li>
             <li><a href="inspiration.html">Inspiration</a></li>
             <li><a href="about.html">About</a></li>
@@ -43,7 +38,6 @@
 
     <!-- this is where the primary visualization will be rendered -->
     <aside id="viz-filters">
-        <!--<h3>Race Classes</h3>-->
         <div id="raceClassFilter">
             <h3>Race Classes</h3>
             <ul>
@@ -52,46 +46,20 @@
                 <li><span class="raceFilter" id="lightweight"><div class="raceFilterBox lightweight"></div> TT Lightweight</span></li>
                 <li><span class="raceFilter" id="production"><div class="raceFilterBox production"></div> TT Intnl. Production 1000</span></li>
                 <li><span class="raceFilter" id="senior"><div class="raceFilterBox senior"></div> Senior TT</span></li>
-                <!-- commenting out the Sidecar class races for now; they're not working properly in the visualization  -->
-                <!--
-                <li><span class="raceFilter" id="sidecara"><div class="raceFilterBox sidecara"></div> TT Sidecar Race A</span></li>
-                <li><span class="raceFilter" id="sidecarb"><div class="raceFilterBox sidecarb"></div> TT Sidecar Race B</span></li>
-                -->
                 <li><span class="raceFilter" id="singles"><div class="raceFilterBox singles"></div> TT Singles</span></li>
                 <li><span class="raceFilter" id="superbike"><div class="raceFilterBox superbike"></div> TT Superbike</span></li>
-                <!-- commenting out the Supersport class races for now; they're not working properly in the visualization  -->
-                <!--
-                <li><span class="raceFilter" id="supersporta"><div class="raceFilterBox supersporta"></div> TT Supersport Race A</span></li>
-                <li><span class="raceFilter" id="supersportb"><div class="raceFilterBox supersportb"></div> TT Supersport Race B</span></li>
-                -->
                 <li><span class="raceFilter" id="superstock"><div class="raceFilterBox superstock"></div> TT Superstock</span></li>
-
-                <!-- commenting out the Ultralightweight class races for now; they're not working properly in the visualization  -->
-                <!--
-                <li><span class="raceFilter" id="ultralightweight"><div class="raceFilterBox ultralightweight"></div> TT Ultra Lightweight 125</span></li>
-                -->
-
                 <li><span class="raceFilter" id="zero"><div class="raceFilterBox zero"></div> TTXGP</span></li>
             </ul>
         </div>
 
         <!-- this is where we can filter individually selected riders -->
-        <div id="riderSelectionFilter">
-            <!-- mockup HTML -->
-            <!--
-            <h3>Selected Rider</h3>
-            <ul id="riderSelection">
-                <li><span class="raceFilter" id="formulaoneee"><div class="riderFilterBox darkred">&#10006;</div> Guy Martin</span></li>
-            </ul>
-            -->
-        </div>
+        <div id="riderSelectionFilter"></div>
 
     </aside>
 
 
     <div id="viz"></div>
-
-
 
     <!-- this is where detailed rider info will display when the user mouses over a race line -->
     <aside id="riderInfo"></aside>
