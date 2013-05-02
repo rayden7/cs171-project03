@@ -86,20 +86,25 @@ d3.csv("Data/Death_riders_per_eventv2.csv", function(error, data){
             .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
             .attr("width", function(d){return x(d.NumRecords) ;})
             .attr("height", function(d){return y.rangeBand(d.NumRecords) -3;})   ;
-//            .attr("height", 20)   ;
 
     chart.selectAll("text")
             .data(newDataset)
             .enter().append("text")
-//            .attr("x", function(d){return x(d.NumRecords);})
             .attr("x", -4)
-//            .attr("y", function(d) { return y(d.NumRecords) + y.rangeBand() / 2; })
             .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords) + 10; })
             .attr("dx", -5) // padding-right
             .attr("dy", ".35em") // vertical-align: middle
             .attr("text-anchor", "end") // text-align: right
             .text(function(d){return d.DeathEvent});
 
+
+    chart.selectAll("text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", w / 2)
+            .attr("y", -17)
+            .style("text-anchor", "end")
+            .text("Years of experience at TT races");
 
     chart.selectAll("line")
             .data(x.ticks(10))
@@ -162,8 +167,7 @@ d3.csv("Data/Deaths_grouped_by_years_of_experiencev2.csv", function(error, data)
             .range([0, w - (padding * 3)]);
 
     var y = d3.scale.ordinal()
-            .domain([ d3.min(newDataset2 , function(d) { return d.NumRecords;})
-                , d3.max(newDataset2 , function(d) { return d.NumRecords;})])
+            .domain([ d3.min(newDataset2 , function(d) { return d.NumRecords;}) , d3.max(newDataset2 , function(d) { return d.NumRecords;})])
             .rangeBands([0, 40]);
 
 
@@ -173,6 +177,7 @@ d3.csv("Data/Deaths_grouped_by_years_of_experiencev2.csv", function(error, data)
             .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
             .attr("width", function(d){return x(d.NumRecords);})
             .attr("height", function(d){return y.rangeBand(d.NumRecords) - 2;});
+
 
     chart.selectAll("text")
             .data(newDataset2)
@@ -184,6 +189,13 @@ d3.csv("Data/Deaths_grouped_by_years_of_experiencev2.csv", function(error, data)
             .attr("text-anchor", "end") // text-align: right
             .text(function(d){return d.Experience});
 
+    chart.selectAll("text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", w / 2)
+            .attr("y", 0)
+            .style("text-anchor", "end")
+            .text("Years of experience at TT races");
 
     chart.selectAll("line")
             .data(x.ticks(10))
@@ -233,16 +245,13 @@ d3.csv("Data/Death_riders_per_location.csv", function(error, data){
             .range([0, w - (padding * 3) - 30]);
 
     var y = d3.scale.ordinal()
-            .domain([ d3.min(newDataset3 , function(d) { return d.NumRecords;})
-                , d3.max(newDataset3 , function(d) { return d.NumRecords;})])
-//            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords;})])
-            .rangeBands([0, 12]);
+            .domain([ d3.min(newDataset3 , function(d) { return d.NumRecords;}) , d3.max(newDataset3 , function(d) { return d.NumRecords;})])
+              .rangeBands([0, 12]);
 
     chart.selectAll("rect")
             .data(newDataset3)
             .enter().append("rect")
             .attr("y", function(d,i){ return i*((h - padding) / newDataset3.length) ; })
-//            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
             .attr("width", function(d){return x(d.NumRecords);})
             .attr("height", ((h - padding) / newDataset3.length) - barPadding) ;
 
@@ -251,10 +260,18 @@ d3.csv("Data/Death_riders_per_location.csv", function(error, data){
             .enter().append("text")
             .attr("x", -3)
             .attr("y", function(d,i){ return i*((h - padding) / newDataset3.length) + 5; })
-            .attr("dx", -3) // padding-right
-            .attr("dy", ".35em") // vertical-align: middle
-            .attr("text-anchor", "end") // text-align: right
+            .attr("dx", -3)
+            .attr("dy", ".35em")
+            .attr("text-anchor", "end")
             .text(function(d){return d.DeathPlace});
+
+    chart.selectAll("text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", w / 2)
+            .attr("y", -17)
+            .style("text-anchor", "end")
+            .text("Years of experience at TT races");
 
     chart.selectAll("line")
             .data(x.ticks(6))
