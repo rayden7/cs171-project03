@@ -15,290 +15,257 @@
  *
  **********************************************************************************************************************/
 
+var w = 350;
+var h = 225;
+var barPadding = 3;
+var newDataset = [];
+var newDataset2 = [];
+var newDataset3 = [];
+var padding = 30;
+var test = 0;
 
 
 window.onload = function() {
 
-
-
-
-    var w = 500;
-    var h = 450;
-    var barPadding = 2;
-
-    var newDataset = [];
-    var newDataset2 = [];
-    var newDataset3 = [];
-
-    var svg = d3.select("viz")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h)
-        ;
-
-    var svg2 = d3.select("viz")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h)
-        ;
-
-
-    var svg3 = d3.select("viz")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h)
-        ;
-    var padding = 30;
-
-
-d3.csv("csv/Death_riders_per_event.csv", function(error, data){
-    data.forEach(function(d) {
-        newDataset.push({
-            DeathEvent: d.deathevent,
-            NumRecords: +d.NumberOfDeadRiders
+    // rider deaths by race class
+    d3.csv("csv/Death_riders_per_eventv2.csv", function(error, data){
+        data.forEach(function(d) {
+            newDataset.push({
+                DeathEvent: d.deathevent,
+                NumRecords: +d.NumberOfDeadRiders
+            });
         });
-    });
 
-    var barScaleY = d3.scale.linear()
-        .domain([0, d3.max(newDataset , function(d) { return d.NumRecords; })])
-        .rangeRound([h - padding , padding]);
+        var chart = d3.select("body").append("svg")
+            .attr("class", "chart")
+            .attr("width", w)
+            .attr("height", h)
+            .append("g")
+            .attr("transform", "translate(100,35)") ;
 
-    var barScaleY2 = d3.scale.linear()
-        .domain([d3.max(newDataset, function(d) { return d.NumRecords; }), 0])
-        .rangeRound([  h - padding,padding]);
+        var x = d3.scale.linear()
+            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords;})])
+            .range([0, w - (padding*3)-15]);
 
-    var barYAxis = d3.svg.axis()
-        .scale(barScaleY)
-        .orient("left");
-
-
-    var barScaleX = d3.scale.linear()
-        .domain(
-            [d3.min(newDataset, function(d){ return d.Experience; }),
-                d3.max(newDataset, function(d){ return d.Experience;})])
-        .range([padding, w ]);
-
-    var barXAxis = d3.svg.axis()
-        .scale(barScaleX)
-        .orient("bottom");
+        var y = d3.scale.ordinal()
+            .domain([ d3.min(newDataset , function(d) { return d.NumRecords;}), d3.max(newDataset , function(d) { return d.NumRecords;})])
+            .rangeBands([0, 40]);
 
 
+        chart.selectAll("rect")
+            .data(newDataset)
+            .enter().append("rect")
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
+            .attr("width", function(d){return x(d.NumRecords) ;})
+            .attr("height", function(d){return y.rangeBand(d.NumRecords) -3;})   ;
 
-    svg.selectAll("rect")
-        .data(newDataset)
-        .enter()
-        .append("rect")
-        .attr("fill", "teal")
-        .attr("x", function(d,i){ return i*((w - padding)/ newDataset.length) + padding + 1 ; })
-        .attr("y",function(d){return h - (barScaleY2(d.NumRecords));} )
-        .attr("width", (w - padding) / newDataset.length - barPadding)
-        .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
-
-    svg.selectAll("text")
-        .data(newDataset)
-        .enter()
-        .append("text")
-        .text(function(d){  return d.DeathEvent; })
-        .attr("x", function(d, i) { return i*((w - padding) / newDataset.length) + padding + 15; })
-        .attr("y",function(d){ return  h - padding - 13 ;} )
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11x")
-        .attr("font-weight", "bold")
-        .attr("text-anchor", "middle")
-        .attr("fill", "black")
-//            .attr("transform", "rotate(-90)")
-
-    ;
+        chart.selectAll("text")
+            .data(newDataset)
+            .enter().append("text")
+            .attr("x", -4)
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords) + 10; })
+            .attr("dx", -5) // padding-right
+            .attr("dy", ".35em") // vertical-align: middle
+            .attr("text-anchor", "end") // text-align: right
+            .text(function(d){return d.DeathEvent});
 
 
-    svg.append("g")
-        .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
-        .attr("transform", "translate(0," + (h - padding) + ")")
-        .call(barXAxis)
-        .append("text")
-        .attr("x", w / 2)
-        .attr("y", 30)
-        .style("text-anchor", "end")
-        .text("Number of Deaths Per Event.");
+        chart.selectAll("text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", w / 2)
+            .attr("y", -17)
+            .style("text-anchor", "end")
+            .text("Years of experience at TT races");
 
-    svg.append("g")
-        .attr("class", "axis rider-detail-graphs")
-        .attr("transform", "translate(" +  padding + ", 0)")
-        .call(barYAxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -32)
-        .attr("x", -(h/3)*2.5)
-        .text("Death Per Event.");
+        chart.selectAll("line")
+            .data(x.ticks(10))
+            .enter().append("line")
+            .attr("x1", x)
+            .attr("x2", x)
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset.length)
+            .style("stroke", "#ccc");
+
+        chart.selectAll(".rule")
+            .data(x.ticks(10))
+            .enter().append("text")
+            .attr("class", "rule")
+            .attr("x", x)
+            .attr("y", 0)
+            .attr("dy", -3)
+            .attr("text-anchor", "middle")
+            .text(String);
 
 
-});
-
-d3.csv("csv/Deaths_grouped_by_years_of_experience.csv", function(error, data){
-    data.forEach(function(d) {
-        newDataset2.push({
-            Experience: +d.experience,
-            NumRecords: +d.numberOfDeathRiders
-        });
+        chart.append("line")
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset.length)
+            .style("stroke", "#000");
     });
 
 
-    var barScaleY = d3.scale.linear()
-        .domain([0, d3.max(newDataset2 , function(d) { return d.NumRecords; })])
-        .rangeRound([h - padding , padding]);
-
-
-    var barScaleY2 = d3.scale.linear()
-        .domain([d3.max(newDataset2, function(d) { return d.NumRecords; }), 0])
-        .rangeRound([  h - padding,padding]);
-
-
-
-    var barScaleX = d3.scale.linear()
-        .domain(
-            [d3.min(newDataset, function(d){ return d.Experience; }),
-                d3.max(newDataset, function(d){ return d.Experience;})])
-        .range([padding, w ]);
-
-    var barXAxis = d3.svg.axis()
-        .scale(barScaleX)
-        .orient("bottom");
-
-    var barYAxis = d3.svg.axis()
-        .scale(barScaleY)
-        .orient("left");
-
-    svg2.selectAll("rect")
-        .data(newDataset2)
-        .enter()
-        .append("rect")
-        .attr("fill", "teal")
-        .attr("x", function(d,i){ return i*((w - padding) / newDataset2.length) + padding + 1 ; })
-        .attr("y",function(d){ return h - (barScaleY2(d.NumRecords));} )
-        .attr("width", (w - padding) / newDataset2.length - barPadding)
-        .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
-
-    svg2.selectAll("text")
-        .data(newDataset2)
-        .enter()
-        .append("text")
-        .text(function(d){  return d.Experience; })
-        .attr("x", function(d, i) { return i*((w - padding) / newDataset2.length) + padding + 15; })
-        .attr("y",function(d){ return  h - padding + 15 ;} )
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11x")
-        .attr("font-weight", "bold")
-        .attr("text-anchor", "middle")
-        .attr("fill", "black");
-
-    svg2.append("g")
-        .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
-        .attr("transform", "translate(0," + (h - padding) + ")")
-        .call(barXAxis)
-        .append("text")
-        .attr("x", w / 2)
-        .attr("y", 30)
-        .style("text-anchor", "end")
-        .text("Years of experience at TT races");
-
-    svg2.append("g")
-        .attr("class", "axis rider-detail-graphs")
-        .attr("transform", "translate(" +  padding + ", 0)")
-        .call(barYAxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -32)
-        .attr("x", -(h/3)*2.5)
-        .text("Number Race Class Wins");
-});
-
-
-d3.csv("csv/Death_riders_per_place.csv", function(error, data){
-    data.forEach(function(d) {
-        newDataset3.push({
-            DeathPlace: d.deathPlace,
-            NumRecords: +d.NumberOfDeadRiders
+    // rider deaths by years of racing experience at the Isle of Man TT
+    d3.csv("csv/Deaths_grouped_by_years_of_experiencev2.csv", function(error, data){
+        data.forEach(function(d) {
+            newDataset2.push({
+                Experience: d.experience,
+                NumRecords: +d.numberOfDeathRiders
+            });
         });
+
+        var chart = d3.select("body").append("svg")
+                .attr("class", "chart")
+                .attr("width", w)
+                .attr("height", h)
+                .append("g")
+                .attr("transform", "translate(100,35)");
+
+        var x = d3.scale.linear()
+            .domain([0, d3.max(newDataset2 , function(d) { return d.NumRecords;})])
+            .range([0, w - (padding * 3)]);
+
+        var y = d3.scale.ordinal()
+            .domain([ d3.min(newDataset2 , function(d) { return d.NumRecords;}) , d3.max(newDataset2 , function(d) { return d.NumRecords;})])
+            .rangeBands([0, 40]);
+
+
+        chart.selectAll("rect")
+            .data(newDataset2)
+            .enter().append("rect")
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
+            .attr("width", function(d){return x(d.NumRecords);})
+            .attr("height", function(d){return y.rangeBand(d.NumRecords) - 2;});
+
+
+        chart.selectAll("text")
+            .data(newDataset2)
+            .enter().append("text")
+            .attr("x", -3)
+            .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords) + 5; })
+            .attr("dx", -3) // padding-right
+            .attr("dy", ".35em") // vertical-align: middle
+            .attr("text-anchor", "end") // text-align: right
+            .text(function(d){return d.Experience});
+
+        chart.selectAll("text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", w / 2)
+            .attr("y", 0)
+            .style("text-anchor", "end")
+            .text("Years of experience at TT races");
+
+        chart.selectAll("line")
+            .data(x.ticks(10))
+            .enter().append("line")
+            .attr("x1", x)
+            .attr("x2", x)
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset2.length)
+            .style("stroke", "#ccc");
+
+        chart.selectAll(".rule")
+            .data(x.ticks(10))
+            .enter().append("text")
+            .attr("class", "rule")
+            .attr("x", x)
+            .attr("y", 0)
+            .attr("dy", -3)
+            .attr("text-anchor", "middle")
+            .text(String);
+
+        chart.append("line")
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset2.length)
+            .style("stroke", "#000");
     });
 
 
-    newDataset3 = newDataset3.filter(function(d){return d.NumRecords > 1} );
-    var barScaleY = d3.scale.linear()
-        .domain([0, d3.max(newDataset3 , function(d) { return d.NumRecords; })])
-        .rangeRound([h - padding , padding]);
+    // rider deaths based on Snaefell Mountain Course location
+    d3.csv("csv/Death_riders_per_location.csv", function(error, data){
+        data.forEach(function(d) {
+            newDataset3.push({
+                DeathPlace: d.deathPlace,
+                NumRecords: +d.NumberOfDeadRiders
+            });
+        });
 
-    var barScaleY2 = d3.scale.linear()
-        .domain([d3.max(newDataset3, function(d) { return d.NumRecords; }), 0])
-        .rangeRound([  h - padding,padding]);
+        newDataset3 = newDataset3.filter(function(d){return d.NumRecords > 2} );
 
-    var barYAxis = d3.svg.axis()
-        .scale(barScaleY)
-        .orient("left");
+        var chart = d3.select("body").append("svg")
+            .attr("class", "chart")
+            .attr("width", w)
+            .attr("height", h)
+            .append("g")
+            .attr("transform", "translate(115,35)") ;
 
-    var barScaleX = d3.scale.linear()
-        .domain(
-            [d3.min(newDataset3, function(d){ return d.Experience; }),
-                d3.max(newDataset3 , function(d){ return d.Experience;})])
-        .range([padding, w ]);
+        var x = d3.scale.linear()
+            .domain([0, d3.max(newDataset3 , function(d) { return d.NumRecords;})])
+            .range([0, w - (padding * 3) - 30]);
 
-    var barXAxis = d3.svg.axis()
-        .scale(barScaleX)
-        .orient("bottom");
+        var y = d3.scale.ordinal()
+            .domain([ d3.min(newDataset3 , function(d) { return d.NumRecords;}) , d3.max(newDataset3 , function(d) { return d.NumRecords;})])
+            .rangeBands([0, 12]);
 
+        chart.selectAll("rect")
+            .data(newDataset3)
+            .enter().append("rect")
+            .attr("y", function(d,i){ return i*((h - padding) / newDataset3.length) ; })
+            .attr("width", function(d){return x(d.NumRecords);})
+            .attr("height", ((h - padding) / newDataset3.length) - barPadding) ;
 
-    svg3.selectAll("rect")
-        .data(newDataset3)
-        .enter()
-        .append("rect")
-        .attr("fill", "teal")
-        .attr("x", function(d,i){
-            return i*((w - padding) / newDataset3.length) + padding + 1 ; })
-        .attr("y",function(d){ return h - (barScaleY2(d.NumRecords));} )
-        .attr("width", (w - padding) / newDataset3.length - barPadding)
-        .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
+        chart.selectAll("text")
+            .data(newDataset3)
+            .enter().append("text")
+            .attr("x", -3)
+            .attr("y", function(d,i){ return i*((h - padding) / newDataset3.length) + 5; })
+            .attr("dx", -3)
+            .attr("dy", ".35em")
+            .attr("text-anchor", "end")
+            .text(function(d){return d.DeathPlace});
 
-    svg3.selectAll("text")
+        chart.selectAll("text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", w / 2)
+            .attr("y", -17)
+            .style("text-anchor", "end")
+            .text("Years of experience at TT races");
 
-        .attr("transform", function(d) { return "rotate(-65)" })
-        .data(newDataset3)
+        chart.selectAll("line")
+            .data(x.ticks(6))
+            .enter().append("line")
+            .attr("x1", x )
+            .attr("x2", x )
+            .attr("y1", 0)
+            .attr("y2", (20 * newDataset3.length))
+            .style("stroke", "#ccc");
 
-        .enter()
-        .append("text").text(function(d){  return d.DeathPlace; })
-
-        .attr("x", function(d, i) { return i*((w - padding) / newDataset3.length) + padding + 15; })
-        .attr("y",function(d){ return  h - padding - 13 ;} )
-
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "11x")
-        .attr("font-weight", "bold")
-        .attr("text-anchor", "middle")
-        .attr("fill", "black")
-
-//            .attr("transform", function(d) { return "rotate(-65)" })
-
-    ;
-
-    svg3.append("g")
-        .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
-        .attr("transform", "translate(0," + (h - padding) + ")")
-        .call(barXAxis)
-        .append("text")
-        .attr("x", w / 2)
-        .attr("y", 30)
-        .style("text-anchor", "end")
-        .text("Number of Deaths Per Place.");
-
-
-    svg3.append("g")
-        .attr("class", "axis rider-detail-graphs")
-        .attr("transform", "translate(" +  padding + ", 0)")
-        .call(barYAxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -32)
-        .attr("x", -(h/3)*2.5)
-        .text("Number of Death by Place");
-});
-
+        chart.selectAll(".rule")
+            .data(x.ticks(6))
+            .enter().append("text")
+            .attr("class", "rule")
+            .attr("x", x)
+            .attr("y", 0)
+            .attr("dy", -3)
+            .attr("text-anchor", "middle")
+            .text(String);
+        /*
+         .append("text")
+         .attr("x", w / 2)
+         .attr("y", 30)
+         .style("text-anchor", "end")
+         .text("Years of experience at TT races");
+         */
+        chart.append("line")
+            .attr("y1", 0)
+            .attr("y2", 20 * newDataset3.length)
+            .style("stroke", "#000");
+    });
 
 }
+
+
+
+

@@ -1,13 +1,11 @@
 deathevent,NumberOfDeadRiders
-"Classic Race",1
-"Classic TT",1
-"Formula one",5
-"Junior Classic Race",1
-"Junior TT",36
-"Lightweight TT",19
 practice,67
-"Production TT",5
-"Senior TT",37
-"Sidecar TT",14
-"Snaefell Race",1
-"Super-Twin Race",1
+Senior TT,37
+Junior TT,36
+Lightweight TT,19
+Sidecar TT,14
+Formula one,5
+Production TT,5
+Classic TT,3
+Snaefell Race,1
+Super-Twin Race,1
