@@ -40,9 +40,9 @@
 <script>
 
 
-var w = 800;
+var w = 500;
 var h = 450;
-var barPadding = 1;
+var barPadding = 2;
 
 
 var dataset = [];
@@ -56,7 +56,7 @@ var svg = d3.select("body")
         .append("svg")
         .attr("width", w)
         .attr("height", h)
-        .append("g");
+        ;
 
 var svg2 = d3.select("body")
         .append("svg")
@@ -69,10 +69,93 @@ var svg3 = d3.select("body")
         .append("svg")
         .attr("width", w)
         .attr("height", h)
-        .append("g");
+        ;
 var padding = 30;
 
 
+
+d3.csv("Data/Death_riders_per_event.csv", function(error, data){
+    data.forEach(function(d) {
+        newDataset.push({
+            DeathEvent: d.deathevent,
+            NumRecords: +d.NumberOfDeadRiders
+        });
+    });
+
+    var barScaleY = d3.scale.linear()
+            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords; })])
+            .rangeRound([h - padding , padding]);
+
+    var barScaleY2 = d3.scale.linear()
+            .domain([d3.max(newDataset, function(d) { return d.NumRecords; }), 0])
+            .rangeRound([  h - padding,padding]);
+
+    var barYAxis = d3.svg.axis()
+            .scale(barScaleY)
+            .orient("left");
+
+
+    var barScaleX = d3.scale.linear()
+            .domain(
+                    [d3.min(newDataset, function(d){ return d.Experience; }),
+                        d3.max(newDataset, function(d){ return d.Experience;})])
+            .range([padding, w ]);
+
+    var barXAxis = d3.svg.axis()
+            .scale(barScaleX)
+            .orient("bottom");
+
+
+
+    svg.selectAll("rect")
+            .data(newDataset)
+            .enter()
+            .append("rect")
+            .attr("fill", "teal")
+            .attr("x", function(d,i){ return i*((w - padding)/ newDataset.length) + padding + 1 ; })
+            .attr("y",function(d){return h - (barScaleY2(d.NumRecords));} )
+            .attr("width", (w - padding) / newDataset.length - barPadding)
+            .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
+
+    svg.selectAll("text")
+            .data(newDataset)
+            .enter()
+            .append("text")
+            .text(function(d){  return d.DeathEvent; })
+            .attr("x", function(d, i) { return i*((w - padding) / newDataset.length) + padding + 15; })
+            .attr("y",function(d){ return  h - padding - 13 ;} )
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "11x")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "middle")
+            .attr("fill", "black")
+//            .attr("transform", "rotate(-90)")
+
+    ;
+
+
+    svg.append("g")
+            .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
+            .attr("transform", "translate(0," + (h - padding) + ")")
+            .call(barXAxis)
+            .append("text")
+            .attr("x", w / 2)
+            .attr("y", 30)
+            .style("text-anchor", "end")
+            .text("Number of Deaths Per Event.");
+
+    svg.append("g")
+            .attr("class", "axis rider-detail-graphs")
+            .attr("transform", "translate(" +  padding + ", 0)")
+            .call(barYAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -32)
+            .attr("x", -(h/3)*2.5)
+            .text("Death Per Event.");
+
+
+});
 
 d3.csv("Data/Deaths_grouped_by_years_of_experience.csv", function(error, data){
     data.forEach(function(d) {
@@ -96,8 +179,8 @@ d3.csv("Data/Deaths_grouped_by_years_of_experience.csv", function(error, data){
 
     var barScaleX = d3.scale.linear()
             .domain(
-                    [d3.min(newDataset2, function(d){ return d.Experience; }),
-                        d3.max(newDataset2, function(d){ return d.Experience;})])
+                    [d3.min(newDataset, function(d){ return d.Experience; }),
+                        d3.max(newDataset, function(d){ return d.Experience;})])
             .range([padding, w ]);
 
     var barXAxis = d3.svg.axis()
@@ -124,7 +207,7 @@ d3.csv("Data/Deaths_grouped_by_years_of_experience.csv", function(error, data){
             .append("text")
             .text(function(d){  return d.Experience; })
             .attr("x", function(d, i) { return i*((w - padding) / newDataset2.length) + padding + 15; })
-            .attr("y",function(d){ return  h - padding - 13 ;} )
+            .attr("y",function(d){ return  h - padding + 15 ;} )
             .attr("font-family", "sans-serif")
             .attr("font-size", "11x")
             .attr("font-weight", "bold")
@@ -175,6 +258,17 @@ d3.csv("Data/Death_riders_per_place.csv", function(error, data){
             .scale(barScaleY)
             .orient("left");
 
+    var barScaleX = d3.scale.linear()
+            .domain(
+                    [d3.min(newDataset3, function(d){ return d.Experience; }),
+                        d3.max(newDataset3 , function(d){ return d.Experience;})])
+            .range([padding, w ]);
+
+    var barXAxis = d3.svg.axis()
+            .scale(barScaleX)
+            .orient("bottom");
+
+
     svg3.selectAll("rect")
             .data(newDataset3)
             .enter()
@@ -185,6 +279,38 @@ d3.csv("Data/Death_riders_per_place.csv", function(error, data){
             .attr("y",function(d){ return h - (barScaleY2(d.NumRecords));} )
             .attr("width", (w - padding) / newDataset3.length - barPadding)
             .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
+
+    svg3.selectAll("text")
+
+            .attr("transform", function(d) { return "rotate(-65)" })
+            .data(newDataset3)
+
+            .enter()
+            .append("text").text(function(d){  return d.DeathPlace; })
+
+            .attr("x", function(d, i) { return i*((w - padding) / newDataset3.length) + padding + 15; })
+            .attr("y",function(d){ return  h - padding - 13 ;} )
+
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "11x")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "middle")
+            .attr("fill", "black")
+
+//            .attr("transform", function(d) { return "rotate(-65)" })
+
+    ;
+
+    svg3.append("g")
+            .attr("class", "axis rider-detail-graphs")  //Assign "axis" class
+            .attr("transform", "translate(0," + (h - padding) + ")")
+            .call(barXAxis)
+            .append("text")
+            .attr("x", w / 2)
+            .attr("y", 30)
+            .style("text-anchor", "end")
+            .text("Number of Deaths Per Place.");
+
 
     svg3.append("g")
             .attr("class", "axis rider-detail-graphs")
@@ -197,49 +323,6 @@ d3.csv("Data/Death_riders_per_place.csv", function(error, data){
             .text("Number of Death by Place");
 });
 
-
-d3.csv("Data/Death_riders_per_event.csv", function(error, data){
-    data.forEach(function(d) {
-        newDataset.push({
-            DeathEvent: d.deathevent,
-            NumRecords: +d.NumberOfDeadRiders
-        });
-    });
-
-    var barScaleY = d3.scale.linear()
-            .domain([0, d3.max(newDataset , function(d) { return d.NumRecords; })])
-            .rangeRound([h - padding , padding]);
-
-    var barScaleY2 = d3.scale.linear()
-            .domain([d3.max(newDataset, function(d) { return d.NumRecords; }), 0])
-            .rangeRound([  h - padding,padding]);
-
-    var barYAxis = d3.svg.axis()
-            .scale(barScaleY)
-            .orient("left");
-
-    svg.selectAll("rect")
-            .data(newDataset)
-            .enter()
-            .append("rect")
-            .attr("fill", "teal")
-            .attr("x", function(d,i){ return i*((w - padding)/ newDataset.length) + padding + 1 ; })
-            .attr("y",function(d){return h - (barScaleY2(d.NumRecords));} )
-            .attr("width", (w - padding) / newDataset.length - barPadding)
-            .attr("height",  function(d){return barScaleY2(d.NumRecords) - padding;});
-
-    svg.append("g")
-            .attr("class", "axis rider-detail-graphs")
-            .attr("transform", "translate(" +  padding + ", 0)")
-            .call(barYAxis)
-            .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", -32)
-            .attr("x", -(h/3)*2.5)
-            .text("Death Per Event.");
-
-
-});
 
 
 
