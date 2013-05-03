@@ -51,13 +51,13 @@ window.onload = function() {
             .domain([ d3.min(newDataset , function(d) { return d.NumRecords;}), d3.max(newDataset , function(d) { return d.NumRecords;})])
             .rangeBands([0, 40]);
 
-
         chart.selectAll("rect")
             .data(newDataset)
             .enter().append("rect")
             .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
             .attr("width", function(d){return x(d.NumRecords) ;})
-            .attr("height", function(d){return y.rangeBand(d.NumRecords) -3;})   ;
+            .attr("height", function(d){return y.rangeBand(d.NumRecords) -3;})
+            .attr("class", "num-finishes-bars");
 
         chart.selectAll("text")
             .data(newDataset)
@@ -69,15 +69,6 @@ window.onload = function() {
             .attr("text-anchor", "end") // text-align: right
             .text(function(d){return d.DeathEvent});
 
-
-        chart.selectAll("text")
-            .data(data)
-            .enter().append("text")
-            .attr("x", w / 2)
-            .attr("y", -17)
-            .style("text-anchor", "end")
-            .text("Years of experience at TT races");
-
         chart.selectAll("line")
             .data(x.ticks(10))
             .enter().append("line")
@@ -85,7 +76,7 @@ window.onload = function() {
             .attr("x2", x)
             .attr("y1", 0)
             .attr("y2", 20 * newDataset.length)
-            .style("stroke", "#ccc");
+            .attr("class", "bar-chart-line");
 
         chart.selectAll(".rule")
             .data(x.ticks(10))
@@ -97,11 +88,10 @@ window.onload = function() {
             .attr("text-anchor", "middle")
             .text(String);
 
-
         chart.append("line")
             .attr("y1", 0)
             .attr("y2", 20 * newDataset.length)
-            .style("stroke", "#000");
+            .attr("class", "bar-chart-line");
     });
 
 
@@ -135,7 +125,8 @@ window.onload = function() {
             .enter().append("rect")
             .attr("y", function(d, i) { return i * y.rangeBand(d.NumRecords); })
             .attr("width", function(d){return x(d.NumRecords);})
-            .attr("height", function(d){return y.rangeBand(d.NumRecords) - 2;});
+            .attr("height", function(d){return y.rangeBand(d.NumRecords) - 2;})
+            .attr("class", "num-finishes-bars");
 
 
         chart.selectAll("text")
@@ -163,7 +154,7 @@ window.onload = function() {
             .attr("x2", x)
             .attr("y1", 0)
             .attr("y2", 20 * newDataset2.length)
-            .style("stroke", "#ccc");
+            .attr("class", "bar-chart-line");
 
         chart.selectAll(".rule")
             .data(x.ticks(10))
@@ -178,7 +169,7 @@ window.onload = function() {
         chart.append("line")
             .attr("y1", 0)
             .attr("y2", 20 * newDataset2.length)
-            .style("stroke", "#000");
+            .attr("class", "bar-chart-line");
     });
 
 
@@ -213,7 +204,8 @@ window.onload = function() {
             .enter().append("rect")
             .attr("y", function(d,i){ return i*((h - padding) / newDataset3.length) ; })
             .attr("width", function(d){return x(d.NumRecords);})
-            .attr("height", ((h - padding) / newDataset3.length) - barPadding) ;
+            .attr("height", ((h - padding) / newDataset3.length) - barPadding)
+            .attr("class", "num-finishes-bars");
 
         chart.selectAll("text")
             .data(newDataset3)
@@ -240,7 +232,7 @@ window.onload = function() {
             .attr("x2", x )
             .attr("y1", 0)
             .attr("y2", (20 * newDataset3.length))
-            .style("stroke", "#ccc");
+            .attr("class", "bar-chart-line");
 
         chart.selectAll(".rule")
             .data(x.ticks(6))
@@ -251,17 +243,11 @@ window.onload = function() {
             .attr("dy", -3)
             .attr("text-anchor", "middle")
             .text(String);
-        /*
-         .append("text")
-         .attr("x", w / 2)
-         .attr("y", 30)
-         .style("text-anchor", "end")
-         .text("Years of experience at TT races");
-         */
+
         chart.append("line")
             .attr("y1", 0)
             .attr("y2", 20 * newDataset3.length)
-            .style("stroke", "#000");
+            .attr("class", "bar-chart-line");
     });
 
 }

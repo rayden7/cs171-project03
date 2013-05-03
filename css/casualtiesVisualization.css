@@ -255,6 +255,10 @@ hr {
 .color9, .zero        { stroke: #6A3D9A; background-color: #6A3D9A; }
 
 
+.bar-chart-line {
+    stroke: #ccc;
+}
+
 .race-line-tooltip {
     font-size: 9pt;
     border-radius: 0.9em;
