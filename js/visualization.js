@@ -227,7 +227,7 @@ var g4 = svg4.select("g");
 // execute the CSV load and generate the graph once the window has loaded
 window.onload = function() {
 
-    if (window.location.href.contains("index.html")) {
+    if (window.location.href.indexOf("index.html") > 0) {
 
         var x = d3.time.scale().range([0, width]);
 
