@@ -15,7 +15,7 @@ How to Run:
 
 Just load up index.html, and it should load the data for you (in Firefox).  Note that due to issues with the
 same-origin policy, you may have trouble opening the CSVs in Google Chrome.  We had intended to publish
-everything online on our website, but the Project 2 description expressly forbid this.
+everything online on our website, but the Project 3 description expressly forbid this.
 
 
 Code Architecture:
@@ -38,7 +38,9 @@ in Project 3).  The two datafiles that get loaded are:
 
     races_data.csv - contains all individual race records per rider, per class, per year
     rider-data.csv - contains information in individual riders, pictures, bios, etc.
-
+    Death_riders_per_eventv2.csv  - contains a dataset aggregated based on number of casualties per race class.
+    Death_riders_per_location.csv  - contains a dataset aggregated based on number of casualties per location of death.
+    Deaths_grouped_by_years_of_experiencev2.csv - contains a dataset aggregated based on number of casualties per years of experience a rider has at TT races.
 
 
 
