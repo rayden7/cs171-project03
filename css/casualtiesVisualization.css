@@ -328,12 +328,14 @@ svg:hover { cursor: crosshair; }
     /*border: 1px solid black;*/
     float: left;
     padding: 10px;
+    text-align: center;
 }
 
 #viz2 {
     /*background: orange;*/
     float: right;
     clear: left;
+    content: 'some text for the viz';
 }
 
 #viz3 {
@@ -346,3 +348,7 @@ article {
 
 }
 
+#casualtyArticle p {
+    margin-bottom: 1em;
+    font-size: 12pt;
+}

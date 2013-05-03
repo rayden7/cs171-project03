@@ -217,14 +217,6 @@ window.onload = function() {
             .attr("text-anchor", "end")
             .text(function(d){return d.DeathPlace});
 
-        chart.selectAll("text")
-            .data(data)
-            .enter().append("text")
-            .attr("x", w / 2)
-            .attr("y", -17)
-            .style("text-anchor", "end")
-            .text("Years of experience at TT races");
-
         chart.selectAll("line")
             .data(x.ticks(6))
             .enter().append("line")
