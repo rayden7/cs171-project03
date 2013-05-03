@@ -20,11 +20,15 @@ everything online on our website, but the Project 2 description expressly forbid
 
 Code Architecture:
 
-visualization.js is what drives the entire visualization display.  We load two different CSVs, and then
-begin the data display in window.onload.
+visualization.js is what drives the entire primary visualization display (on index.html).
+We load two different CSVs, and then begin the data display in window.onload.
 
 All code libraries necessary to run the visualization are inclued in the "js" directory (minified D3
 library, and minified jQuery library).
+
+We also have another JavaScript file, casualtiesVisualization.js, that is used on the casulaties.html page to show
+aggregated data for rider deaths in the Isle of Man TT.
+
 
 
 Data Files:
